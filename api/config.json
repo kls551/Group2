@@ -1,13 +1,13 @@
 {
     "dev": {
-      "host": "localhost",
+      "host": "192.168.99.100",
       "port": 3306,
       "username": "root",
       "password": "password",
       "database": "dev"
     },
     "test": {
-      "host": "localhost",
+      "host": "192.168.99.100",
       "port": 3306,
       "username": "root",
       "password": "password",

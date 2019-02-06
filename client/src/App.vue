@@ -1,27 +1,45 @@
 <template>
   <div id="app">
-    <div class="navbar" role="navigation" aria-label="main navigation">
-      <div class="navbar-menu">
-        <div class="navbar-start">
-          <router-link class="navbar-item is-tab" to="/" exact-active-class="is-active">Home</router-link>
-          <router-link class="navbar-item is-tab" to="/about" exact-active-class="is-active">About</router-link>
-        </div>
+    <!-- top, smaller nav bar -->
+    <div class="navbar navbar2">
+      <div class="navbar-menu is-active">
         <div class="navbar-end">
-          <div class="navbar-item">
-            <div class="buttons">
-              <a class="button is-primary" v-if="!isLoggedIn" v-on:click="showSignupModal()">
+              <a class="navbar-item is-primary" v-if="!isLoggedIn" v-on:click="showSignupModal()">
                 <strong>Sign up</strong>
               </a>
               <router-link
-                class="button is-text"
+                class="navbar-item is-text"
                 v-if="isLoggedIn"
                 to="/my-profile"
                 exact-active-class="is-active"
               >My Profile</router-link>
-              <a class="button is-light" v-if="!isLoggedIn" v-on:click="showLoginModal()">Log in</a>
-              <a class="button is-light" v-if="isLoggedIn" v-on:click="logout">Log out</a>
-            </div>
-          </div>
+              <a class="navbar-item is-light" v-if="!isLoggedIn">Track Order</a>
+              <a class="navbar-item is-light" v-if="!isLoggedIn" v-on:click="showLoginModal()">Log in</a>
+              <a class="navbar-item is-light" v-if="isLoggedIn" v-on:click="logout">Log out</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- main nav bar -->
+    <div class="navbar is-light">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="https://bulma.io">
+          <img src="./assets/FoxCycle.png" width="60">
+        </a>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu is-active">
+        <div class="navbar-start">
+        </div>
+        <div class="navbar-end">
+          <router-link class="navbar-item is-tab" to="/" exact-active-class="is-active">Home</router-link>
+          <router-link class="navbar-item is-tab" to="/shop" exact-active-class="is-active">Shop</router-link>
+          <router-link class="navbar-item is-tab" to="/services" exact-active-class="is-active">Services</router-link>
+          <router-link class="navbar-item is-tab" to="/about" exact-active-class="is-active">About</router-link>
         </div>
       </div>
     </div>
@@ -96,7 +114,7 @@ export default class App extends Vue {
 
 
 <style lang="scss">
-@import "~bulma/css/bulma.css";
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

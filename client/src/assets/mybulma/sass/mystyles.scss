@@ -1,0 +1,18 @@
+@charset "utf-8";
+
+@import url("https://fonts.googleapis.com/css?family=Questrial");
+
+// set brand colors
+$orange: #FF530D;
+$lightorange: #FF812C;
+$grey: #C2CAD4;
+
+// update Bulma's component variables
+$navbar-height: 5rem;
+$navbar-tab-active-border-bottom-color: $orange;
+$navbar-tab-hover-border-bottom-color: $orange;
+$navbar-padding-horizontal: 4rem;
+$navbar-padding-vertical: 4rem;
+$navbar-box-shadow-size: 0 4px 0 0;
+
+@import "~bulma/bulma";

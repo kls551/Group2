@@ -13,6 +13,7 @@
                 to="/my-profile"
                 exact-active-class="is-active"
               >My Profile</router-link>
+              <a class="navbar-item is-light" v-if="!isLoggedIn">Track Order</a>
               <a class="navbar-item is-light" v-if="!isLoggedIn" v-on:click="showLoginModal()">Log in</a>
               <a class="navbar-item is-light" v-if="isLoggedIn" v-on:click="logout">Log out</a>
         </div>
@@ -23,7 +24,7 @@
     <div class="navbar is-light">
       <div class="navbar-brand">
         <a class="navbar-item" href="https://bulma.io">
-          <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+          <img src="./assets/FoxCycle.png" width="60">
         </a> 
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
           <span aria-hidden="true"></span>

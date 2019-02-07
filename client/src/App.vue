@@ -24,7 +24,7 @@
     <div class="navbar is-light">
       <div class="navbar-brand">
         <a class="navbar-item" href="https://bulma.io">
-          <img src="./assets/FoxCycle.png" width="60">
+          <img src="./assets/FoxCycle.png" width="150">
         </a> 
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
           <span aria-hidden="true"></span>

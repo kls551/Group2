@@ -28,15 +28,15 @@
       <div class="navbar-brand">
         <a class="navbar-item" href="https://bulma.io">
           <img src="./assets/FoxCycle.png" width="60">
-        </a> 
+        </a>
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
-        </a>   
+        </a>
       </div>
       <div class="navbar-menu is-active">
-        <div class="navbar-start">         
+        <div class="navbar-start">
         </div>
         <div class="navbar-end">
           <router-link class="navbar-item is-tab" to="/" exact-active-class="is-active">Home</router-link>
@@ -117,17 +117,17 @@ export default class App extends Vue {
   }
 
   get isLoggedIn(): boolean {
-    return !!this.$store.state.userId;
+    return !!this.$store.state.user;
   }
 
   logout() {
-    debugger;
     axios
       .post(APIConfig.buildUrl("/logout"), null, {
         headers: { token: this.$store.state.userToken }
       })
       .then(() => {
         this.$store.commit("logout");
+        this.$router.push({ name: "home" });
       });
   }
 }

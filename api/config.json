@@ -1,16 +1,17 @@
 {
-    "dev": {
-      "host": "192.168.99.100",
-      "port": 3306,
-      "username": "root",
-      "password": "password",
-      "database": "dev"
-    },
-    "test": {
-      "host": "192.168.99.100",
-      "port": 3306,
-      "username": "root",
-      "password": "password",
-      "database": "test"
-    }
+  "dev": {
+    "host": "192.168.99.100",
+    "port": 3306,
+    "username": "root",
+    "password": "password",
+    "database": "dev",
+    "logging": true
+  },
+  "test": {
+    "host": "192.168.99.100",
+    "port": 3306,
+    "username": "root",
+    "password": "password",
+    "database": "test"
   }
+}

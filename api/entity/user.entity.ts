@@ -13,7 +13,6 @@ export class User {
 
   @Column()
   public password!: string;
-  
   @Column({default: null})
   public profileUrl!: string;
 

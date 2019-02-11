@@ -5,16 +5,20 @@
 // set brand colors
 $orange: #FF530D;
 $lightorange: #FF812C;
-$grey: #C2CAD4;
+$grey: rgb(214, 220, 228);
 
-// update Bulma's component variables
+// update Bulma's navbar component variables
 $navbar-height: 5rem;
+$navbar-background-color:$grey;
+$navbar-item-hover-background-color: $grey;
+$navbar-item-active-color: $lightorange;
+$navbar-item-hover-color: $lightorange;
 $navbar-tab-active-border-bottom-color: $orange;
 $navbar-tab-hover-border-bottom-color: $orange;
 $navbar-padding-horizontal: 4rem;
-$navbar-padding-vertical: 4rem;
-$navbar-box-shadow-size: 0 4px 0 0;
+$navbar-padding-vertical: 2rem;
 $navbar-item-img-max-height: 10rem;
-$navbar-item-hover-background-color: #C2CAD4;
+
 
 @import "~bulma/bulma";
+//@import '~bulma-extensions';

@@ -46,6 +46,12 @@ export default new Router({
       path: "/my-profile",
       name: "myProfile",
       component: MyProfile
+    },
+    {
+      path: "/owner/announcment",
+      name: "announcment",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/OwnerAnnouncment.vue")
     }
   ]
 });

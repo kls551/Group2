@@ -1,31 +1,12 @@
 <template>
   <div id="app">
-    <!-- top, smaller nav bar -->
-    <div class="navbar navbar2">
-      <div class="navbar-menu is-active">
-        <div class="navbar-end">
-              <a class="navbar-item is-primary" v-if="!isLoggedIn" v-on:click="showSignupModal()">
-                <strong>Sign up</strong>
-              </a>
-              <router-link
-                class="navbar-item is-text"
-                v-if="isLoggedIn"
-                to="/my-profile"
-                exact-active-class="is-active"
-              >My Profile</router-link>
-              <a class="navbar-item is-light" v-if="!isLoggedIn">Track Order</a>
-              <a class="navbar-item is-light" v-if="!isLoggedIn" v-on:click="showLoginModal()">Log in</a>
-              <a class="navbar-item is-light" v-if="isLoggedIn" v-on:click="logout">Log out</a>
-        </div>
-      </div>
-    </div>
 
     <!-- main nav bar -->
-    <div class="navbar is-light">
+    <div class="navbar">
       <div class="navbar-brand">
         <a class="navbar-item" href="https://bulma.io">
-          <img src="./assets/FoxCycle.png" width="60">
-        </a>
+          <img src="./assets/FoxCycle.png" width="150">
+        </a> 
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -33,13 +14,23 @@
         </a>
       </div>
       <div class="navbar-menu is-active">
-        <div class="navbar-start">
-        </div>
-        <div class="navbar-end">
+        <div class="navbar-start">  
           <router-link class="navbar-item is-tab" to="/" exact-active-class="is-active">Home</router-link>
           <router-link class="navbar-item is-tab" to="/shop" exact-active-class="is-active">Shop</router-link>
           <router-link class="navbar-item is-tab" to="/services" exact-active-class="is-active">Services</router-link>
-          <router-link class="navbar-item is-tab" to="/about" exact-active-class="is-active">About</router-link>
+          <router-link class="navbar-item is-tab" to="/about" exact-active-class="is-active">About</router-link>       
+        </div>
+        <div class="navbar-end">
+          <a class="navbar-item is-tab" v-if="!isLoggedIn" v-on:click="showSignupModal()">Sign up</a>
+              <router-link
+                class="navbar-item is-text"
+                v-if="isLoggedIn"
+                to="/my-profile"
+                exact-active-class="is-active"
+              >My Profile</router-link>
+              <a class="navbar-item is-tab" v-if="!isLoggedIn">Track Order</a>
+              <a class="navbar-item is-tab" v-if="!isLoggedIn" v-on:click="showLoginModal()">Log in</a>
+              <a class="navbar-item is-tab" v-if="isLoggedIn" v-on:click="logout">Log out</a>
         </div>
       </div>
     </div>

@@ -21,7 +21,7 @@
       </div>
       <div class="column is-three-fifths">
         <figure class="image is-1by1">
-          <img alt="Map" src="../assets/Foxcycle.png" 
+          <img alt="Map" src="../assets/Fox_map.jpeg" 
                 style="margin-left:30px">
         </figure>
       </div>

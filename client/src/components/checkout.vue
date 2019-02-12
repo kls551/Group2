@@ -34,6 +34,12 @@
           <input class="input" type="text" placeholder="Credit Card number" v-model="checkout.cnum"/>
         </div>
       </div>
+      <div class="control">
+        <label class="radio">
+          <input type="radio" name="Pickup" v-model="checkout.Pickup" v-bind:value="true">
+          Pickup
+        </label>
+      </div>     
     </form>
   </modal>
 </template>
@@ -56,19 +62,21 @@ export default class order extends Vue {
     lastName: "",
     address: "",
     city: "",
-    cnum: ""
+    cnum: "",
+    Pickup: false,
+    user: 0
   };
   error: string | boolean = false;
 
   success() {
     debugger;
     this.error = false;
-    // this.signup.firstName = "done";
+    this.checkout.user = this.$store.state.user;
     console.log('hello');
     axios
       .post(APIConfig.buildUrl("/checkout"), {
         ...this.checkout
-      })
+      }, {headers: {token: this.$store.state.userToken}})
       .then((response: AxiosResponse<iOrder>) => {
         this.$emit("success");
       })
@@ -84,10 +92,12 @@ export default class order extends Vue {
 }
 
 export interface orderForm {
+  user: number;
   firstName: string;
   lastName: string;
   address: string;
   city: string;
   cnum: string;
+  Pickup: boolean;
 }
 </script>

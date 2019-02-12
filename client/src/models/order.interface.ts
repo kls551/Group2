@@ -3,5 +3,6 @@ export interface iOrder {
   lastName: string,
   address: string,
   cnum: string,
+  Pickup: boolean,
   id: number
 }

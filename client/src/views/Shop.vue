@@ -1,7 +1,7 @@
 <template>
   <div class="shop">
-   <div class="tile is-ancestor top-bar">
-     <div class="tile is-3 is-vertical is-parent">
+     <div class="tile is-ancestor top-bar">
+        <div class="tile is-3 is-vertical is-parent">
           <div class="tile is-child box">
             <nav class="panel">
               <p class="panel-heading">
@@ -253,7 +253,7 @@
          </div>
       </div>
    </div>
-</div>
+  </div>
 </template>
 
 <style lang="scss">

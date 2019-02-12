@@ -29,6 +29,7 @@
                 exact-active-class="is-active"
               >My Profile</router-link>
               <a class="navbar-item is-tab" v-if="!isLoggedIn">Track Order</a>
+              <a class="navbar-item is-tab" v-if="isLoggedIn" v-on:click="showcheckoutModal()">Checkout</a>
               <a class="navbar-item is-tab" v-if="!isLoggedIn" v-on:click="showLoginModal()">Log in</a>
               <a class="navbar-item is-tab" v-if="isLoggedIn" v-on:click="logout">Log out</a>
         </div>
@@ -40,6 +41,11 @@
       v-on:success="successSignup()"
       v-on:cancel="cancelSignup()"
     />
+    <checkout
+      v-bind:is-showing="showcheckout"
+      v-on:success="successCheckout()"
+      v-on:cancel="cancelCheckout()"
+    />
     <Login v-bind:is-showing="showLogin" v-on:success="successLogin()" v-on:cancel="cancelLogin()"/>
   </div>
 </template>
@@ -50,28 +56,41 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import Signup from "@/components/Signup.vue";
 import Login from "@/components/Login.vue";
+import checkout from "@/components/checkout.vue";
 import { APIConfig } from "@/utils/api.utils";
 
 @Component({
   components: {
     Signup,
-    Login
+    Login,
+    checkout
   }
 })
 export default class App extends Vue {
   public showSignup: boolean = false;
   public showLogin: boolean = false;
+  public showcheckout: boolean = false;
 
   showSignupModal() {
     this.showSignup = true;
   }
 
+  showcheckoutModal() {
+    this.showcheckout = true;
+  }
+
   successSignup() {
     this.showSignup = false;
+  }
+  successCheckout() {
+    this.showcheckout = false;
   }
 
   cancelSignup() {
     this.showSignup = false;
+  }
+  cancelCheckout() {
+    this.showcheckout = false;
   }
 
   showLoginModal() {

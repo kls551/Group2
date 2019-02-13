@@ -1,6 +1,7 @@
 <template>
   <div class="about">
     <div class="columns">
+      
       <div class="rightMargin column is-two-fifths">
         <h1>Address</h1>
         <h2>313 Madonna Road</h2>
@@ -19,12 +20,14 @@
         <h2>Email:   foxcycle@gmail.com</h2>
         <h2>Phone:   (805) 123-4567</h2>
       </div>
+      
       <div class="column is-three-fifths">
         <figure class="image is-1by1">
           <img alt="Map" src="../assets/Fox_map.jpeg" 
                 style="margin-left:30px">
         </figure>
       </div>
+
     </div>
   </div>
 </template>

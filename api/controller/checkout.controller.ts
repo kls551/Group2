@@ -12,17 +12,16 @@ export class OrderController extends DefaultController {
     const router = express.Router();
 
     router.route("/checkout")
-    // .get((req: Request, res: Response) => {
-    //   const checkoutRepo = getRepository(Order);
-    //   const sessionRepo = getRepository(Session);
-    //   const token = req.get("token");
-    //   sessionRepo.findOne(token, {relations: ["user", "user.todos"]}).then((foundSession: Session | undefined) => {
-    //     if (foundSession) {
-    //       const user = foundSession!.user;
-    //       res.status(200).send(user.todos);
-    //     }
-    //   });
-    // })
+    .get((req: Request, res: Response) => {
+      const orderRepo = getRepository(Order);
+      const sessionRepo = getRepository(Session);
+      const token = req.get("token");
+      orderRepo.findOne(token).then((foundOrder: Order | undefined) => {
+        if (foundOrder) {
+          res.status(200).send(Order);
+        }
+      });
+    })
     .post((req: Request, res: Response) => {
       const token = req.get("token");
       const sessionRepo = getRepository(Session);

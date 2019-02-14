@@ -13,6 +13,7 @@
           <span aria-hidden="true"></span>
         </a>
       </div>
+      
       <div class="navbar-menu is-active">
         <div class="navbar-start">  
           <router-link class="navbar-item is-tab" to="/" exact-active-class="is-active">Home</router-link>
@@ -21,6 +22,8 @@
           <router-link class="navbar-item is-tab" to="/about" exact-active-class="is-active">About</router-link>
           <router-link class="navbar-item is-tab" to="/Track Order" exact-active-class="is-active">Track Order</router-link>       
         </div>
+
+        <!-- Log in, Checkout, Sign Up Tabs -->
         <div class="navbar-end">
           <a class="navbar-item is-tab" v-if="!isLoggedIn" v-on:click="showSignupModal()">Sign up</a>
               <router-link
@@ -36,6 +39,30 @@
         </div>
       </div>
     </div>
+
+    <!-- Owner and Staff Login Tabs Only -->
+      <div class="container" style="margin-top: 15px; margin-bottom: 15px" v-if="isLoggedIn">
+        <div class="tabs is-boxed is-centered">
+          <ul>
+            <li class="is-active">
+              <a> <span>Manage Categories</span></a>
+            </li>
+            <li>
+              <a> <span>Orders/Inventory</span></a>
+            </li>
+            <li>
+              <a><span>Announcement</span>
+              </a>
+            </li>
+            <li>
+              <a><span>Accounts</span></a>
+            </li>
+            <li>
+              <a><span>Add Item</span></a>
+            </li>
+          </ul>
+        </div>
+      </div>
     <router-view class="container"/>
     <Signup
       v-bind:is-showing="showSignup"

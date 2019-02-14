@@ -16,6 +16,7 @@
     "acorn": "^6.1.0",
     "axios": "^0.18.0",
     "bulma": "^0.7.2",
+    "bulma-carousel": "^3.0.0",
     "bulma-extensions": "^4.1.0",
     "font-awesome": "^4.7.0",
     "i": "^0.3.6",

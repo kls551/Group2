@@ -14,12 +14,7 @@ export class User {
 
   @Column()
   public password!: string;
-<<<<<<< HEAD
-
-  @Column({default : null})
-=======
   @Column({default: null})
->>>>>>> b3f4f5e931252cc90e03749fa4d7cd45919787e4
   public profileUrl!: string;
 
   @Column()

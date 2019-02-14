@@ -23,9 +23,6 @@
                 <figure class="image is-128x128">
                   <img src="https://bulma.io/images/placeholders/128x128.png">
                 </figure>
-                <!-- <div class="media-left picture is-3">
-                    <!-- <img src="../assets/tireChange.jpg"  height="200" width="200">  -->
-                <!-- </div>  -->
                 <div class="tile is-1"> <br> </div>
                 <div class = "tile columns is-10 ">
                   <div class="column  media-content"> 
@@ -82,9 +79,7 @@
                 <figure class="image is-128x128">
                   <img src="https://bulma.io/images/placeholders/128x128.png">
                 </figure>
-                <!-- <div class="media-left picture is-3">
-                    <!-- <img src="../assets/tireChange.jpg"  height="200" width="200">  -->
-                <!-- </div>  -->
+
                 <div class="tile is-1"> <br> </div>
                 <div class = "tile columns is-10 ">
                   <div class="column  media-content"> 
@@ -140,9 +135,9 @@
                 <figure class="image is-128x128">
                   <img src="https://bulma.io/images/placeholders/128x128.png">
                 </figure>
-                <!-- <div class="media-left picture is-3">
-                    <!-- <img src="../assets/tireChange.jpg"  height="200" width="200">  -->
-                <!-- </div>  -->
+                <!-- <div class="media-left picture is-3"
+                    <img src="../assets/tireChange.jpg"  height="200" width="200"> 
+                </div>  -->
                 <div class="tile is-1"> <br> </div>
                 <div class = "tile columns is-10 ">
                   <div class="column  media-content"> 
@@ -189,21 +184,16 @@
             </div>
           </div>
 
-      </div>
-  </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import "../assets/main.scss";
 export default Vue.extend({
   
 })
 </script>
 
 <style lang="scss">
-@import "~bulma/css/bulma.css";
-@import "../assets/mybulma/sass/mystyles.scss";
 
 .service {
   color: seagreen;

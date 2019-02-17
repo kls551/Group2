@@ -31,7 +31,7 @@
                 to="/my-profile"
                 exact-active-class="is-active"
               >My Profile</router-link>
-              <a class="navbar-item is-tab" v-if="!isLoggedIn">Track Order</a>
+              <router-link class="navbar-item is-tab" v-if="!isLoggedIn" to="/trackorder">Track Order</router-link>
               <a class="navbar-item is-tab" v-if="isLoggedIn" v-on:click="showcheckoutModal()">Checkout</a>
               <a class="navbar-item is-tab" v-if="!isLoggedIn" v-on:click="showLoginModal()">Log in</a>
               <a class="navbar-item is-tab" v-if="isLoggedIn" v-on:click="logout">Log out</a>

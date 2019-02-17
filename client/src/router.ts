@@ -58,6 +58,12 @@ export default new Router({
       name: "itemview",
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/ItemView.vue")
+    },
+    {
+      path: "/trackorder",
+      name: "trackOrder",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/TrackOrder.vue")
     }
   ]
 });

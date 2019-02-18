@@ -64,6 +64,12 @@ export default new Router({
       name: "trackOrder",
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/TrackOrder.vue")
+    },
+    {
+      path: "/owner/managecategories",
+      name: "ownerManageCategories",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/ManageCategories.vue")
     }
   ]
 });

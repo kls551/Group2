@@ -44,14 +44,13 @@
         <div class="tabs is-boxed is-centered">
           <ul>
             <li class="is-active">
-              <a> <span>Manage Categories</span></a>
+              <router-link to="/owner/managecategories">Manage Categories</router-link>
             </li>
             <li>
               <a> <span>Orders/Inventory</span></a>
             </li>
             <li>
-              <a><span>Announcement</span>
-              </a>
+              <router-link to="/owner/announcment">Announcement</router-link>
             </li>
             <li>
               <a><span>Accounts</span></a>

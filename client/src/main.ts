@@ -9,11 +9,12 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(faUpload, faUser);
 
-Vue.component("font-awesome-icon", FontAwesomeIcon);
+
 
 Vue.config.productionTip = false;
 
 require("./assets/mybulma/sass/mystyles.scss")
+Vue.component("font-awesome-icon", FontAwesomeIcon);
 
 new Vue({
   router,

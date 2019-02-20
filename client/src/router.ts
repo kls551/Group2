@@ -66,10 +66,16 @@ export default new Router({
         import(/* webpackChunkName: "about" */ "./views/TrackOrder.vue")
     },
     {
-      path: "/owner/managecategories",
+      path: "/owner/manage-main-categories",
       name: "ownerManageCategories",
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/ManageCategories.vue")
+    },
+    {
+      path: "/owner/manage-sub-categories",
+      name: "ownerManageSubCategories",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/ManageSubCategories.vue")
     }
   ]
 });

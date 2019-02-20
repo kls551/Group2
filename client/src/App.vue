@@ -44,7 +44,7 @@
         <div class="tabs is-boxed is-centered">
           <ul>
             <li class="is-active">
-              <router-link to="/owner/managecategories">Manage Categories</router-link>
+              <router-link to="/owner/manage-main-categories">Manage Categories</router-link>
             </li>
             <li>
               <a> <span>Orders/Inventory</span></a>
@@ -157,4 +157,6 @@ export default class App extends Vue {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
 }
+
+
 </style>

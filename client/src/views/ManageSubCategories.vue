@@ -1,6 +1,6 @@
 <template>
 
-    <div class="container" style="margin-top: 25px; margin-bottom: 25px;">
+<div class="container" style="margin-top: 25px; margin-bottom: 25px;">
         
         <div class="tile is-ancestor">
 
@@ -20,9 +20,37 @@
 
             <div class="tile is-8 is-vertical is-parent">
                 <!-- Input box -->
-                <h2 style="padding-bottom: 15px">Manage Categories</h2>
+                <h2 style="padding-bottom: 15px">Manage Sub Categories</h2>
                 <div class="tile is-child box">
-                    <h3 style="padding-bottom: 10px;">New Main Category</h3>
+
+                    <!-- Main category drop down -->
+                    <h3 style="padding-bottom: 10px">Select Main Category</h3>
+                        <div class="dropdown is-hoverable" style="margin-bottom: 15px;">
+                            <div class="dropdown-trigger">
+                                <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                                <span style="color: grey">Ex: Bikes</span>
+                                <span class="icon is-small">
+                                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                                </span>
+                                </button>
+                            </div>
+                            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                <div class="dropdown-content">
+                                    <a href="#" class="dropdown-item">
+                                        Bikes
+                                    </a>
+                                    <a class="dropdown-item">
+                                        Accessories
+                                    </a>
+                                    <a href="#" class="dropdown-item is-active">
+                                        Clothing
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    <!-- sub category input box -->
+                    <h3 style="padding-bottom: 10px;">New Sub Category</h3>
                     <input type="text" class="input is-warning is-medium" placeholder="Category Name">
                     <div class="level-right">
                         <button class="button is-success" type="submit" style="margin-top: 15px;">Add</button>
@@ -31,28 +59,29 @@
 
                 <!-- Table -->
                 <div class="tile is-child box">
+                    <h2><b>Main Category :</b> Bikes </h2>
                     <table class="table is-hoverable is-fullwidth">
                     <thead>
                         <tr>
-                        <th>Categories</th>
+                        <th>Sub Categories</th>
                         <th>Edit</th>
                         <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <th>Bikes</th>
+                            <th>Mountain</th>
                             <!-- <td><font-awesome-icon="edit" /></td> -->
                             <td>edit icon</td>
                             <td>delete icon</td>
                         </tr>
                         <tr>
-                            <th>Accesories</th>
+                            <th>Racing</th>
                             <td>edit icon</td>
                             <td>delete icon</td>
                         </tr>
                         <tr>
-                            <th>Clothing</th>
+                            <th>Cruisers</th>
                             <td>edit icon</td>
                             <td>delete icon</td>
                         </tr>
@@ -86,8 +115,6 @@ h3 {
     font-size: 16px;
 }
 
-router-link:active {
-    background-color: orange;
-}
+
 
 </style>

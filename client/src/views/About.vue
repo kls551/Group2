@@ -22,10 +22,12 @@
       </div>
       
       <div class="column is-three-fifths">
+      <br> <br>
         <figure class="image is-1by1">
           <img alt="Map" src="../assets/Fox_map.jpeg" 
                 style="margin-left:30px">
         </figure>
+        <br>
       </div>
 
     </div>

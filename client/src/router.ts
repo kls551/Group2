@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
-import ToDos from "./views/ToDos.vue";
 import MyProfile from "./views/MyProfile.vue";
 
 Vue.use(Router);
@@ -58,6 +57,42 @@ export default new Router({
       name: "itemview",
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/ItemView.vue")
+    },
+    {
+      path: "/trackorder",
+      name: "trackOrder",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/TrackOrder.vue")
+    },
+    {
+      path: "/owner/manage-main-categories",
+      name: "ownerManageCategories",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/ManageCategories.vue")
+    },
+    {
+      path: "/owner/manage-sub-categories",
+      name: "ownerManageSubCategories",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/ManageSubCategories.vue")
+    },
+    {
+      path:"/owner/manage-orders",
+      name: "ownerManageOrders",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/OwnerOrders.vue")
+    },
+    {
+      path:"/owner/manage-inventory",
+      name: "ownerManageInventory",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/OwnerInventory.vue")
+    },
+    {
+      path:"/owner/add-item",
+      name: "ownerAddItem",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/NewItem.vue")
     }
   ]
 });

@@ -31,7 +31,7 @@
                 to="/my-profile"
                 exact-active-class="is-active"
               >My Profile</router-link>
-              <a class="navbar-item is-tab" v-if="!isLoggedIn">Track Order</a>
+              <router-link class="navbar-item is-tab" v-if="!isLoggedIn" to="/trackorder">Track Order</router-link>
               <a class="navbar-item is-tab" v-if="isLoggedIn" v-on:click="showcheckoutModal()">Checkout</a>
               <a class="navbar-item is-tab" v-if="!isLoggedIn" v-on:click="showLoginModal()">Log in</a>
               <a class="navbar-item is-tab" v-if="isLoggedIn" v-on:click="logout">Log out</a>
@@ -44,20 +44,22 @@
         <div class="tabs is-boxed is-centered">
           <ul>
             <li class="is-active">
-              <a> <span>Manage Categories</span></a>
+              <router-link to="/owner/manage-main-categories">Manage Categories</router-link>
             </li>
             <li>
-              <a> <span>Orders/Inventory</span></a>
+              <router-link to="/owner/manage-orders">Orders</router-link>
             </li>
             <li>
-              <a><span>Announcement</span>
-              </a>
+              <router-link to="/owner/manage-inventory">Inventory</router-link>
+            </li>
+            <li>
+              <router-link to="/owner/announcment">Announcement</router-link>
             </li>
             <li>
               <a><span>Accounts</span></a>
             </li>
             <li>
-              <a><span>Add Item</span></a>
+              <router-link to="/owner/add-item">New Item</router-link>
             </li>
           </ul>
         </div>
@@ -85,6 +87,11 @@ import Signup from "@/components/Signup.vue";
 import Login from "@/components/Login.vue";
 import checkout from "@/components/checkout.vue";
 import { APIConfig } from "@/utils/api.utils";
+import Vue from 'vue'
+import Buefy from 'buefy'
+import 'buefy/dist/buefy.css'
+
+Vue.use(Buefy)
 
 @Component({
   components: {
@@ -158,4 +165,6 @@ export default class App extends Vue {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
 }
+
+
 </style>

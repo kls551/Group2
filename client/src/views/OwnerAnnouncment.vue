@@ -4,8 +4,8 @@
 
         <!-- Announcement Form -->
         <div class="tile is-ancestor">
-            <div class="tile is-3"></div>
-            <div class="tile is-6 is-vertical is-parent">
+            <div class="tile is-2"></div>
+            <div class="tile is-8 is-vertical is-parent">
                 <h2>Create Announcment</h2>
                 <div class="tile is-child box">
                     <span>Title</span>

@@ -52,6 +52,12 @@ export default new Router({
       name: "announcment",
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/OwnerAnnouncment.vue")
+    },
+    {
+      path: "/shop/itemview",
+      name: "itemview",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/ItemView.vue")
     }
   ]
 });

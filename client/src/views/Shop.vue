@@ -58,7 +58,7 @@
       </div>
       <div class="tile">
          <div class="tile is-parent is-vertical">
-             <div class="tile is-child box">
+             <div class="tile is-child box" onclick="location.href='shop/itemview';" style="cursor: pointer;">
                 <figure class="image is-128x128 center">
                    <img src="https://bulma.io/images/placeholders/128x128.png">
                 </figure>

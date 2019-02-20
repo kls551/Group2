@@ -1,88 +1,51 @@
 <template>
-  <!-- <modal v-bind:is-showing="isShowing" title="Track Order" success-button="Track" v-on:success="success" v-on:cancel="cancel">
-    <form v-on:submit.prevent="onSubmit">
-      <p v-if="error" class="is-danger">
-        {{ error }}
-      </p>
-      <div class="field">
-        <label class="label">Order Number</label>
-        <div class="control">
-          <input class="input" type="text" placeholder="Order Number" v-model="to.Order"/>
+
+    <div class="container" style="margin-top: 5%; margin-bottom: 15px;">
+        <div class="tile is-ancestor">
+            <div class="tile is-2 is-parent">
+                <div class="tile is-child"></div>
+            </div>
+
+            <!-- Order number box and submit button -->
+            <div class="tile is-8 is-parent is-vertical">
+                <h2 style="margin-bottom: 15px">Track My Order</h2>
+                <div class="tile is-child box">
+                    <input type="text" class="input is-warning is-large" placeholder="Tracking Number">
+                    <button class="button is-success is-normal is-fullwidth" type="submit" style="margin-top: 15px">Submit</button>
+                </div>
+
+                <!-- order information to appear when order retrieved from databse -->
+                <h2 style="margin-bottom: 15px; margin-top: 15px; padding-top: 20px; border-top: 1px solid orange;">Order Information</h2>
+                <div class="tile is-child box">
+                    <h3>Ordered on: </h3>
+                    <h3>Shipped on: </h3>
+                    <h3>Current Location: </h3>
+                    <h3>Expected Delivery: </h3>
+                    <h3>Shipping to: </h3>
+                </div>
+            </div>
+
+            <div class="tile is-2 is-parent">
+                <div class="tile is-child"></div>
+            </div>
+
         </div>
-      </div>   
-    </form> -->
-    <div>
-    <h2>My ToDoList:</h2>
-    <table>
-      <tr>
-        <th>Todo   </th>
-        <th>Duedate   </th>
-        <th>Delete   </th>
-      </tr>
-      <tr v-for="(todo, index) in mytodos" v-bind:key="index" style="width:100%">
-        <td>{{ todo.userId }}</td>
-        <td>{{ todo.fn }}</td>
-        <td>
-          <button class="button button3" v-on:click="deleteItem(todo.id)">Delete?</button>
-        </td>
-      </tr>
-      {{loadToDos()}}
-    </table>
     </div>
-  <!-- </modal> -->
+    
 </template>
 
+<style scoped lang="scss">
 
-<script lang="ts">
-import axios, { AxiosResponse } from "axios";
-import { APIConfig } from "../utils/api.utils";
-import { Component, Prop, Vue } from "vue-property-decorator";
-import Modal from "./Modal.vue";
-import { iOrder } from "../models/order.interface";
-@Component({})
-export default class track extends Vue {
-  public shownt: boolean = false;
-  public showNewItm: boolean = false;
-  mytodos: order[] = [];
-  get isLoggedIn(): boolean {
-    return !!this.$store.state.user;
-  }
-  loadToDos() {
-    if (this.$store.state.user) {
-      axios.get(APIConfig.buildUrl("/trackorder"), {
-        headers: {token: 1}
-      })
-      .then((response) => {
-        this.mytodos = response.data;
-      })
-      .catch((errorResponse: any) => {
-        this.mytodos = errorResponse.response.data.reason;
-      });
-    }
-  }
-
-  showNewItmModal() {
-    this.showNewItm = true;
-  }
-  success() {
-    this.showNewItm = false;
-  }
-  cancel() {
-    this.showNewItm = false;
-  }
+h2 {
+    font-size: 32px;
+    font-family: 'Questrial';
 }
 
-interface order {
-  id: number | null;
-  userId: number | null;
-  processing: boolean | null;
-  shipped: boolean | null;
-  orderedDate: Date | null;
-  Address: string | null;
-  cnum: string | null;
-  fn: string | null;
-  ln: string | null;
-  City: string | null;
-  pickup: boolean | null;
+h3 {
+    font-size: 20px;
+    font-family: 'Questrial';
+    color: black;
+    padding: 5px;
 }
-</script>
+
+</style>

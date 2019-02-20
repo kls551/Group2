@@ -26,24 +26,6 @@
                     
                 </b-table>
             </b-tab-item>
-
-            <b-tab-item label="Inventory">
-                <b-table
-                    :data="data"
-                    :columns="columns"
-                    :checked-rows.sync="checkedRows"
-                    :is-row-checkable="(row) => row.id !== 3"
-                    checkable>
-
-                    <template slot="bottom-left">
-                        <div class="buttons has-addons">
-                            <span class="button">Delete Selected</span>
-                            <span class="button">Save Changes</span>
-                        </div>
-                    </template>
-                    
-                </b-table>
-            </b-tab-item>
         </b-tabs>
 
        

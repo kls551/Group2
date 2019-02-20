@@ -47,7 +47,10 @@
               <router-link to="/owner/manage-main-categories">Manage Categories</router-link>
             </li>
             <li>
-              <a> <span>Orders/Inventory</span></a>
+              <router-link to="/owner/manage-orders">Orders</router-link>
+            </li>
+            <li>
+              <router-link to="/owner/manage-inventory">Inventory</router-link>
             </li>
             <li>
               <router-link to="/owner/announcment">Announcement</router-link>
@@ -56,7 +59,7 @@
               <a><span>Accounts</span></a>
             </li>
             <li>
-              <a><span>Add Item</span></a>
+              <router-link to="/owner/add-item">New Item</router-link>
             </li>
           </ul>
         </div>

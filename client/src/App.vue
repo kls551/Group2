@@ -20,7 +20,8 @@
           <router-link class="navbar-item is-tab" to="/shop" exact-active-class="is-active">Shop</router-link>
           <router-link class="navbar-item is-tab" to="/services" exact-active-class="is-active">Services</router-link>
           <router-link class="navbar-item is-tab" to="/about" exact-active-class="is-active">About</router-link>
-          <router-link class="navbar-item is-tab" to="/Track Order" exact-active-class="is-active">Track Order</router-link>       
+          <router-link class="navbar-item is-tab" to="/trackorder" exact-active-class="is-active">Track Order</router-link>   
+          <router-link class="navbar-item is-tab" to="/todos" exact-active-class="is-active">my Todos</router-link>    
         </div>
 
         <!-- Log in, Checkout, Sign Up Tabs -->

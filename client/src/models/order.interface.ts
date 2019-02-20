@@ -1,8 +1,13 @@
 export interface iOrder {
-  firstName: string,
-  lastName: string,
-  address: string,
-  cnum: string,
-  Pickup: boolean,
-  id: number
+  id: number;
+  userId: number;
+  processing: boolean;
+  shipped: boolean;
+  orderedDate: Date;
+  Address: string;
+  cnum: string;
+  fn: string;
+  ln: string;
+  City: string;
+  pickup: boolean;
 }

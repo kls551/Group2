@@ -11,10 +11,9 @@ export class OrderController extends DefaultController {
   protected initializeRoutes(): express.Router {
     const router = express.Router();
 
-    router.route("/checkout")
+    router.route("/trackorder")
     .get((req: Request, res: Response) => {
       const orderRepo = getRepository(Order);
-      const sessionRepo = getRepository(Session);
       const token = req.get("token");
       orderRepo.findOne(token).then((foundOrder: Order | undefined) => {
         if (foundOrder) {
@@ -22,6 +21,8 @@ export class OrderController extends DefaultController {
         }
       });
     })
+
+    router.route("/checkout")
     .post((req: Request, res: Response) => {
       const token = req.get("token");
       const sessionRepo = getRepository(Session);

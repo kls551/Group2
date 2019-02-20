@@ -69,6 +69,24 @@ export default new Router({
       name: "itemview",
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/ItemView.vue")
+    },
+    {
+      path: "/trackorder",
+      name: "trackOrder",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/TrackOrder.vue")
+    },
+    {
+      path: "/owner/manage-main-categories",
+      name: "ownerManageCategories",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/ManageCategories.vue")
+    },
+    {
+      path: "/owner/manage-sub-categories",
+      name: "ownerManageSubCategories",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/ManageSubCategories.vue")
     }
   ]
 });

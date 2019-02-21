@@ -43,7 +43,7 @@
 
     <!-- Owner and Staff Login Tabs Only -->
       <div class="container" style="margin-top: 15px; margin-bottom: 15px" v-if="isLoggedIn">
-        <div class="tabs is-boxed is-centered" v-show="isAdmin">
+        <div class="tabs is-boxed is-centered" v-show="isStaff">
           <ul>
               <router-link to="/owner/manage-main-categories" tag="li" exact-active-class="is-active"><a>Manage Categories</a></router-link>
 
@@ -53,7 +53,7 @@
 
               <router-link to="/owner/announcment" tag="li" exact-active-class="is-active"><a>Announcement</a></router-link>
 
-              <a><span>Accounts</span></a>
+              <router-link to="/owner/accounts" tag="li" exact-active-class="is-active"><a>Accounts</a></router-link>
 
               <router-link to="/owner/add-item" tag="li" exact-active-class="is-active"><a>New Item</a></router-link>
           </ul>
@@ -108,7 +108,6 @@ export default class App extends Vue {
   showSignupModal() {
     this.showSignup = true;
   }
-
   successSignup() {
     this.showSignup = false;
   }
@@ -153,8 +152,8 @@ export default class App extends Vue {
     return !!this.$store.state.user;
   }
 
-  get isAdmin(): boolean {
-    return true || this.$store.state.user.isAdmin === 1
+  get isStaff(): boolean {
+    return this.$store.state.user && (this.$store.state.user.isAdmin === 0 || this.$store.state.user.isAdmin === 1);
   }
   
   logout() {

@@ -2,9 +2,8 @@
 <div class="container" style="margin-top: 15px; margin-bottom: 15px">
     <!-- Four Grid Pictures -->
 
-        <!-- Preview Announcment -->
-        {{preview()}}
-        <div class="box">
+    <!-- Preview Announcment -->
+    <div class="box">
         <article class="message is-warning" v-for="(ann, index) in announcements" v-bind:key="index">
             <div class="message-header">
                 <p>{{ann.title}}</p>
@@ -14,7 +13,7 @@
                 {{ann.body}}
             </div>
         </article>
-        </div>
+    </div>
     <div class="tile is-ancestor">
         <div class="tile is-1"></div>
         <div class="tile is-5 is-vertical is-parent">
@@ -93,7 +92,10 @@ import {
 export default class Home extends Vue {
     error: string | boolean = false;
     announcements: iAnnouncement[] = [];
-    
+
+    mounted() {
+        this.preview();
+    }
     preview() {
         axios
             .get(APIConfig.buildUrl("/announcement"))

@@ -1,8 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
-import ToDos from "./views/ToDos.vue";
-import OwnerAnnouncement from "./views/OwnerAnnouncement.vue";
 import MyProfile from "./views/MyProfile.vue";
 
 Vue.use(Router);
@@ -88,6 +86,24 @@ export default new Router({
       name: "ownerManageSubCategories",
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/ManageSubCategories.vue")
+    },
+    {
+      path:"/owner/manage-orders",
+      name: "ownerManageOrders",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/OwnerOrders.vue")
+    },
+    {
+      path:"/owner/manage-inventory",
+      name: "ownerManageInventory",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/OwnerInventory.vue")
+    },
+    {
+      path:"/owner/add-item",
+      name: "ownerAddItem",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/NewItem.vue")
     }
   ]
 });

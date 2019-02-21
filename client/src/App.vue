@@ -47,13 +47,15 @@
           <ul>
               <router-link to="/owner/manage-main-categories" tag="li" exact-active-class="is-active"><a>Manage Categories</a></router-link>
 
-              <a> <span>Orders/Inventory</span></a>
+              <router-link to="/owner/manage-orders" tag="li" exact-active-class="is-active"><a>Orders</a></router-link>
+
+              <router-link to="/owner/manage-inventory" tag="li" exact-active-class="is-active"><a>Inventory</a></router-link>
 
               <router-link to="/owner/announcment" tag="li" exact-active-class="is-active"><a>Announcement</a></router-link>
 
               <a><span>Accounts</span></a>
 
-              <a><span>Add Item</span></a>
+              <router-link to="/owner/add-item" tag="li" exact-active-class="is-active"><a>New Item</a></router-link>
           </ul>
         </div>
       </div>
@@ -85,6 +87,11 @@ import Signup from "@/components/Signup.vue";
 import Login from "@/components/Login.vue";
 import checkout from "@/components/checkout.vue";
 import { APIConfig } from "@/utils/api.utils";
+import Vue from 'vue'
+import Buefy from 'buefy'
+import 'buefy/dist/buefy.css'
+
+Vue.use(Buefy)
 
 @Component({
   components: {

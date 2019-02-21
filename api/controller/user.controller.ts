@@ -6,6 +6,7 @@ import Path from "path";
 
 import { getRepository } from "typeorm";
 import { Session, User } from "../entity";
+import { isDate } from "util";
 
 export class UserController extends DefaultController {
   protected initializeRoutes(): Router {
@@ -15,17 +16,18 @@ export class UserController extends DefaultController {
       .get((req: Request, res: Response) => {
         const userRepo = getRepository(User);
         userRepo.find().then((users: User[]) => {
-          res.status(200).send({ users });
+          res.status(200).send(users);
         });
       })
       .post((req: Request, res: Response) => {
         const userRepo = getRepository(User);
-        const { firstName, lastName, emailAddress, password } = req.body;
+        const { firstName, lastName, emailAddress, password, isAdmin } = req.body;
         const user = new User();
         user.firstName = firstName;
         user.lastName = lastName;
         user.emailAddress = emailAddress;
         user.password = password;
+        user.isAdmin = isAdmin;
         userRepo.save(user).then(
           createdUser => {
             res.status(200).send({ createdUser });
@@ -58,7 +60,8 @@ export class UserController extends DefaultController {
         });
       }
     );
-    router.route("/users/:id").get((req: Request, res: Response) => {
+    router.route("/users/:id")
+    .get((req: Request, res: Response) => {
       const userRepo = getRepository(User);
       userRepo.findOne(req.params.id).then(
         (user: User | undefined) => {
@@ -72,6 +75,14 @@ export class UserController extends DefaultController {
           res.sendStatus(404);
         }
       );
+    })
+    .delete((req: Request, res: Response) => {
+      const userRepo = getRepository(User);
+      userRepo.findOneOrFail(req.params.id).then((foundUser: User) => {
+        userRepo.delete(foundUser).then(result => {
+          res.send(200);
+        });
+      });
     });
     return router;
   }

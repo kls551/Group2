@@ -76,17 +76,13 @@ import axios, {
 import {
     APIConfig
 } from "../utils/api.utils";
-import {
-    Component,
-    Prop,
-    Vue
-} from "vue-property-decorator";
+import {Component,Prop,Vue} from "vue-property-decorator";
 import {
     iAnnouncement
 } from "../models/announcement.interface";
 
 @Component
-export default class EditAnnouncements extends Vue {
+export default class OwnerAnnouncement extends Vue {
     error: string | boolean = false;
     announcementTitle: String = "";
     announcementBody: String = "";

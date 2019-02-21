@@ -57,7 +57,6 @@ export default class newItem extends Vue {
       });
   }
 
-
   cancel() {
     this.$emit("cancel");
   }

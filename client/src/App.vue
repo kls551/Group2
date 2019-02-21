@@ -43,23 +43,17 @@
 
     <!-- Owner and Staff Login Tabs Only -->
       <div class="container" style="margin-top: 15px; margin-bottom: 15px" v-if="isLoggedIn">
-        <div class="tabs is-boxed is-centered">
+        <div class="tabs is-boxed is-centered" v-show="isAdmin">
           <ul>
-            <li class="is-active">
-              <router-link to="/owner/manage-main-categories">Manage Categories</router-link>
-            </li>
-            <li>
+              <router-link to="/owner/manage-main-categories" tag="li" exact-active-class="is-active"><a>Manage Categories</a></router-link>
+
               <a> <span>Orders/Inventory</span></a>
-            </li>
-            <li>
-              <router-link to="/owner/announcment">Announcement</router-link>
-            </li>
-            <li>
+
+              <router-link to="/owner/announcment" tag="li" exact-active-class="is-active"><a>Announcement</a></router-link>
+
               <a><span>Accounts</span></a>
-            </li>
-            <li>
+
               <a><span>Add Item</span></a>
-            </li>
           </ul>
         </div>
       </div>
@@ -153,6 +147,10 @@ export default class App extends Vue {
     return !!this.$store.state.user;
   }
 
+  get isAdmin(): boolean {
+    return true || this.$store.state.user.isAdmin === 1
+  }
+  
   logout() {
     axios
       .post(APIConfig.buildUrl("/logout"), null, {

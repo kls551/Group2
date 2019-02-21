@@ -22,6 +22,9 @@ export class User {
   @Index({ unique: true })
   public emailAddress!: string;
 
+  @Column({default: null})
+  public isAdmin!: number;
+
   @OneToMany(type => Order, (order) => order.userId)
   public orders!: Order[];
 

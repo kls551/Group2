@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
 import ToDos from "./views/ToDos.vue";
+import OwnerAnnouncement from "./views/OwnerAnnouncement.vue";
 import MyProfile from "./views/MyProfile.vue";
 
 Vue.use(Router);
@@ -56,14 +57,14 @@ export default new Router({
       path: "/owner/announcment",
       name: "announcment",
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/OwnerAnnouncment.vue")
+        import(/* webpackChunkName: "about" */ "./views/OwnerAnnouncement.vue")
     },
-    {
-      path: "/trackorder",
-      name: "trackorder",
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/trackorder.vue")
-    },
+    // {
+    //   path: "/trackorder",
+    //   name: "trackorder",
+    //   component: () =>
+    //     import(/* webpackChunkName: "about" */ "./views/trackorder.vue")
+    // },
     {
       path: "/shop/itemview",
       name: "itemview",

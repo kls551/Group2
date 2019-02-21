@@ -14,10 +14,11 @@ export class OrderController extends DefaultController {
     router.route("/trackorder")
     .get((req: Request, res: Response) => {
       const orderRepo = getRepository(Order);
+      const sessionRepo = getRepository(Session);
       const token = req.get("token");
-      orderRepo.findOne(token).then((foundOrder: Order | undefined) => {
+      orderRepo.findOne(1).then((foundOrder: Order | undefined) => {
         if (foundOrder) {
-          res.status(200).send(Order);
+          res.status(200).send(foundOrder);
         }
       });
     })
@@ -31,11 +32,6 @@ export class OrderController extends DefaultController {
       sessionRepo.findOne(token).then((foundSession: Session | undefined) => {
         const user = foundSession!.user;
         order.userId = req.body.user;
-        order.fn = req.body.firstName;
-        order.ln = req.body.lastName;
-        order.Address = req.body.address;
-        order.City = req.body.city;
-        order.cnum = req.body.cnum;
         order.pickup = req.body.Pickup;
         orderRepo.save(order).then((savedOrder: Order) => {
           res.status(200).send({ order });

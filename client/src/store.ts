@@ -5,6 +5,7 @@ import { APIConfig } from "./utils/api.utils";
 import axios, { AxiosResponse } from "axios";
 
 import { iUser } from "@/models/user.interface";
+import { iAnnouncement } from './models/announcement.interface';
 
 Vue.use(Vuex);
 
@@ -20,7 +21,7 @@ interface iLoginPayload {
 
 const state: iRootState = {
   userToken: null,
-  user: null
+  user: null,
 };
 
 const mutations: MutationTree<iRootState> = {

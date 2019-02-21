@@ -46,12 +46,23 @@ export default new Router({
       name: "myProfile",
       component: MyProfile
     },
+    // {
+    //   path: "/todos",
+    //   name: "todos",
+    //   component: ToDos
+    // },
     {
       path: "/owner/announcment",
       name: "announcment",
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/OwnerAnnouncment.vue")
+        import(/* webpackChunkName: "about" */ "./views/OwnerAnnouncement.vue")
     },
+    // {
+    //   path: "/trackorder",
+    //   name: "trackorder",
+    //   component: () =>
+    //     import(/* webpackChunkName: "about" */ "./views/trackorder.vue")
+    // },
     {
       path: "/shop/itemview",
       name: "itemview",

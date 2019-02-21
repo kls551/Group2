@@ -9,21 +9,6 @@ export class Order {
   public userId!: number;
 
   @Column({default:null})
-  public fn!: string;
-
-  @Column({default:null})
-  public ln!: string;
-
-  @Column({default:null})
-  public Address!: string;
-
-  @Column({default:null})
-  public City!: string;
-
-  @Column({default:null})
-  public cnum!: string;
-
-  @Column({default:null})
   public complete!: boolean;
 
   @Column({default:null})

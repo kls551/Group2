@@ -4,7 +4,7 @@
     <!-- Preview Announcment -->
     <div class="box">
         <h2> Users </h2>
-        <table class="table is-full">
+        <table class="table">
             <thead>
                 <tr>
                     <th><abbr title="Id">Pos</abbr></th>

@@ -54,15 +54,16 @@
         <!-- Preview Announcment -->
         <div class="box">
             <h2> Preview Announcements </h2>
-        <article class="message is-warning" v-for="(ann, index) in announcements" v-bind:key="index">
-            <div class="message-header">
-                <p>{{ann.title}}</p>
-                <button class="delete" aria-label="delete"></button>
-            </div>
-            <div class="message-body">
-                {{ann.body}}
-            </div>
-        </article>
+            <article class="message is-warning" v-for="(ann, index) in announcements" v-bind:key="index">
+                <div class="message-header">
+                    <p>{{ann.title}}</p>
+                    <span class="file-icon"><font-awesome-icon icon="edit"/></span>
+                    <button class="delete" aria-label="delete" v-on:click="deleteItem(ann.id)"></button>
+                </div>
+                <div class="message-body">
+                    {{ann.body}}
+                </div>
+            </article>
         </div>
 
     </div>
@@ -76,7 +77,11 @@ import axios, {
 import {
     APIConfig
 } from "../utils/api.utils";
-import {Component,Prop,Vue} from "vue-property-decorator";
+import {
+    Component,
+    Prop,
+    Vue
+} from "vue-property-decorator";
 import {
     iAnnouncement
 } from "../models/announcement.interface";
@@ -118,6 +123,17 @@ export default class OwnerAnnouncement extends Vue {
             .catch((res: AxiosError) => {
                 this.error = res.response && res.response.data.error;
             });
+    }
+
+    deleteItem(index: number) {
+        axios.delete(APIConfig.buildUrl("/announcement/" + index), {
+                headers: {
+                    token: this.$store.state.userToken
+                }
+            })
+            .then(() => {
+                this.preview();
+            })
     }
 
     get picture(): boolean {

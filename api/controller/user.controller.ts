@@ -37,7 +37,8 @@ export class UserController extends DefaultController {
           }
         );
       });
-    router.route("/users/:id").post(
+    router.route("/users/:id")
+    .post(
       this.isAuthenticated(true),
       multer({
         dest: Path.join(__dirname, "..", "public", "profilePhotos")
@@ -59,8 +60,7 @@ export class UserController extends DefaultController {
           }
         });
       }
-    );
-    router.route("/users/:id")
+    )
     .get((req: Request, res: Response) => {
       const userRepo = getRepository(User);
       userRepo.findOne(req.params.id).then(

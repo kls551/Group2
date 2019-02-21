@@ -93,6 +93,12 @@ export default new Router({
       name: "ownerAddItem",
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/NewItem.vue")
+    },
+    {
+      path:"/owner/services",
+      name: "ownerServices",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/OwnerServices.vue")
     }
   ]
 });

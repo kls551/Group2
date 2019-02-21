@@ -1,7 +1,15 @@
 <template>
   <div class="services">
     <br> 
-      
+      {{getServices()}}
+      <div v-if="display">
+        <div v-for="(service, index) in services" v-bind:key="index">
+          <div> supposed to be service here </div>
+          <span>{{ ser.serviceName }}</span>
+          <span>{{ ser.description }}</span>
+        </div>
+      </div>
+
       <div class="tile is-ancestor is-vertical"> 
         <!-- <div class="tile is-veritical"> -->
         <div class="tile"> 
@@ -36,8 +44,8 @@
                   <div class="column media-content"> 
                     <p class="subtitle">
                       Install new rear wheel <br>
-                      Wheel truing (Minor/Major) <br>
-                      Wheel retensioning, dishing and truing 
+                      Wheel truing  <br>
+                      Wheel retensioning 
                     </p>
                   </div>
                   
@@ -94,7 +102,7 @@
                     <p class="subtitle">
                       Install new rear wheel <br>
                       Wheel truing (Minor/Major) <br>
-                      Wheel retensioning, dishing and truing 
+                      Wheel retensioning
                     </p>
                   </div>
                   
@@ -152,7 +160,7 @@
                     <p class="subtitle">
                       Install new rear wheel <br>
                       Wheel truing (Minor/Major) <br>
-                      Wheel retensioning, dishing and truing 
+                      Wheel retensioning 
                     </p>
                   </div>
                   
@@ -188,15 +196,41 @@
 
 <script lang="ts">
 import Vue from 'vue'
-export default Vue.extend({
-  
+import axios, { AxiosResponse } from "axios";
+import { APIConfig } from "../utils/api.utils";
+import { Component, Prop} from "vue-property-decorator";
+import Modal  from "../components/Modal.vue";
+import { iService } from "../models/service.interface";
+import addServiceForm  from "./ownerService.vue";
+import  { Service } from "../../../api/entity";
+
+@Component({
+  components: { Modal }
 })
+
+export default class Services extends Vue{
+    @Prop(Boolean) isShowing: boolean = false;
+    
+    public services: Service[] = [];
+    public display = true;
+    getServices() {
+      console.log("getting services");
+      axios.get(APIConfig.buildUrl("/owner/services"), {
+      })
+      .then((response) => {
+          this.services = response.data;
+          console.log("service ", this.services);
+      });
+    }
+}
+
+
 </script>
 
 <style lang="scss">
 
 .service {
-  color: seagreen;
+  color: #ffa500;
 }
 
 .hours {
@@ -204,7 +238,7 @@ export default Vue.extend({
 }
 
 .subtitle {
-  font-size: 5erm;
+  font-size: 16px;
 }
 /* .column {
   -webkit-column-gap: 3; 

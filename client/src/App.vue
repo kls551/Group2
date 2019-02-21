@@ -56,6 +56,9 @@
               <router-link to="/owner/announcment">Announcement</router-link>
             </li>
             <li>
+              <router-link to="/owner/services">Services</router-link>
+            </li>
+            <li>
               <a><span>Accounts</span></a>
             </li>
             <li>
@@ -87,9 +90,9 @@ import Signup from "@/components/Signup.vue";
 import Login from "@/components/Login.vue";
 import checkout from "@/components/checkout.vue";
 import { APIConfig } from "@/utils/api.utils";
-import Vue from 'vue'
-import Buefy from 'buefy'
-import 'buefy/dist/buefy.css'
+// import Vue from 'vue'
+import Buefy from 'buefy';
+import 'buefy/dist/buefy.css';
 
 Vue.use(Buefy)
 

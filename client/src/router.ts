@@ -46,11 +46,11 @@ export default new Router({
       name: "myProfile",
       component: MyProfile
     },
-    {
-      path: "/todos",
-      name: "todos",
-      component: ToDos
-    },
+    // {
+    //   path: "/todos",
+    //   name: "todos",
+    //   component: ToDos
+    // },
     {
       path: "/owner/announcment",
       name: "announcment",

@@ -8,7 +8,7 @@
         <article class="message is-warning" v-for="(ann, index) in announcements" v-bind:key="index">
             <div class="message-header">
                 <p>{{ann.title}}</p>
-                <button class="delete" aria-label="delete"></button>
+                <!-- <button class="delete" aria-label="delete"></button> -->
             </div>
             <div class="message-body">
                 {{ann.body}}

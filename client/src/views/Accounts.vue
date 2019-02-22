@@ -4,7 +4,7 @@
     <!-- Preview Announcment -->
     <div class="box">
         <h2> Users </h2>
-        <table class="table">
+        <table class="table is-hoverable is-fullwidth">
             <thead>
                 <tr>
                     <th><abbr title="Id">Pos</abbr></th>
@@ -13,10 +13,11 @@
                     <th><abbr title="profileUrl">img</abbr></th>
                     <th><abbr title="emailAddress">Email</abbr></th>
                     <th><abbr title="Type">Type</abbr></th>
+                    <th v-fi="isAd">edit</th>
                     <th v-if="isAd">delete</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody >
                 <tr v-for="(user, index) in users" v-bind:key="index">
                     <th>{{user.id}}</th>
                     <td>{{user.firstName}}</td>

@@ -63,6 +63,7 @@ export default class order extends Vue {
     address: "",
     city: "",
     cnum: "",
+    orderedDate: new Date,
     Pickup: false,
     user: 0
   };
@@ -99,5 +100,6 @@ export interface orderForm {
   city: string;
   cnum: string;
   Pickup: boolean;
+  orderedDate: Date | null;
 }
 </script>

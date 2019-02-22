@@ -19,12 +19,12 @@
                 <h2 style="margin-bottom: 15px; margin-top: 15px; padding-top: 20px; border-top: 1px solid orange;">Order Information</h2>
                 <div class="tile is-child box" v-if="isnotnull">
                     <h3>Ordered on: </h3>
-                        <span> {{new Date(order.orderedDate).toDateString()}}</span>
+                        <span> {{ new Date(order.orderedDate).toDateString() }}</span>
                     <h3>Shipped on: </h3>
-                        <span> {{new Date(order.shipped).toDateString()}}</span>
+                        <span v-if="shipnotnull"> {{ new Date(order.shipped).toDateString() }}</span>
                     <h3>Current Location: </h3>
                     <h3>Expected Delivery: </h3>
-                        <span> {{new Date(expected).toDateString()}}</span>
+                        <span v-if="shipnotnull"> {{ expected.toDateString() }}</span>
                     <h3>Shipping to: </h3>
                         <span> {{order.address + ", "}}</span>
                         <span> {{order.city}}</span>
@@ -70,7 +70,7 @@ export default class TrackOrder extends Vue {
             .then((response: AxiosResponse) => {
                 console.log(response.data);
                 this.order = response.data;
-                if(this.order !== null) {
+                if(this.order !== null && this.order.shipped !== null) {
                     this.expected = new Date(this.order.shipped);
                     this.expected.setDate(this.expected.getDate() + 10);
                 }
@@ -84,6 +84,10 @@ export default class TrackOrder extends Vue {
 
     get isnotnull(): boolean {
         return !!this.order;
+    }
+
+    get shipnotnull(): boolean {
+        return !!this.order && !!this.order.shipped;
     }
 
     get isAd(): boolean {

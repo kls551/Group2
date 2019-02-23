@@ -4,7 +4,19 @@
 
         <!-- Announcement Form -->
         <div class="tile is-ancestor">
-            <div class="tile is-2"></div>
+           <!-- navigating services options on the left -->
+            <div class="tile is-2"> 
+                <aside class="menu" >
+                    <br>
+                    <div class="menu-label title"> <h2> Menu </h2> </div>
+                    <ul class="menu-list">
+                        <li ><router-link to="/owner/edit-services"> Edit </router-link></li>
+                        <li ><router-link to="/owner/create-services"> Create New Service </router-link></li>
+                    </ul>
+                </aside>
+            </div>
+
+            <!-- create services on the right  -->
             <div class="tile is-8 is-vertical is-parent">
                 <h2>Create Service</h2>
                 <div class="tile is-child box">
@@ -24,7 +36,7 @@
                                 <i class="fas fa-upload"></i>
                             </span>
                             <span class="file-label">
-                                Choose an Image…
+                                Choose File
                             </span>
                             </span>
                             <span class="file-name">
@@ -52,19 +64,7 @@
         </div>
         <!-- </form> -->
         <!-- </modal> -->
-        
-        
-        <!-- Preview Announcment -->
-        <div class="tile is-ancestor" style="margin-top: 15px">
-            <div class="tile is-1"></div>
-            <div class="tile is-10 box">
-                <!-- Add content or other tiles -->
-                <p class="title">Preview Service Page</p>
-            </div>
-            <div class="tile is-1"></div>
-        </div>
     </div>
-    
 </template>
 
 <script lang="ts">
@@ -79,7 +79,7 @@ import { iService } from "../models/service.interface";
   components: { Modal }
 })
 
-export default class OwnerServices extends Vue{
+export default class OwnerCreateServices extends Vue{
     @Prop(Boolean) isShowing: boolean = false;
     service: addServiceForm = {
         serviceName: "",
@@ -96,6 +96,8 @@ export default class OwnerServices extends Vue{
         } )
         .then ((response : AxiosResponse<iService> ) => {
             this.$emit("success");
+            this.service.serviceName = "",
+            this.service.description  = ""
         })
         .catch((errorResponse: any) => {
             console.log("error ", errorResponse);

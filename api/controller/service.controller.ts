@@ -49,6 +49,12 @@ export class ServiceController extends DefaultController {
                     }
                 });
             });
+        
+        // router.route("/owner/services").delete((req: Request, res: Response) => {
+        //     const serviceRepo = getRepository(Service);
+        //     const srvId = req.body.id;
+        //     serviceRepo.
+        // }); 
 
         return router;
     }

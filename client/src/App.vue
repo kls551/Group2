@@ -56,7 +56,7 @@
               <router-link to="/owner/announcment">Announcement</router-link>
             </li>
             <li>
-              <router-link to="/owner/services">Services</router-link>
+              <router-link to="/owner/edit-services">Services</router-link>
             </li>
             <li>
               <a><span>Accounts</span></a>

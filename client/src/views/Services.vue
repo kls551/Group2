@@ -1,21 +1,21 @@
 <template>
   <div class="services">
     <br> 
-      {{getServices()}}
-      <div v-if="display">
-        <div v-for="(service, index) in services" v-bind:key="index">
-          <div> supposed to be service here </div>
-          <span>{{ ser.serviceName }}</span>
-          <span>{{ ser.description }}</span>
-        </div>
-      </div>
-
-      <div class="tile is-ancestor is-vertical"> 
+     <div class="tile is-ancestor is-vertical"> 
         <!-- <div class="tile is-veritical"> -->
         <div class="tile"> 
           <div class="tile is-1"> <br> </div>
           <div class="service tile title is-11"> Services </div>
         </div>
+
+    <div v-if="display">
+      <!-- <button class="button" v-on:click="getServices()" >  add service </button> -->
+      <div v-for="(service, index) in services" v-bind:key="index">
+    
+        <!-- <span>{{ service.serviceName }}</span>
+        <span>{{ service.description }}</span> -->
+
+      
 
         <div class="tile"> <br> </div>
 
@@ -25,8 +25,8 @@
             <div class="tile"> 
               <div class="tile is-1"> <br> </div> 
             <div class="tile box is-parent is-vertical">
-              <div class="title is-4 tile is-children"> Wheels </div>
-    
+              <div class="title is-4 tile is-children"> {{ service.serviceName }} {{index}} </div>
+              <!-- <div class="title"> {{services[index]}} </div> -->
               <div class="tile is-children">
                 <figure class="image is-128x128">
                   <img src="https://bulma.io/images/placeholders/128x128.png">
@@ -35,27 +35,13 @@
                 <div class = "tile columns is-10 ">
                   <div class="column  media-content"> 
                     <p class="subtitle">
-                      Flat tire repair <br>
+                      {{ service.description }}
+                      <!-- Flat tire repair <br>
                       Replace broken spoke(s) <br>
-                      Install new front wheel 
+                      Install new front wheel  -->
                     </p>
                   </div>
                 
-                  <div class="column media-content"> 
-                    <p class="subtitle">
-                      Install new rear wheel <br>
-                      Wheel truing  <br>
-                      Wheel retensioning 
-                    </p>
-                  </div>
-                  
-                  <div class="column media-content"> 
-                    <p class="subtitle">
-                      Custom wheel building <br>
-                      Hub bearing overhaul <br>
-                      Replace tire(s) 
-                    </p>
-                  </div>
 
                   <div class="hours tile box media-content"> 
                     <p>
@@ -71,7 +57,7 @@
             </div>
             <div class="tile is-1"> <br> </div> 
           </div>
-
+      </div>
           </div>
 
           <div class="tile"> <br> </div>
@@ -188,9 +174,10 @@
           </div>
           
           </div>
+      </div>
 
-            </div>
-          </div>
+  </div>
+</div>
 
 </template>
 
@@ -209,10 +196,12 @@ import  { Service } from "../../../api/entity";
 })
 
 export default class Services extends Vue{
-    @Prop(Boolean) isShowing: boolean = false;
-    
+    @Prop(Boolean) isShowing: boolean = true;
     public services: Service[] = [];
     public display = true;
+    mounted() {
+      this.getServices();
+    }
     getServices() {
       console.log("getting services");
       axios.get(APIConfig.buildUrl("/owner/services"), {
@@ -220,6 +209,7 @@ export default class Services extends Vue{
       .then((response) => {
           this.services = response.data;
           console.log("service ", this.services);
+          // this.display = false;
       });
     }
 }

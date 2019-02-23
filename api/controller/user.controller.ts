@@ -61,6 +61,23 @@ export class UserController extends DefaultController {
         });
       }
     )
+    .put((req: Request, res: Response) => {
+      const userRepo = getRepository(User);
+      userRepo.findOne(req.params.id).then(
+        (user: User | undefined) => {
+          if (user) {
+            userRepo.update( user.id,
+              {firstName: req.body.firstName,
+               lastName: req.body.lastName,
+               isAdmin: req.body.isAdmin}
+            ).then(() => res.sendStatus(200));
+          }
+          else {
+            res.sendStatus(404);
+          }
+        }
+      )
+    })
     .get((req: Request, res: Response) => {
       const userRepo = getRepository(User);
       userRepo.findOne(req.params.id).then(

@@ -23,9 +23,9 @@
                 <h2 style="padding-bottom: 15px">Manage Categories</h2>
                 <div class="tile is-child box">
                     <h3 style="padding-bottom: 10px;">New Main Category</h3>
-                    <input type="text" class="input is-warning is-medium" placeholder="Category Name">
+                    <input type="text" class="input is-warning is-medium" placeholder="Category Name" v-model="categoryName">
                     <div class="level-right">
-                        <button class="button is-success" type="submit" style="margin-top: 15px;">Add</button>
+                        <button class="button is-success" type="submit" style="margin-top: 15px;" v-on:click="addCategory">Add</button>
                     </div>
                 </div>
 
@@ -66,8 +66,62 @@
     
 </template>
 
-<style scoped lang="scss">
+<script lang="ts">
+import axios, { AxiosResponse } from "axios";
+import { APIConfig } from "../utils/api.utils";
+import { Component, Prop, Vue } from "vue-property-decorator";
+import { iMainCategory } from "../models/mainCategory.interface";
 
+export default class mainCategory extends Vue {
+
+    mainCategoryList: MainCategory[] = [];
+    categoryName: String = "";
+
+    error: string | boolean = false;
+
+    getCategories() {
+        if (this.$store.state.userToken) {
+            axios.get(APIConfig.buildUrl("/maincategory"), {
+                headers: {
+                    token: this.$store.state.userToken
+                }
+            })
+        .then((response) => {
+            this.mainCategoryList = response.data;
+            });
+        }
+    }
+
+    addCategory() {
+        console.log(this.categoryName);
+        //this.error = false;
+        axios
+        .post(APIConfig.buildUrl("/maincategory"), {           
+            name: this.categoryName,
+        })
+        .then((response: AxiosResponse) => {
+            this.categoryName = "";
+            this.$emit("success");
+        })
+        .catch((errorResponse: any) => {
+            debugger;
+            this.error = errorResponse.response.data.reason;
+        });
+    }
+
+    cancel() {
+        this.$emit("cancel");
+    }  
+}
+
+interface MainCategory {
+    categoryname: string;
+}
+
+</script>
+
+
+<style scoped lang="scss">
 thead {
     background-color: orange;
 }

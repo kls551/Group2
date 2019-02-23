@@ -5,4 +5,5 @@ export interface iUser {
   password: string;
   id: number;
   profileUrl: string;
+  isAdmin: number;
 }

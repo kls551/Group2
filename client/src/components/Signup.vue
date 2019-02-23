@@ -28,6 +28,12 @@
           <input class="input" type="password" placeholder="password" v-model="signup.password"/>
         </div>
       </div>
+      <div class="field" v-if="isAd">
+        <label class="label">Type</label>
+        <div class="control">
+          <input class="input" type="text" placeholder="Type" v-model="signup.isAdmin"/>
+        </div>
+      </div>
     </form>
   </modal>
 </template>
@@ -50,7 +56,8 @@ export default class Signup extends Vue {
     firstName: "",
     lastName: "",
     emailAddress: "",
-    password: ""
+    password: "",
+    isAdmin: null
   };
   error: string | boolean = false;
 
@@ -73,6 +80,11 @@ export default class Signup extends Vue {
   cancel() {
     this.$emit("cancel");
   }
+  
+  get isAd(): boolean {
+      console.log("get here");
+      return this.$store.state.user && (this.$store.state.user.isAdmin === 1);
+  }
 }
 
 export interface SignupForm {
@@ -80,5 +92,6 @@ export interface SignupForm {
   lastName: string;
   emailAddress: string;
   password: string;
+  isAdmin: number | null;
 }
 </script>

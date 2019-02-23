@@ -17,7 +17,7 @@
             >
             <span class="file-cta">
               <span class="file-icon">
-                <font-awesome-icon icon="upload"/>
+                <font-awesome-icon icon="upload"/> <!-- using icon -->
               </span>
               <span class="file-label">
                 Choose a profile image…

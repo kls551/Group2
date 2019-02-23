@@ -14,6 +14,7 @@ export class User {
 
   @Column()
   public password!: string;
+  
   @Column({default: null})
   public profileUrl!: string;
 
@@ -21,6 +22,11 @@ export class User {
   @Index({ unique: true })
   public emailAddress!: string;
 
+  @Column({default: null})
+  public isAdmin!: number;
+
   @OneToMany(type => Order, (order) => order.userId)
   public orders!: Order[];
+
+
 }

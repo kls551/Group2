@@ -11,18 +11,19 @@ export class OrderController extends DefaultController {
   protected initializeRoutes(): express.Router {
     const router = express.Router();
 
+    router.route("/trackorder")
+    .get((req: Request, res: Response) => {
+      const orderRepo = getRepository(Order);
+      const sessionRepo = getRepository(Session);
+      const token = req.get("token");
+      orderRepo.findOne(1).then((foundOrder: Order | undefined) => {
+        if (foundOrder) {
+          res.status(200).send(foundOrder);
+        }
+      });
+    })
+
     router.route("/checkout")
-    // .get((req: Request, res: Response) => {
-    //   const checkoutRepo = getRepository(Order);
-    //   const sessionRepo = getRepository(Session);
-    //   const token = req.get("token");
-    //   sessionRepo.findOne(token, {relations: ["user", "user.todos"]}).then((foundSession: Session | undefined) => {
-    //     if (foundSession) {
-    //       const user = foundSession!.user;
-    //       res.status(200).send(user.todos);
-    //     }
-    //   });
-    // })
     .post((req: Request, res: Response) => {
       const token = req.get("token");
       const sessionRepo = getRepository(Session);
@@ -31,11 +32,6 @@ export class OrderController extends DefaultController {
       sessionRepo.findOne(token).then((foundSession: Session | undefined) => {
         const user = foundSession!.user;
         order.userId = req.body.user;
-        order.fn = req.body.firstName;
-        order.ln = req.body.lastName;
-        order.Address = req.body.address;
-        order.City = req.body.city;
-        order.cnum = req.body.cnum;
         order.pickup = req.body.Pickup;
         orderRepo.save(order).then((savedOrder: Order) => {
           res.status(200).send({ order });

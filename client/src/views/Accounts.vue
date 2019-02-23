@@ -13,7 +13,7 @@
                     <th><abbr title="profileUrl">img</abbr></th>
                     <th><abbr title="emailAddress">Email</abbr></th>
                     <th><abbr title="Type">Type</abbr></th>
-                    <th v-fi="isAd">edit</th>
+                    <th v-if="isAd">edit</th>
                     <th v-if="isAd">delete</th>
                 </tr>
             </thead>

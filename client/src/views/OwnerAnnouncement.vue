@@ -58,23 +58,22 @@
             <h2> Preview Announcements </h2>
             <article class="message is-warning" v-for="(ann, index) in announcements" v-bind:key="index">
                 <div class="message-header">
+                    <span class="button is-small" v-on:click="showEditForm(index)">
+              <span class="file-icon">
+                <font-awesome-icon icon="edit"/> <!-- using icon -->
+              </span>
+                    </span>
                     <p>{{ann.title}}</p>
                     <button class="delete" aria-label="delete" v-on:click="deleteItem(ann.id)"></button>
                 </div>
                 <div class="message-body">
-
-            <span class="button" v-on:click="showEditForm(index)">
-              <span class="file-icon">
-                <font-awesome-icon icon="edit"/> <!-- using icon -->
-              </span>
-            </span>
-                                {{ann.body}}
+                    {{ann.body}}
                 </div>
 
             </article>
         </div>
-    
-    <Edit v-bind:is-showing="showEdit" v-on:success="successEdit()" v-on:cancel="cancelEdit()" />
+
+        <Edit v-bind:is-showing="showEdit" v-on:success="successEdit()" v-on:cancel="cancelEdit()" />
     </div>
 </template>
 
@@ -172,8 +171,6 @@ export default class OwnerAnnouncement extends Vue {
     get picture(): boolean {
         return false;
     }
-
-
 
     showEditForm(index: number) {
         this.editTitle = this.announcements[index].title;

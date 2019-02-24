@@ -4,9 +4,9 @@
     <!-- main nav bar -->
     <div class="navbar">
       <div class="navbar-brand">
-        <a class="navbar-item" href="https://bulma.io">
+        <router-link class="navbar-item" to="/">
           <img src="./assets/Foxcycle.png" width="150">
-        </a> 
+        </router-link> 
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>

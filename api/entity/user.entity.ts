@@ -1,6 +1,5 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { Order } from "./order.entity";
-import { ToDo } from "./todo.entity";
 
 @Entity()
 export class User {
@@ -28,7 +27,4 @@ export class User {
 
   @OneToMany(type => Order, (order) => order.userId)
   public orders!: Order[];
-
-  @OneToMany(type => ToDo, (todo) => todo.user)
-  public todos!: ToDo[];
 }

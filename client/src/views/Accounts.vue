@@ -17,7 +17,7 @@
                     <th v-if="isAd">delete</th>
                 </tr>
             </thead>
-            <tbody >
+            <tbody>
                 <tr v-for="(user, index) in users" v-bind:key="index">
                     <th>{{user.id}}</th>
                     <td>{{user.firstName}}</td>
@@ -27,58 +27,51 @@
                     <td>{{user.isAdmin}}</td>
                     <td v-if="isAd">
                         <button class="button is-success" v-on:click="showEditForm(index)">Edit</button>
-                    </td>                    
+                    </td>
                     <td v-if="isAd">
                         <button class="button is-danger" v-on:click="deleteItem(user.id)">Delete?</button>
                     </td>
                 </tr>
             </tbody>
         </table>
-<div class="columns">
-<div class="column is-half is-offset-one-quarter" v-if="showEdit">
-    <div class="box is-small">
-        <b> Editing ({{editEmail}}) </b>
-<div class="field">
-  <label class="label is-small">FirstName</label>
-  <div class="control">
-    <input class="input is-small" type="text" placeholder="e.g Alex" v-model="editFn">
+        <div class="columns">
+            <div class="column is-half is-offset-one-quarter" v-if="showEdit">
+                <div class="box is-small">
+                    <h3> Editing ({{editEmail}}) </h3>
+                    <div class="field">
+                        <label class="label is-small">FirstName</label>
+                        <div class="control">
+                            <input class="input is-small" type="text" placeholder="e.g Alex" v-model="editFn">
   </div>
-</div>
-<div class="field">
-  <label class="label is-small">LastName</label>
-  <div class="control">
-    <input class="input is-small" type="text" placeholder="e.g.Smith" v-model="editLn">
+                        </div>
+                        <div class="field">
+                            <label class="label is-small">LastName</label>
+                            <div class="control">
+                                <input class="input is-small" type="text" placeholder="e.g.Smith" v-model="editLn">
   </div>
-</div>
-<div class="field">
-  <label class="label is-small">Role</label>
-  <div class="control">
-    <input class="input is-small" type="number" placeholder="e.g.0" v-model="editRole">
+                            </div>
+                            <div class="field">
+                                <label class="label is-small">Role</label>
+                                <div class="control">
+                                    <input class="input is-small" type="number" placeholder="e.g.0" v-model="editRole">
   </div>
-</div>
-<nav class="level">
-<div class="level-left">
-<button class="button is-success is-small" v-on:click="editItem(editIndex)">Update</button></div>
-<div class="level-right">
-<button class="button is-danger is-small" v-on:click="cancelEdit()">Cancel</button></div></nav>
-</div></div></div>
+                                </div>
+                                <nav class="level">
+                                    <div class="level-left">
+                                        <button class="button is-success is-small" v-on:click="editItem(editIndex)">Update</button></div>
+                                    <div class="level-right">
+                                        <button class="button is-danger is-small" v-on:click="cancelEdit()">Cancel</button></div>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
 
+                    <button class="button is-success" v-if="isAd" v-on:click="showSignupModal()">Add User</button>
+                    <Signup v-bind:is-showing="showSignup" v-on:success="successSignup()" v-on:cancel="cancelSignup()" />
+                    <Edit v-bind:is-showing="showEdit" v-on:success="successEdit()" v-on:cancel="cancelEdit()" />
+                </div>
 
-
-    <button class="button is-success" v-if="isAd" v-on:click="showSignupModal()">Add User</button>
-    <Signup
-      v-bind:is-showing="showSignup"
-      v-on:success="successSignup()"
-      v-on:cancel="cancelSignup()"
-    />
-    <Edit
-      v-bind:is-showing="showEdit"
-      v-on:success="successEdit()"
-      v-on:cancel="cancelEdit()"
-    />
-    </div>
-
-</div>
+            </div>
 </template>
 
 <script lang="ts">
@@ -122,7 +115,7 @@ export default class Accounts extends Vue {
     preview() {
         axios
             .get(APIConfig.buildUrl("/users"))
-            .then((response: AxiosResponse<iUser[]>) => {
+            .then((response: AxiosResponse < iUser[] > ) => {
                 this.users = response.data;
                 console.log(this.users);
                 this.$emit("success");
@@ -141,9 +134,9 @@ export default class Accounts extends Vue {
                 this.preview();
             })
     }
-    editItem(index : number) {
+    editItem(index: number) {
         this.edit = this.users[index];
-        if(this.edit) {
+        if (this.edit) {
             this.edit.firstName = this.editFn;
             this.edit.lastName = this.editLn;
             this.edit.isAdmin = this.editRole;
@@ -153,7 +146,7 @@ export default class Accounts extends Vue {
                 .then(() => {
                     this.preview();
                     this.successEdit();
-                })            
+                })
         }
     }
 
@@ -176,7 +169,7 @@ export default class Accounts extends Vue {
         this.preview();
     }
 
-    showEditForm(index : number) {
+    showEditForm(index: number) {
         this.editEmail = this.users[index].emailAddress;
         this.editFn = this.users[index].firstName;
         this.editLn = this.users[index].lastName;
@@ -199,5 +192,8 @@ export default class Accounts extends Vue {
 h2 {
     font-family: 'Questrial';
     font-size: 28px;
+}
+h3 {
+    font-family: 'Questrial';
 }
 </style>

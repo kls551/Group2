@@ -37,7 +37,6 @@
 
         </div>
     </div>
-    
 </template>
 
 <script lang="ts">
@@ -92,7 +91,7 @@ export default class TrackOrder extends Vue {
         return false;
     }
 }
-</script>  
+</script>
 
 <style scoped lang="scss">
 h2 {

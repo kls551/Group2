@@ -25,7 +25,12 @@
                     <h3 style="padding-bottom: 10px;">New Main Category</h3>
                     <input type="text" class="input is-warning is-medium" placeholder="Category Name" v-model="categoryName">
                     <div class="level-right">
-                        <button class="button is-success" type="submit" style="margin-top: 15px;" v-on:click="addCategory">Add</button>
+                        <div v-if="editMe == true">
+                            <button class="button is-success" type="submit" style="margin-top: 15px;" v-on:click="editCategory">Update</button>
+                        </div>
+                        <div v-else>
+                            <button class="button is-success" type="submit" style="margin-top: 15px;" v-on:click="addCategory">Add</button>
+                        </div>
                     </div>
                 </div>
 
@@ -34,28 +39,19 @@
                     <table class="table is-hoverable is-fullwidth">
                     <thead>
                         <tr>
-                        <th>Categories</th>
+                        <th>Main Categories</th>
                         <th>Edit</th>
                         <th>Delete</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody v-for="(cat, index) in mainCategoryList" v-bind:key="index">
                         <tr>
-                            <th>Bikes</th>
+                            <td>{{ cat.name }}</td>
                             <!-- <td><font-awesome-icon="edit" /></td> -->
-                            <td>edit icon</td>
-                            <td>delete icon</td>
+                            <td><a v-on:click="editTrue(cat.name, cat.id)"><font-awesome-icon icon="edit" /></a></td>
+                            <td><a v-on:click="deleteCategory(cat.id)"><font-awesome-icon icon="trash-alt" /></a></td>
                         </tr>
-                        <tr>
-                            <th>Accesories</th>
-                            <td>edit icon</td>
-                            <td>delete icon</td>
-                        </tr>
-                        <tr>
-                            <th>Clothing</th>
-                            <td>edit icon</td>
-                            <td>delete icon</td>
-                        </tr>
+                        
                     </tbody>
                 </table>
             </div>
@@ -67,46 +63,81 @@
 </template>
 
 <script lang="ts">
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 import { APIConfig } from "../utils/api.utils";
 import { Component, Prop, Vue } from "vue-property-decorator";
-import { iMainCategory } from "../models/mainCategory.interface";
 
+@Component
 export default class mainCategory extends Vue {
 
     mainCategoryList: MainCategory[] = [];
     categoryName: String = "";
+    editMe: Boolean = false;
+    editIndex: Number = 0;
 
     error: string | boolean = false;
 
+    mounted(){
+        this.getCategories();
+    }
+
     getCategories() {
-        if (this.$store.state.userToken) {
-            axios.get(APIConfig.buildUrl("/maincategory"), {
-                headers: {
-                    token: this.$store.state.userToken
-                }
+        axios
+            .get(APIConfig.buildUrl("/maincategory"))
+            .then((response: AxiosResponse<MainCategory[]>) => {
+                this.mainCategoryList = response.data;
+                this.$emit("success");
             })
-        .then((response) => {
-            this.mainCategoryList = response.data;
+            .catch((res: AxiosError) => {
+                this.error = res.response && res.response.data.error;
             });
-        }
     }
 
     addCategory() {
         console.log(this.categoryName);
-        //this.error = false;
         axios
         .post(APIConfig.buildUrl("/maincategory"), {           
             name: this.categoryName,
+            // subCategories: this.subCategories,
         })
         .then((response: AxiosResponse) => {
             this.categoryName = "";
             this.$emit("success");
+            this.getCategories();
         })
         .catch((errorResponse: any) => {
             debugger;
             this.error = errorResponse.response.data.reason;
         });
+    }
+
+    deleteCategory(index:number) {
+        axios
+        .delete(APIConfig.buildUrl("/maincategory/" + index), {           
+        })
+        .then(() => {
+            this.getCategories();
+        })
+    }
+
+    editTrue(name:string, index: number){
+        this.editMe = true;
+        this.categoryName = name;
+        this.editIndex = index;
+    }
+
+    editCategory() {
+        console.log(this.editIndex);
+        axios
+        .put(APIConfig.buildUrl("/maincategory/" + this.editIndex), {
+            name: this.categoryName
+        })
+        .then(() => {
+            this.categoryName = "";
+            this.editIndex = 0;
+            this.editMe = false;
+            this.getCategories();
+        })
     }
 
     cancel() {
@@ -116,6 +147,11 @@ export default class mainCategory extends Vue {
 
 interface MainCategory {
     categoryname: string;
+}
+
+interface SubCategory {
+    name: string;
+    mainCategory: MainCategory;
 }
 
 </script>

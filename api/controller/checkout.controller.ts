@@ -14,7 +14,7 @@ export class OrderController extends DefaultController {
     router.route("/trackorder/:id")
     .get((req: Request, res: Response) => {
       const orderRepo = getRepository(Order);
-      orderRepo.findOneOrFail({trackingNum:req.params.id}).then(
+      orderRepo.findOneOrFail({ trackingNum: req.params.id }).then(
         (order: Order | undefined) => {
           if (order) {
             res.status(200).send(order);

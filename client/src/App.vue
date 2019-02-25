@@ -52,7 +52,7 @@
               <router-link to="/owner/manage-inventory" tag="li" exact-active-class="is-active"><a>Inventory</a></router-link>
 
               <router-link to="/owner/announcment" tag="li" exact-active-class="is-active"><a>Announcement</a></router-link>
-
+              <router-link to="/owner/about" tag="li" exact-active-class="is-active"><a>About</a></router-link>
               <router-link to="/owner/accounts" tag="li" exact-active-class="is-active"><a>Accounts</a></router-link>
 
               <router-link to="/owner/add-item" tag="li" exact-active-class="is-active"><a>New Item</a></router-link>

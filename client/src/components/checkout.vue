@@ -4,30 +4,41 @@
       <p v-if="error" class="is-danger">
         {{ error }}
       </p>
+      <div class="columns">
+        <div class="column is-half">
       <div class="field">
         <label class="label">First Name</label>
         <div class="control">
           <input class="input" type="text" placeholder="First name" v-model="checkout.firstName"/>
         </div>
-      </div>
+      </div></div>
+       <div class="column">
       <div class="field">
         <label class="label">Last Name</label>
         <div class="control">
           <input class="input" type="text" placeholder="Last name" v-model="checkout.lastName"/>
         </div>
-      </div>
+      </div></div></div>
+
+
+      <div class="columns">
+        <div class="column is-half">
       <div class="field">
         <label class="label">Address</label>
         <div class="control">
           <input class="input" type="text" placeholder="Address" v-model="checkout.address"/>
         </div>
-      </div>
+      </div></div>
+        <div class="column">
       <div class="field">
         <label class="label">City</label>
         <div class="control">
           <input class="input" type="text" placeholder="City" v-model="checkout.city"/>
         </div>
-      </div>      
+      </div> </div> </div>   
+
+
+
       <div class="field">
         <label class="label">Credit Card</label>
         <div class="control">
@@ -63,6 +74,7 @@ export default class order extends Vue {
     address: "",
     city: "",
     cnum: "",
+    orderedDate: new Date,
     Pickup: false,
     user: 0
   };
@@ -99,5 +111,6 @@ export interface orderForm {
   city: string;
   cnum: string;
   Pickup: boolean;
+  orderedDate: Date | null;
 }
 </script>

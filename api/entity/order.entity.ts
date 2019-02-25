@@ -9,21 +9,6 @@ export class Order {
   public userId!: number;
 
   @Column({default:null})
-  public fn!: string;
-
-  @Column({default:null})
-  public ln!: string;
-
-  @Column({default:null})
-  public Address!: string;
-
-  @Column({default:null})
-  public City!: string;
-
-  @Column({default:null})
-  public cnum!: string;
-
-  @Column({default:null})
   public complete!: boolean;
 
   @Column({default:null})
@@ -33,7 +18,16 @@ export class Order {
   public processing!: boolean;
 
   @Column({default:null})
-  public shipped!: boolean;
+  public shipped!: Date;
+
+  @Column({default:null})
+  public trackingNum!: string;
+
+  @Column({default: null})
+  public address!: string;
+
+  @Column({default: null})
+  public city!: string;
 
   @Column({default:null})
   public orderedDate!: Date;

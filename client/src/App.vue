@@ -4,9 +4,9 @@
     <!-- main nav bar -->
     <div class="navbar">
       <div class="navbar-brand">
-        <a class="navbar-item" href="https://bulma.io">
+        <router-link class="navbar-item" to="/">
           <img src="./assets/Foxcycle.png" width="150">
-        </a> 
+        </router-link> 
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -14,12 +14,14 @@
         </a>
       </div>
       
-      <div class="navbar-menu is-active">
+      <div class="navbar-menu">
         <div class="navbar-start">  
           <router-link class="navbar-item is-tab" to="/" exact-active-class="is-active">Home</router-link>
           <router-link class="navbar-item is-tab" to="/shop" exact-active-class="is-active">Shop</router-link>
           <router-link class="navbar-item is-tab" to="/services" exact-active-class="is-active">Services</router-link>
-          <router-link class="navbar-item is-tab" to="/about" exact-active-class="is-active">About</router-link>       
+          <router-link class="navbar-item is-tab" to="/about" exact-active-class="is-active">About</router-link>
+          <!-- <router-link class="navbar-item is-tab" to="/trackorder" exact-active-class="is-active">Track Order</router-link>    -->
+          <!-- <router-link class="navbar-item is-tab" to="/todos" exact-active-class="is-active">my Todos</router-link>     -->
         </div>
 
         <!-- Log in, Checkout, Sign Up Tabs -->
@@ -31,7 +33,7 @@
                 to="/my-profile"
                 exact-active-class="is-active"
               >My Profile</router-link>
-              <router-link class="navbar-item is-tab" v-if="!isLoggedIn" to="/trackorder">Track Order</router-link>
+              <router-link class="navbar-item is-tab" to="/trackorder">Track Order</router-link>
               <a class="navbar-item is-tab" v-if="isLoggedIn" v-on:click="showcheckoutModal()">Checkout</a>
               <a class="navbar-item is-tab" v-if="!isLoggedIn" v-on:click="showLoginModal()">Log in</a>
               <a class="navbar-item is-tab" v-if="isLoggedIn" v-on:click="logout">Log out</a>
@@ -41,26 +43,19 @@
 
     <!-- Owner and Staff Login Tabs Only -->
       <div class="container" style="margin-top: 15px; margin-bottom: 15px" v-if="isLoggedIn">
-        <div class="tabs is-boxed is-centered">
+        <div class="tabs is-boxed is-centered" v-show="isStaff">
           <ul>
-            <li class="is-active">
-              <router-link to="/owner/manage-main-categories">Manage Categories</router-link>
-            </li>
-            <li>
-              <router-link to="/owner/manage-orders">Orders</router-link>
-            </li>
-            <li>
-              <router-link to="/owner/manage-inventory">Inventory</router-link>
-            </li>
-            <li>
-              <router-link to="/owner/announcment">Announcement</router-link>
-            </li>
-            <li>
-              <a><span>Accounts</span></a>
-            </li>
-            <li>
-              <router-link to="/owner/add-item">New Item</router-link>
-            </li>
+              <router-link to="/owner/manage-main-categories" tag="li" exact-active-class="is-active"><a>Manage Categories</a></router-link>
+
+              <router-link to="/owner/manage-orders" tag="li" exact-active-class="is-active"><a>Orders</a></router-link>
+
+              <router-link to="/owner/manage-inventory" tag="li" exact-active-class="is-active"><a>Inventory</a></router-link>
+
+              <router-link to="/owner/announcment" tag="li" exact-active-class="is-active"><a>Announcement</a></router-link>
+
+              <router-link to="/owner/accounts" tag="li" exact-active-class="is-active"><a>Accounts</a></router-link>
+
+              <router-link to="/owner/add-item" tag="li" exact-active-class="is-active"><a>New Item</a></router-link>
           </ul>
         </div>
       </div>
@@ -75,6 +70,11 @@
       v-on:success="successCheckout()"
       v-on:cancel="cancelCheckout()"
     />
+    <trackorder
+      v-bind:is-showing="trackorder"
+      v-on:success="successtrack()"
+      v-on:cancel="canceltrack()"
+    />
     <Login v-bind:is-showing="showLogin" v-on:success="successLogin()" v-on:cancel="cancelLogin()"/>
   </div>
 </template>
@@ -87,11 +87,10 @@ import Signup from "@/components/Signup.vue";
 import Login from "@/components/Login.vue";
 import checkout from "@/components/checkout.vue";
 import { APIConfig } from "@/utils/api.utils";
-import Vue from 'vue'
-import Buefy from 'buefy'
-import 'buefy/dist/buefy.css'
+import Buefy from 'buefy';
+import 'buefy/dist/buefy.css';
 
-Vue.use(Buefy)
+Vue.use(Buefy);
 
 @Component({
   components: {
@@ -108,20 +107,18 @@ export default class App extends Vue {
   showSignupModal() {
     this.showSignup = true;
   }
+  successSignup() {
+    this.showSignup = false;
+  }
+  cancelSignup() {
+    this.showSignup = false;
+  }
 
   showcheckoutModal() {
     this.showcheckout = true;
   }
-
-  successSignup() {
-    this.showSignup = false;
-  }
   successCheckout() {
     this.showcheckout = false;
-  }
-
-  cancelSignup() {
-    this.showSignup = false;
   }
   cancelCheckout() {
     this.showcheckout = false;
@@ -133,6 +130,7 @@ export default class App extends Vue {
 
   successLogin() {
     this.showLogin = false;
+    this.$router.push({ name: "ownerManageCategories" });
   }
 
   cancelLogin() {
@@ -143,6 +141,10 @@ export default class App extends Vue {
     return !!this.$store.state.user;
   }
 
+  get isStaff(): boolean {
+    return this.$store.state.user && (this.$store.state.user.isAdmin === 0 || this.$store.state.user.isAdmin === 1);
+  }
+  
   logout() {
     axios
       .post(APIConfig.buildUrl("/logout"), null, {
@@ -164,6 +166,10 @@ export default class App extends Vue {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+}
+
+.navbar-burger:active {
+
 }
 
 

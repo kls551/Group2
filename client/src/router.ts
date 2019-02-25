@@ -79,7 +79,7 @@ export default new Router({
       path: "/trackorder",
       name: "trackOrder",
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/trackorder.vue")
+        import(/* webpackChunkName: "about" */ "./views/TrackOrder.vue")
     },
     {
       path: "/owner/manage-main-categories",

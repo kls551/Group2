@@ -123,6 +123,7 @@ export default class OwnerAnnouncement extends Vue {
                 this.$emit("success");
                 this.announcementTitle = "";
                 this.announcementBody = "";
+                this.preview();
             })
             .catch((errorResponse: any) => {
                 this.error = errorResponse.response.data.reason;
@@ -187,7 +188,7 @@ export default class OwnerAnnouncement extends Vue {
         this.preview();
     }
 }
-</script>  
+</script>
 
 <style lang="scss" scoped>
 h2 {

@@ -37,7 +37,7 @@
 
         </div>
     </div>
-    
+
 </template>
 
 <script lang="ts">
@@ -56,14 +56,12 @@ import {
 import {
     iOrder
 } from "../models/order.interface";
-
 @Component
 export default class TrackOrder extends Vue {
     error: string | boolean = false;
     trackid: string = "";
     order: iOrder | null = null;
     expected: Date | null = null;
-
     getorder(id : number) {
         axios
             .get(APIConfig.buildUrl("/trackorder/"+id))
@@ -81,15 +79,12 @@ export default class TrackOrder extends Vue {
                 this.error = res.response && res.response.data.error;
             });
     }
-
     get isnotnull(): boolean {
         return !!this.order;
     }
-
     get shipnotnull(): boolean {
         return !!this.order && !!this.order.shipped;
     }
-
     get isAd(): boolean {
         return (this.$store.state.user.isAdmin === 1);
     }
@@ -97,19 +92,17 @@ export default class TrackOrder extends Vue {
         return false;
     }
 }
-</script>  
+</script>
 
 <style scoped lang="scss">
 h2 {
     font-size: 32px;
     font-family: 'Questrial';
 }
-
 h3 {
     font-size: 20px;
     font-family: 'Questrial';
     color: black;
     padding: 5px;
 }
-
 </style>

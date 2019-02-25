@@ -13,6 +13,7 @@ export class LoginController extends DefaultController {
       const { emailAddress, password } = req.body;
       const userRepo = getRepository(User);
       const sessionRepo = getRepository(Session);
+      console.log("loging in ");
       userRepo
         .findOne({ where: { emailAddress } })
         .then((user: User | undefined) => {

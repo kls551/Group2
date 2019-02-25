@@ -110,6 +110,18 @@ export default new Router({
       name: "ownerAddItem",
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/NewItem.vue")
+    },
+    {
+      path:"/owner/create-services",
+      name: "ownerCreateServices",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/OwnerCreateServices.vue")
+    },
+    {
+      path:"/owner/edit-services",
+      name: "ownerEditServices",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/OwnerEditServices.vue")
     }
   ]
 });

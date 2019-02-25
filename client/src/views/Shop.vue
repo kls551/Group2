@@ -171,9 +171,9 @@
       return result
     }
 
-    showSortMenu() {
-      document.getElementById("dropdown-menu").classList.toggle("show");
-    }
+    //showSortMenu() {
+    //  document.getElementById("dropdown-menu").classList.toggle("show");
+    //}
   }
 </script>
 

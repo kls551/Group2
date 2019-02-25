@@ -10,11 +10,12 @@
               Categories
             </p>
 
+            <!-- Dropdown menu for sorting options -->
             <a class="panel-block is-active">
-              <div class="dropdown is-hoverable">
-                <div class="dropdown-trigger">
+              <div class="dropdown">
+                <div class="dropdown-trigger" on-click="showSortMenu()">
                   <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-                    <span>Brands</span>
+                    <span>Sort Options</span>
                     <span class="icon is-small">
                       <i class="fas fa-user" aria-hidden="true"></i>
                     </span>
@@ -38,9 +39,13 @@
                 </div>
               </div>
             </a>
+
+            <!-- Category options -->
             <a v-for="category in categories" :key="category.id" class="panel-block">
               {{ category.name }}
             </a>
+
+            <!-- Search button -->
             <div class="panel-block">
               <button class="button is-link is-outlined is-fullwidth">
                 Search
@@ -164,6 +169,10 @@
         }
       }
       return result
+    }
+
+    showSortMenu() {
+      document.getElementById("dropdown-menu").classList.toggle("show");
     }
   }
 </script>

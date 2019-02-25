@@ -180,9 +180,6 @@ export default class App extends Vue {
   color: #2c3e50;
 }
 
-.navbar-burger:active {
-
-}
 
 
 </style>

@@ -59,6 +59,7 @@
           </ul>
         </div>
       </div>
+      
     <router-view class="container"/>
     <Signup
       v-bind:is-showing="showSignup"
@@ -142,6 +143,7 @@ export default class App extends Vue {
 
   successLogin() {
     this.showLogin = false;
+    
     this.$router.push({ name: "ownerManageCategories" });
   }
 

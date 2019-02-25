@@ -31,61 +31,84 @@
                         <!-- <input type="text input" class="input is-warning is-small" placeholder="Service Name" v-model="service.serviceName"> -->
                     </div>
                 </div>
-                <div class="tile is-child">
-                    <div class="tile">
-                        <div class="tile"> Tire </div>
-                        <div class="tile"> $20.00  </div>
-                        <div class="tile"> 7:00am-7pm </div>
-                        <div class="tile is-1"> 
-                            <i class="fas fa-edit"></i>
+
+
+                <!-- list of services -->
+                <div v-for="(service, index) in services" v-bind:key="index">
+                    <div class="tile is-child">
+                        <div class="tile">
+                            <div class="tile"> {{ service.serviceName }} </div>
+                            <div class="tile"> {{ service.price }}  </div>
+                            <div class="tile"> 7:00am-7pm </div>
+                            <!-- <span class="icon"> 
+                                <i class="fas fa-edit"></i>
+                            </span> -->
+                        
+                            <a class="button" v-on:click="showEditForm(services[index])">edit </a>
+                            <a class="button" v-on:click="removeService(service.id)">delete </a>
                         </div>
-                        <div class="tile is-1">   </div>
-                        <!-- <input type="text input" class="input is-warning is-small" placeholder="Service Name" v-model="service.serviceName"> -->
                     </div>
-                </div>
 
-
-                <div class="tile is-child box">
-                    <span>Description </span>
-                    <textarea class="textarea input is-warning is-small" rows="8" placeholder="Description ... "  v-model="service.description"></textarea>
                 </div>
-                <div class="tile is-child box">
-                     <div class="file has-name">
-                        <label class="file-label">
-                            <input class="file-input" type="file" name="resume">
-                            <span class="file-cta">
-                            <span class="file-icon">
-                                <i class="fas fa-upload"></i>
-                            </span>
-                            <span class="file-label">
-                                Choose File
-                            </span>
-                            </span>
-                            <span class="file-name">
-                            Photo1.jpg
-                            </span>
-                        </label>
+<!-- 
+                edit form  -->
+                <!-- <form v-on:submit.prevent="onSubmit" v-if="showEdit" > -->
+                <form v-if="showEdit" >
+                        <p v-if="error">{{ error }}</p>
+                        <!-- service name field  -->
+                        <div class="field">
+                            <label class="label">Service Name</label>
+                            <div class="control">
+                            <input
+                                class="input"
+                                type="text"
+                                placeholder=""
+                                v-model="editSrv.serviceName"
+                            >
+                            
+                            </div>
                         </div>
-                </div>
 
-                <!-- Submit, Preview, cancel buttons -->
-                <div class="field is-grouped">
-                    <div class="control">
-                        <button class="button is-link">Preview</button>
-                    </div>
-                    <div class="control">
-                        <button class="button is-success" type="submit" v-on:click="success">Submit</button>
-                    </div>
-                    <div class="control">
-                        <button class="button is-danger" type="reset">Cancel</button>
-                    </div>
-                </div>
+                        <!-- description field -->
+                        <div class="field">
+                            <label class="label">Description</label>
+                            <div class="control">
+                            <input class="input" type="text" placeholder="" v-model="editSrv.description">
+                            </div>
+                        </div>
+
+                        <!-- description field -->
+                        <div class="field">
+                            <label class="label">Price</label>
+                            <div class="control">
+                            <input class="input" placeholder="" v-model="editSrv.price">
+                            </div>
+                        </div>
+
+                        <!-- Submit, Preview, cancel buttons -->
+                        <div class="field is-grouped">
+                            <div class="control">
+                                <button class="button is-link">Preview</button>
+                            </div>
+                            <div class="control">
+                                <button class="button is-success" type="submit" v-on:click="updateService(editSrv)">Save Changes</button>
+                            </div>
+                            <div class="control">
+                                <button class="button is-danger" type="reset">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+
 
             </div>
             <div class="tile is-3"></div>
         </div>
         <!-- </form> -->
         <!-- </modal> -->
+        <!-- <UpdateService 
+            v-bind:is-showing="showEdit"
+            v-on:success="successUpdate()" 
+            v-on:cancel="cancelUpdate()"> </UpdateService> -->
     </div>
 </template>
 
@@ -96,23 +119,48 @@ import { APIConfig } from "../utils/api.utils";
 import { Component, Prop} from "vue-property-decorator";
 import Modal  from "../components/Modal.vue";
 import { iService } from "../models/service.interface";
-
+import  { Service } from "../../../api/entity";
+import UpdateService  from "@/components/UpdateService.vue";
 @Component({
-  components: { Modal }
+  components: { Modal, UpdateService }
 })
 
 export default class OwnerEditServices extends Vue{
-    @Prop(Boolean) isShowing: boolean = false;
-    service: addServiceForm = {
+    // @Prop(Boolean) isShowing: boolean = false;
+    public showEdit: boolean = false;
+    public editSrv : Service | undefined = undefined;
+    service: ServiceForm = {
         serviceName: "",
-        description: ""
+        description: "",
+        price: 0
     };
     error: string | boolean = false;
+
+    public services: Service[] = [];
+    public display = true;
+    mounted() {
+      this.getServices();
+    }
+
+    getServices() {
+        axios.get(APIConfig.buildUrl("/owner/edit-services"), {
+        })
+        .then((response) => {
+            this.services = response.data;
+        });
+    }
+
+    successUpdate() {
+      this.showEdit = false;
+    }
+    cancelUpdate() {
+        this.showEdit = false;
+    }
     success() {
         this.error = false;
-        console.log("submit is pressed --- handling post ");
+       
         axios 
-        .post(APIConfig.buildUrl("/owner/services"), {
+        .post(APIConfig.buildUrl("/owner/edit-services"), {
             // console.log("service ", this.service);
             ...this.service
         } )
@@ -128,11 +176,40 @@ export default class OwnerEditServices extends Vue{
     cancel() {
         this.$emit("cancel");
     }
+
+    showEditForm(srv : Service) {
+        console.log("srv ", srv);
+        this.editSrv = srv;
+        console.log("editSrv ", srv);
+        this.showUpdate();
+    }
+    showUpdate() {
+        this.showEdit = true;
+    }
+
+    removeService( srvId : number | undefined ) {
+        axios
+        .delete(APIConfig.buildUrl("/owner/edit-services/" + srvId ))
+        .then( () => {
+            this.getServices();
+        }) 
+    }
+
+    updateService(srv : Service) {
+        axios
+        .put(APIConfig.buildUrl("/owner/edit-services/" + srv.id))
+        .then( () => {
+            this.getServices();
+        })
+    }
+
+
 }
 
-export interface addServiceForm {
+export interface ServiceForm {
   serviceName: string;
   description: string;
+  price: number;
 }
 </script>
 

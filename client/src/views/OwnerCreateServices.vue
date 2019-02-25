@@ -1,6 +1,6 @@
 <template>
     <!-- Main container -->
-    <div class="container" style="margin-top: 15px; margin-bottom: 15px;">
+    <div class="container" style="margin-top: 15px; margin-bottom: 15px;" >
 
         <!-- Announcement Form -->
         <div class="tile is-ancestor">
@@ -28,6 +28,10 @@
                     <textarea class="textarea input is-warning is-small" rows="8" placeholder="Description ... "  v-model="service.description"></textarea>
                 </div>
                 <div class="tile is-child box">
+                    <span>Price</span>
+                    <input type="text input" class="input is-warning is-small" placeholder="Price" v-model="service.price">
+                </div>
+                <div class="tile is-child box">
                      <div class="file has-name">
                         <label class="file-label">
                             <input class="file-input" type="file" name="resume">
@@ -52,7 +56,7 @@
                         <button class="button is-link">Preview</button>
                     </div>
                     <div class="control">
-                        <button class="button is-success" type="submit" v-on:click="success">Submit</button>
+                        <button class="button is-success" type="submit" v-on:click="success()">Submit</button>
                     </div>
                     <div class="control">
                         <button class="button is-danger" type="reset">Cancel</button>
@@ -83,26 +87,33 @@ export default class OwnerCreateServices extends Vue{
     @Prop(Boolean) isShowing: boolean = false;
     service: addServiceForm = {
         serviceName: "",
-        description: ""
+        description: "",
+        price: undefined
     };
+
     error: string | boolean = false;
     success() {
         this.error = false;
         console.log("submit is pressed --- handling post ");
         axios 
-        .post(APIConfig.buildUrl("/owner/services"), {
+        .post(APIConfig.buildUrl("/owner/edit-services"), {
             // console.log("service ", this.service);
-            ...this.service
+            // ...this.service
+            ...{serviceName : this.service.serviceName,
+                description : this.service.description,
+                price : this.service.price}
         } )
         .then ((response : AxiosResponse<iService> ) => {
             this.$emit("success");
             this.service.serviceName = "",
-            this.service.description  = ""
+            this.service.description  = "",
+            this.service.price = undefined
         })
         .catch((errorResponse: any) => {
             console.log("error ", errorResponse);
         });
     }
+
     cancel() {
         this.$emit("cancel");
     }
@@ -111,6 +122,7 @@ export default class OwnerCreateServices extends Vue{
 export interface addServiceForm {
   serviceName: string;
   description: string;
+  price: number | undefined;
 }
 </script>
 

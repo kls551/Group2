@@ -11,4 +11,7 @@ export class Service {
 
   @Column()
   public description!: string;
+
+  @Column()
+  public price!: number;
 }

@@ -17,6 +17,7 @@ Vue.config.productionTip = false;
 require("./assets/mybulma/sass/mystyles.scss")
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
+
 new Vue({
   router,
   store,

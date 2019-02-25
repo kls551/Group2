@@ -4,9 +4,9 @@
     <!-- main nav bar -->
     <div class="navbar">
       <div class="navbar-brand">
-        <a class="navbar-item" href="https://bulma.io">
+        <router-link class="navbar-item" to="/">
           <img src="./assets/Foxcycle.png" width="150">
-        </a> 
+        </router-link> 
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -33,7 +33,7 @@
                 to="/my-profile"
                 exact-active-class="is-active"
               >My Profile</router-link>
-              <router-link class="navbar-item is-tab" v-if="!isLoggedIn" to="/trackorder">Track Order</router-link>
+              <router-link class="navbar-item is-tab" to="/trackorder">Track Order</router-link>
               <a class="navbar-item is-tab" v-if="isLoggedIn" v-on:click="showcheckoutModal()">Checkout</a>
               <a class="navbar-item is-tab" v-if="!isLoggedIn" v-on:click="showLoginModal()">Log in</a>
               <a class="navbar-item is-tab" v-if="isLoggedIn" v-on:click="logout">Log out</a>
@@ -104,7 +104,6 @@ export default class App extends Vue {
   public showSignup: boolean = false;
   public showLogin: boolean = false;
   public showcheckout: boolean = false;
-  public showtrack: boolean = false;
 
   showSignupModal() {
     this.showSignup = true;
@@ -125,17 +124,6 @@ export default class App extends Vue {
   cancelCheckout() {
     this.showcheckout = false;
   }
-
-  showTrackOrder() {
-    this.showtrack = true;
-  }
-  successtrack() {
-    this.showtrack = false;
-  }
-  canceltrack() {
-    this.showtrack = false;
-  }
-
 
   showLoginModal() {
     this.showLogin = true;

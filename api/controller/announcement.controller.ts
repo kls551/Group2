@@ -26,6 +26,30 @@ export class AnnouncementController extends DefaultController {
           res.status(200).send(announcements);
         })
     });
+
+    router.route("/announcement/:id")
+    .put((req: Request, res: Response) => {
+      announcementRepo.findOne(req.params.id).then(
+        (announcement: Announcement | undefined) => {
+          if (announcement) {
+            announcementRepo.update( announcement.id,
+              {title: req.body.title,
+               body: req.body.body}
+            ).then(() => res.sendStatus(200));
+          }
+          else {
+            res.sendStatus(404);
+          }
+        }
+      )
+    })
+    .delete((req: Request, res: Response) => {
+      announcementRepo.findOneOrFail(req.params.id).then((foundAnn: Announcement) => {
+        announcementRepo.delete(foundAnn).then(result => {
+          res.send(200);
+        });
+      });
+    });
     return router;
 }
 }

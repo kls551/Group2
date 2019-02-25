@@ -11,6 +11,7 @@ export class ShopItemController extends DefaultController {
   protected initializeRoutes(): express.Router {
     const router = express.Router();
     const shopItemRepo = getRepository(ShopItem);
+    
     router.route("/shopitems")
     .post((req: Request, res: Response) => {
         const shopitem = new ShopItem();

@@ -16,7 +16,6 @@
               <label class="file-label">
                 <input 
                 type="file"
-                
                 accept="image/*"
                 class="input-file file-input" 
                 name="resume">
@@ -49,26 +48,26 @@
         <div class="columns">
           <div class="column is-6">
             <div class="field">
-            <label class="label">Price</label>
-            <div class="control">
-                <input class="input" type="text" placeholder="Item Price" v-model="itemPrice">
+                <label class="label">Price</label>
+                <div class="control">
+                    <input class="input" type="text" placeholder="Item Price" v-model="itemPrice">
+                </div>
             </div>
-        </div>
-        </div>
+          </div>
           <div class="column">
             <div class="field">
             <label class="label">Quantity Available</label>
             <div class="control">
                 <input class="input" type="text" placeholder="0" v-model="itemQuantity">
             </div>
-        </div>
           </div>
         
+            </div>
         </div>
 
 
         <!-- Main Category Drop Down -->
-            <label class="label">Main Category</label>
+            <!-- <label class="label">Main Category</label>
                 <div class="dropdown is-hoverable" style="margin-bottom: 15px;">
                             <div class="dropdown-trigger">
                                 <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
@@ -86,7 +85,36 @@
                                     <a class="dropdown-item" v-on:click="saveMainCat(main.name)">{{ main.name }}</a>
                                 </div>
                             </div>
+                </div> -->
+
+            <div class="columns">
+                <div class="column">
+                    <label class="label">Main Category</label>
+                    <div class="control scroll-container">
+                        <label class="radio">
+                            <input type="radio" name="answer">
+                            Yes
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="answer">
+                            No
+                        </label>
+                    </div>
                 </div>
+                <div class="column">
+                    <label class="label">Sub Categories</label>
+                    <div class="control scroll-container">
+                        <label class="radio">
+                            <input type="radio" name="answer">
+                            Yes
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="answer">
+                            No
+                        </label>
+                    </div>
+                </div>
+            </div>
 
         <div class="field">
             <div class="control">
@@ -107,12 +135,16 @@
             <div class="control">
                   <button class="button is-success" type="submit" v-on:click="addItem">Add Item</button>
              </div>
+        <br>
+
+        
         </div>
 
       </div>
     </div>
     </div>
   </div>
+
 </template>
 
 <script lang="ts">
@@ -244,6 +276,9 @@ h2 {
 .leftMargin {
   margin-left:80px;
 }
+.rightColumn {
+  margin-right:180px;
+}
 .buttonStyle {
   padding-top:5px;
   padding-right:17px;
@@ -251,8 +286,20 @@ h2 {
   padding-left:17px;
   margin-bottom: 4px;
 }
-article{
-  height:300px;
-  width:400px;
+.scroll-container {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin-top: 10px;
+}
+div h1{
+    text-align: left;
+    margin-top: -10px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 15px;
+}
+
+div h1 span{
+    background-color: white;
 }
 </style>

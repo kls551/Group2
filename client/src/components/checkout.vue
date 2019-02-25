@@ -45,6 +45,23 @@
           <input class="input" type="text" placeholder="Credit Card number" v-model="checkout.cnum"/>
         </div>
       </div>
+
+      <div class="columns">
+        <div class="column is-half">
+      <div class="field">
+        <label class="label">Expiration Date</label>
+        <div class="control">
+          <input class="input" type="text" placeholder="Expr Date" v-model="checkout.address"/>
+        </div>
+      </div></div>
+        <div class="column">
+      <div class="field">
+        <label class="label">Zip</label>
+        <div class="control">
+          <input class="input" type="text" placeholder="Zip" v-model="checkout.city"/>
+        </div>
+      </div> </div> </div>   
+
       <div class="control">
         <label class="radio">
           <input type="radio" name="Pickup" v-model="checkout.Pickup" v-bind:value="true">

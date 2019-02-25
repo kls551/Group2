@@ -116,6 +116,18 @@ export default new Router({
       name: "ownerAbout",
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/About.vue")
+    },
+    {
+      path:"/owner/create-services",
+      name: "ownerCreateServices",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/OwnerCreateServices.vue")
+    },
+    {
+      path:"/owner/edit-services",
+      name: "ownerEditServices",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/OwnerEditServices.vue")
     }
   ]
 });

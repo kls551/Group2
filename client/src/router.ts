@@ -62,7 +62,7 @@ export default new Router({
       name: "accounts",
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/Accounts.vue")
-    }, 
+    },
     // {
     //   path: "/trackorder",
     //   name: "trackorder",

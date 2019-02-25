@@ -14,7 +14,7 @@
         </a>
       </div>
       
-      <div class="navbar-menu is-active">
+      <div class="navbar-menu">
         <div class="navbar-start">  
           <router-link class="navbar-item is-tab" to="/" exact-active-class="is-active">Home</router-link>
           <router-link class="navbar-item is-tab" to="/shop" exact-active-class="is-active">Shop</router-link>
@@ -87,10 +87,10 @@ import Signup from "@/components/Signup.vue";
 import Login from "@/components/Login.vue";
 import checkout from "@/components/checkout.vue";
 import { APIConfig } from "@/utils/api.utils";
-import Buefy from 'buefy'
-import 'buefy/dist/buefy.css'
+import Buefy from 'buefy';
+import 'buefy/dist/buefy.css';
 
-Vue.use(Buefy)
+Vue.use(Buefy);
 
 @Component({
   components: {
@@ -130,6 +130,7 @@ export default class App extends Vue {
 
   successLogin() {
     this.showLogin = false;
+    this.$router.push({ name: "ownerManageCategories" });
   }
 
   cancelLogin() {
@@ -165,6 +166,10 @@ export default class App extends Vue {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+}
+
+.navbar-burger:active {
+
 }
 
 

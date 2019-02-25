@@ -9,8 +9,6 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 library.add(faUpload, faUser, faEdit);
 
-
-
 Vue.config.productionTip = false;
 
 require("./assets/mybulma/sass/mystyles.scss")

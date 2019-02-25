@@ -14,7 +14,12 @@
           <div class="field" style="margin-top 20px;">
             <div class="file" style="margin-left: 150px">
               <label class="file-label">
-                <input class="file-input" type="file" name="resume">
+                <input 
+                type="file"
+                
+                accept="image/*"
+                class="input-file file-input" 
+                name="resume">
                 <span class="file-cta">
                   <span class="file-icon">
                     <i class="fas fa-upload"></i>
@@ -61,18 +66,27 @@
         
         </div>
 
-        <div class="columns">
 
-          <div class="column">
-            <div class="field">
-              <label class="label">Main Catgegory</label>
-                <div class="control">
-                    <input class="input" type="text" placeholder="Category" v-model="itemCategory">
+        <!-- Main Category Drop Down -->
+            <label class="label">Main Category</label>
+                <div class="dropdown is-hoverable" style="margin-bottom: 15px;">
+                            <div class="dropdown-trigger">
+                                <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+
+                                <span style="color: grey" v-if="itemCategory === ''">Ex: Bikes</span>
+                                <span style="color: grey" v-else>{{ itemCategory }}</span>
+
+                                <span class="icon is-small">
+                                    <i class="fas fa-angle-down"></i>
+                                </span>
+                                </button>
+                            </div>
+                            <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                                <div class="dropdown-content" v-for="(main, index) in mainCategoryList" v-bind:key="index">
+                                    <a class="dropdown-item" v-on:click="saveMainCat(main.name)">{{ main.name }}</a>
+                                </div>
+                            </div>
                 </div>
-            </div>
-          </div>
-
-        </div>
 
         <div class="field">
             <div class="control">
@@ -123,6 +137,25 @@ export default class OwnerAnnouncement extends Vue {
     itemPostedDate: Date = new Date();
     itemImageURL: String = "";
 
+    fileCount: number = 0;
+    mainCategoryList: MainCategory[] = [];
+
+    getMainCategories() {
+        axios
+            .get(APIConfig.buildUrl("/maincategory"))
+            .then((response: AxiosResponse<MainCategory[]>) => {
+                this.mainCategoryList = response.data;
+                this.$emit("success");
+            })
+            .catch((res: AxiosError) => {
+                this.error = res.response && res.response.data.error;
+            });
+    }
+
+    saveMainCat(mainCat:string) {
+        this.itemCategory = mainCat;
+    }
+
     addItem() {
         if (this.itemName == "" || this.itemPrice == 0) {
             return;
@@ -152,9 +185,41 @@ export default class OwnerAnnouncement extends Vue {
             });
     }
 
-    get picture(): boolean {
-        return false;
-    }
+  //   save(formData: FormData) {
+  //   // upload data to the server
+  //     this.currentStatus = STATUS_SAVING;
+  //     this.upload(formData)
+  //       .then(() => {
+  //         this.currentStatus = STATUS_SUCCESS;
+  //       })
+  //       .catch(err => {
+  //         this.uploadError = err.response;
+  //         this.currentStatus = STATUS_FAILED;
+  //       });
+  // }
+
+    // filesChanged(event: any) {
+    //     const name = event.target.name;
+    //     const files = event.target.files;
+    //     this.fileCount = event.target.files.length;
+    //     // handle file changes
+    //     const formData = new FormData();
+
+    //     if (!files.length) return;
+
+    //     // append the files to FormData
+    //     Array.from(Array(files.length).keys()).map(x => {
+    //       formData.append(name, files[x], files[x].name);
+    //     });
+
+    //     // save it
+    //     this.save(formData);
+    // }
+}
+
+interface MainCategory {
+    categoryname: string;
+//    subCategories: SubCategory[];
 }
 </script>  
 

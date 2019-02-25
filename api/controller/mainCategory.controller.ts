@@ -27,6 +27,26 @@ export class MainCategoryController extends DefaultController {
           res.status(200).send({ mainCat });
         });
       });
+
+      router.route("/maincategory/:id")
+      .delete((req: Request, res: Response) => {
+        const mainCat = getRepository(MainCategory);
+        mainCat.findOneOrFail(req.params.id).then((foundCategory: MainCategory) => {
+          mainCat.delete(foundCategory).then(result => {
+            res.send(200);
+          });
+        });
+      })
+
+      .put((req: Request, res: Response) => {
+        const mainCat = getRepository(MainCategory);
+        mainCat.findOneOrFail(req.params.id).then((foundCategory: MainCategory) => {
+          foundCategory.name = req.body.name;
+          mainCat.save(foundCategory).then(result => {
+            res.send(200);
+          });
+        });
+      });
     
     return router;
   }

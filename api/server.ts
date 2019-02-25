@@ -1,6 +1,6 @@
 import cors from "cors";
 import express from "express";
-import { LoginController, UserController, OrderController, AnnouncementController, MainCategoryController, ShopItemController  } from "./controller";
+import { LoginController, UserController, OrderController, AnnouncementController, MainCategoryController, ShopItemController, SubCategoryController  } from "./controller";
 
 import { DBConnection } from "./connection";
 
@@ -24,6 +24,7 @@ export class Server {
       app.use("/", new LoginController().router);
       app.use("/", new OrderController().router);
       app.use("/", new MainCategoryController().router);
+      app.use("/", new SubCategoryController().router);
       app.use("/", new AnnouncementController().router);
       app.use("/", new ShopItemController().router);
 

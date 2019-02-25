@@ -4,7 +4,7 @@
     <!-- Preview Announcment -->
     <div class="box">
         <h2> Users </h2>
-        <table class="table is-full">
+        <table class="table is-hoverable is-fullwidth">
             <thead>
                 <tr>
                     <th><abbr title="Id">Pos</abbr></th>
@@ -13,6 +13,7 @@
                     <th><abbr title="profileUrl">img</abbr></th>
                     <th><abbr title="emailAddress">Email</abbr></th>
                     <th><abbr title="Type">Type</abbr></th>
+                    <th v-if="isAd">edit</th>
                     <th v-if="isAd">delete</th>
                 </tr>
             </thead>
@@ -25,20 +26,52 @@
                     <td>{{user.emailAddress}}</td>
                     <td>{{user.isAdmin}}</td>
                     <td v-if="isAd">
+                        <button class="button is-success" v-on:click="showEditForm(index)">Edit</button>
+                    </td>
+                    <td v-if="isAd">
                         <button class="button is-danger" v-on:click="deleteItem(user.id)">Delete?</button>
                     </td>
                 </tr>
             </tbody>
         </table>
-    <button class="button is-success" v-if="isAd" v-on:click="showSignupModal()">Add User</button>
-    <Signup
-      v-bind:is-showing="showSignup"
-      v-on:success="successSignup()"
-      v-on:cancel="cancelSignup()"
-    />
-    </div>
+        <div class="columns">
+            <div class="column is-half is-offset-one-quarter" v-if="showEdit">
+                <div class="box is-small">
+                    <h3> Editing ({{editEmail}}) </h3>
+                    <div class="field">
+                        <label class="label is-small">FirstName</label>
+                        <div class="control">
+                            <input class="input is-small" type="text" placeholder="e.g Alex" v-model="editFn">
+  </div>
+                        </div>
+                        <div class="field">
+                            <label class="label is-small">LastName</label>
+                            <div class="control">
+                                <input class="input is-small" type="text" placeholder="e.g.Smith" v-model="editLn">
+  </div>
+                            </div>
+                            <div class="field">
+                                <label class="label is-small">Role</label>
+                                <div class="control">
+                                    <input class="input is-small" type="number" placeholder="e.g.0" v-model="editRole">
+  </div>
+                                </div>
+                                <nav class="level">
+                                    <div class="level-left">
+                                        <button class="button is-success is-small" v-on:click="editItem(editIndex)">Update</button></div>
+                                    <div class="level-right">
+                                        <button class="button is-danger is-small" v-on:click="cancelEdit()">Cancel</button></div>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
 
-</div>
+                    <button class="button is-success" v-if="isAd" v-on:click="showSignupModal()">Add User</button>
+                    <Signup v-bind:is-showing="showSignup" v-on:success="successSignup()" v-on:cancel="cancelSignup()" />
+                    <Edit v-bind:is-showing="showEdit" v-on:success="successEdit()" v-on:cancel="cancelEdit()" />
+                </div>
+
+            </div>
 </template>
 
 <script lang="ts">
@@ -66,8 +99,15 @@ import {
 })
 export default class Accounts extends Vue {
     public showSignup: boolean = false;
+    public showEdit: boolean = false;
     error: string | boolean = false;
     users: iUser[] = [];
+    edit: iUser | undefined;
+    editFn: string = "";
+    editEmail: string = "";
+    editLn: string = "";
+    editRole: number = 0;
+    editIndex: number = 0;
 
     mounted() {
         this.preview();
@@ -75,7 +115,7 @@ export default class Accounts extends Vue {
     preview() {
         axios
             .get(APIConfig.buildUrl("/users"))
-            .then((response: AxiosResponse) => {
+            .then((response: AxiosResponse < iUser[] > ) => {
                 this.users = response.data;
                 console.log(this.users);
                 this.$emit("success");
@@ -93,6 +133,21 @@ export default class Accounts extends Vue {
             .then(() => {
                 this.preview();
             })
+    }
+    editItem(index: number) {
+        this.edit = this.users[index];
+        if (this.edit) {
+            this.edit.firstName = this.editFn;
+            this.edit.lastName = this.editLn;
+            this.edit.isAdmin = this.editRole;
+            axios.put(APIConfig.buildUrl("/users/" + this.edit.id), {
+                    ...this.edit
+                })
+                .then(() => {
+                    this.preview();
+                    this.successEdit();
+                })
+        }
     }
 
     get isAd(): boolean {
@@ -113,6 +168,23 @@ export default class Accounts extends Vue {
         this.showSignup = false;
         this.preview();
     }
+
+    showEditForm(index: number) {
+        this.editEmail = this.users[index].emailAddress;
+        this.editFn = this.users[index].firstName;
+        this.editLn = this.users[index].lastName;
+        this.editRole = this.users[index].isAdmin;
+        this.editIndex = index;
+        this.showEdit = true;
+    }
+    successEdit() {
+        this.showEdit = false;
+        this.preview();
+    }
+    cancelEdit() {
+        this.showEdit = false;
+        this.preview();
+    }
 }
 </script>  
 
@@ -120,5 +192,8 @@ export default class Accounts extends Vue {
 h2 {
     font-family: 'Questrial';
     font-size: 28px;
+}
+h3 {
+    font-family: 'Questrial';
 }
 </style>

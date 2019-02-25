@@ -87,10 +87,10 @@ export class ServiceController extends DefaultController {
                 .then( (service : Service | undefined)  => {
 
                     if (service) {
-                        serviceRepo.save({id : srvId, 
-                                        serviceName: serviceName,
-                                        description: description,
-                                        price: price})
+                        service.serviceName = serviceName;
+                        service.description = description;
+                        service.price = price;
+                        serviceRepo.save(service)
                         .then( (result => {
                             res.status(200).end();
                         }))

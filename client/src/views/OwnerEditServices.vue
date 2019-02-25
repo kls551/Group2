@@ -23,9 +23,9 @@
                 <br>
                 <div class="tile is-child">
                     <div class="tile">
-                        <div class="tile"> Service Name </div>
-                        <div class="tile"> Pricing  </div>
-                        <div class="tile"> Hours  </div>
+                        <div class="tile is-3"> Service Name </div>
+                        <div class="tile is-1"> Price  </div>
+                        <div class="tile"> Description  </div>
                         <div class="tile is-1"> Edit  </div>
                         <div class="tile is-1"> Delete  </div>
                         <!-- <input type="text input" class="input is-warning is-small" placeholder="Service Name" v-model="service.serviceName"> -->
@@ -37,9 +37,9 @@
                 <div v-for="(service, index) in services" v-bind:key="index">
                     <div class="tile is-child">
                         <div class="tile">
-                            <div class="tile"> {{ service.serviceName }} </div>
-                            <div class="tile"> {{ service.price }}  </div>
-                            <div class="tile"> 7:00am-7pm </div>
+                            <div class="tile is-3"> {{ service.serviceName }} </div>
+                            <div class="tile is-1"> {{ service.price }}  </div>
+                            <div class="tile"> {{ service.description }}</div>
                             <!-- <span class="icon"> 
                                 <i class="fas fa-edit"></i>
                             </span> -->
@@ -63,7 +63,7 @@
                                 class="input"
                                 type="text"
                                 placeholder=""
-                                v-model="editSrv.serviceName"
+                                v-model="editServiceName"
                             >
                             
                             </div>
@@ -73,7 +73,7 @@
                         <div class="field">
                             <label class="label">Description</label>
                             <div class="control">
-                            <input class="input" type="text" placeholder="" v-model="editSrv.description">
+                            <input class="input" type="text" placeholder="" v-model="editDescription">
                             </div>
                         </div>
 
@@ -81,7 +81,7 @@
                         <div class="field">
                             <label class="label">Price</label>
                             <div class="control">
-                            <input class="input" placeholder="" v-model="editSrv.price">
+                            <input class="input" placeholder="" v-model="editPrice">
                             </div>
                         </div>
 
@@ -91,7 +91,7 @@
                                 <button class="button is-link">Preview</button>
                             </div>
                             <div class="control">
-                                <button class="button is-success" type="submit" v-on:click="updateService(editSrv)">Save Changes</button>
+                                <button class="button is-success" type="submit" v-on:click="updateService()">Save Changes</button>
                             </div>
                             <div class="control">
                                 <button class="button is-danger" type="reset">Cancel</button>
@@ -119,7 +119,7 @@ import { APIConfig } from "../utils/api.utils";
 import { Component, Prop} from "vue-property-decorator";
 import Modal  from "../components/Modal.vue";
 import { iService } from "../models/service.interface";
-import  { Service } from "../../../api/entity";
+import { Service } from "../../../api/entity";
 import UpdateService  from "@/components/UpdateService.vue";
 @Component({
   components: { Modal, UpdateService }
@@ -128,7 +128,15 @@ import UpdateService  from "@/components/UpdateService.vue";
 export default class OwnerEditServices extends Vue{
     // @Prop(Boolean) isShowing: boolean = false;
     public showEdit: boolean = false;
-    public editSrv : Service | undefined = undefined;
+    public editServiceName = "";
+    public editDescription = "";
+    public editPrice = 0;
+    public editSrv : Service = {
+        id: 0,
+        serviceName: "",
+        description: "",
+        price: 0
+    };
     service: ServiceForm = {
         serviceName: "",
         description: "",
@@ -180,6 +188,9 @@ export default class OwnerEditServices extends Vue{
     showEditForm(srv : Service) {
         console.log("srv ", srv);
         this.editSrv = srv;
+        this.editServiceName = srv.serviceName;
+        this.editDescription = srv.description;
+        this.editPrice = srv.price;
         console.log("editSrv ", srv);
         this.showUpdate();
     }
@@ -195,9 +206,14 @@ export default class OwnerEditServices extends Vue{
         }) 
     }
 
-    updateService(srv : Service) {
+    updateService() {
+        console.log("updatesrv: ", this.editSrv);
         axios
-        .put(APIConfig.buildUrl("/owner/edit-services/" + srv.id))
+        .put(APIConfig.buildUrl("/owner/edit-services/" + this.editSrv.id ), 
+            {serviceName: this.editServiceName,
+            description: this.editDescription,
+            price : this.editPrice }
+        )
         .then( () => {
             this.getServices();
         })

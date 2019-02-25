@@ -14,6 +14,7 @@
             </div>
         </article>
     </div>
+    
     <div class="tile is-ancestor">
         <div class="tile is-1"></div>
         <div class="tile is-5 is-vertical is-parent">

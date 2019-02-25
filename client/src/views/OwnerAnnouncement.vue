@@ -188,7 +188,7 @@ export default class OwnerAnnouncement extends Vue {
         this.preview();
     }
 }
-</script>  
+</script>
 
 <style lang="scss" scoped>
 h2 {

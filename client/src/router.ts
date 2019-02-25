@@ -75,12 +75,12 @@ export default new Router({
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/ItemView.vue")
     },
-    {
-      path: "/trackorder",
-      name: "trackOrder",
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/TrackOrder.vue")
-    },
+    // {
+    //   path: "/trackorder",
+    //   name: "trackOrder",
+    //   component: () =>
+    //     import(/* webpackChunkName: "about" */ "./views/TrackOrder.vue")
+    // },
     {
       path: "/owner/manage-main-categories",
       name: "ownerManageCategories",
@@ -110,6 +110,18 @@ export default new Router({
       name: "ownerAddItem",
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/NewItem.vue")
+    },
+    {
+      path:"/owner/create-services",
+      name: "ownerCreateServices",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/OwnerCreateServices.vue")
+    },
+    {
+      path:"/owner/edit-services",
+      name: "ownerEditServices",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/OwnerEditServices.vue")
     }
   ]
 });

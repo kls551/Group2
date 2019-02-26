@@ -74,7 +74,7 @@
       v-on:cancel="cancelCheckout()"
     />
     <trackorder
-      v-bind:is-showing="trackorder"
+      v-bind:is-showing="showTrackOrder"
       v-on:success="successtrack()"
       v-on:cancel="canceltrack()"
     />

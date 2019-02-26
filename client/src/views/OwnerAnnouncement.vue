@@ -58,11 +58,9 @@
             <h2> Preview Announcements </h2>
             <article class="message is-warning" v-for="(ann, index) in announcements" v-bind:key="index">
                 <div class="message-header">
-                    <span class="button is-small" v-on:click="showEditForm(index)">
-              <span class="file-icon">
+              <span class="file-icon" v-on:click="showEditForm(index)">
                 <font-awesome-icon icon="edit"/> <!-- using icon -->
               </span>
-                    </span>
                     <p>{{ann.title}}</p>
                     <button class="delete" aria-label="delete" v-on:click="deleteItem(ann.id)"></button>
                 </div>

@@ -115,7 +115,7 @@ export default new Router({
       path:"/owner/about",
       name: "ownerAbout",
       component: () =>
-        import(/* webpackChunkName: "about" */ "./views/About.vue")
+        import(/* webpackChunkName: "about" */ "./views/OwnerAbout.vue")
     },
     {
       path:"/owner/create-services",

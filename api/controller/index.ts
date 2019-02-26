@@ -7,3 +7,4 @@ export * from "./subCategory.controller";
 export * from "./announcement.controller";
 export * from "./shopitem.controller";
 export * from "./announcement.controller";
+export * from "./about.controller";

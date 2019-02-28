@@ -47,14 +47,42 @@
                     <span>Sunday</span>
                     <input type="text" class="input is-warning is-small" placeholder="Hours" v-model="editSunday">
                 </div>
-                <div class="field is-grouped">
+              
+      <form enctype="multipart/form-data" novalidate>
+        <div class="profilePhoto">
+          <img :src="profileUrl"/>
+        </div>
+        <div class="file">
+          <label class="file-label">
+            <input
+              type="file"
+              name="profilePhoto"
+              :disabled="isSaving"
+              v-on:change="filesChanged"
+              accept="image/*"
+              class="input-file file-input"
+            >
+            <span class="file-cta">
+              <span class="file-icon">
+                <font-awesome-icon icon="upload"/>
+              </span>
+              <span class="file-label">
+                Choose a map
+              </span>
+            </span>
+          </label>
+          <p v-if="isSaving">Uploading file...</p>
+        </div>
+      </form>   
+
+                      <div class="field is-grouped">
                     <div class="control">
                         <button class="button is-success" type="submit" v-on:click="editItem">Submit</button>
                     </div>
                     <div class="control">
                         <button v-if="!showEdit" class="button is-text" type="reset">Cancel</button>
                     </div>
-                </div>                
+                </div>         
         </div>
     </div>
 
@@ -80,6 +108,10 @@ import {
     iAbout
 } from "../models/about.interface";
 
+const STATUS_INITIAL = 0;
+const STATUS_SAVING = 1;
+const STATUS_SUCCESS = 2;
+const STATUS_FAILED = 3;
 @Component
 export default class OwnerAbout extends Vue {
     public showEdit: boolean = false;
@@ -96,14 +128,88 @@ export default class OwnerAbout extends Vue {
     editFriday: string = "";
     editSaturday: string = "";
     editSunday: string = "";
-
-  uploadError: string | null = null;
   uploadedFile: any = null;
+    currentStatus: number | null = null;
+  fileCount: number = 0;
+  uploadError: string | null = null;
     editIndex: number = 0;
     editId: number = 0;
+  upload(formData: FormData) {
+    if (this.about) {
+      const url = `${APIConfig.url}/about`;
+      return axios
+        .post(url, formData)
+        .then((res: AxiosResponse) => {
+          this.$emit("success");
+        });
+    }
+    return Promise.reject({ response: "no user logged in" });
+  }
+
+  save(formData: FormData) {
+    // upload data to the server
+    this.currentStatus = STATUS_SAVING;
+    this.upload(formData)
+      .then(() => {
+        this.currentStatus = STATUS_SUCCESS;
+        this.preview();
+      })
+      .catch(err => {
+        this.uploadError = err.response;
+        this.currentStatus = STATUS_FAILED;
+      });
+  }
+
+  filesChanged(event: any) {
+    const name = event.target.name;
+    const files = event.target.files;
+    this.fileCount = event.target.files.length;
+    // handle file changes
+    const formData = new FormData();
+
+    if (!files.length) return;
+
+    // append the files to FormData
+    Array.from(Array(files.length).keys()).map(x => {
+      formData.append(name, files[x], files[x].name);
+    });
+
+    // save it
+    this.save(formData);
+  }
+
+  reset() {
+    // reset form to initial state
+    this.currentStatus = STATUS_INITIAL;
+    this.uploadError = null;
+  }
+
+  //computed
+  get isInitial() {
+    return this.currentStatus === STATUS_INITIAL;
+  }
+
+  get isSaving() {
+    return this.currentStatus === STATUS_SAVING;
+  }
+
+  get isSuccess() {
+    return this.currentStatus === STATUS_SUCCESS;
+  }
+
+  get isFailed() {
+    return this.currentStatus === STATUS_FAILED;
+  }
+  get profileUrl(): string {
+    if (this.about) {
+      return APIConfig.buildUrl(`/profilePhotos/5f50f3d590761181d337b40c5cc54283`);
+    }
+    return "";
+  }
 
     mounted() {
         this.preview();
+        this.reset();
     }
     // announcement() {
     //     if (this.announcementTitle == "" || this.announcementBody == "") {
@@ -124,6 +230,9 @@ export default class OwnerAbout extends Vue {
     //             this.error = errorResponse.response.data.reason;
     //         });
     // }
+
+
+
 
     preview() {
         axios

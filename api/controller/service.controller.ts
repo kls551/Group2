@@ -13,11 +13,9 @@ export class ServiceController extends DefaultController {
         router.route("/owner/edit-services").post((req: Request, res: Response) => {
             const {serviceName, description, price } = req.body;
             const serviceRepo = getRepository(Service);
-            console.log("posting service ", serviceName, "\n ", description, " ", price);
             serviceRepo
                 .findOne({ where : { serviceName } })
                 .then((service: Service | undefined) => {
-                    console.log("service ", service);
                     if (!service) {
                         const newService = new Service();
                         newService.serviceName = serviceName;
@@ -45,7 +43,6 @@ export class ServiceController extends DefaultController {
             serviceRepo
                 .find()
                 .then((service: Service[] | undefined) => {
-                    console.log("getiing services");
                     if (service) {
                         res.status(200).send(service);
                     }

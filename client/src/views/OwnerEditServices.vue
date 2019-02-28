@@ -2,113 +2,72 @@
     <!-- Main container -->
     <div class="container" style="margin-top: 15px; margin-bottom: 15px;">
 
-        <!-- Announcement Form -->
+        <!-- Service List -->
         <div class="tile is-ancestor">
             <!-- navigating services options on the left -->
-            <div class="tile is-2"> 
+            <div class="tile is-2" style="margin-top: 15px"> 
                 <aside class="menu" >
-                    <br>
                     <div class="menu-label title"> <h2> Menu </h2> </div>
                     <ul class="menu-list">
-                        <li ><router-link to="/owner/edit-services"> Edit </router-link></li>
-                        <li ><router-link to="/owner/create-services"> Create New Service </router-link></li>
+                        <li ><router-link to="/owner/edit-services"> <h3> Edit  </h3> </router-link></li>
+                        <li ><router-link to="/owner/create-services"> <h3> New Service </h3> </router-link></li>
                     </ul>
                 </aside>
             </div>
 
             <!-- editing area on the right -->
-            <div class="tile is-8 is-vertical is-parent">
+            <div class="tile is-9 is-vertical is-parent">
                 <br>
                 <h2>Services Available</h2>
                 <br>
                 <div class="tile is-child">
-                    <div class="tile">
-                        <div class="tile is-3"> Service Name </div>
-                        <div class="tile is-1"> Price  </div>
-                        <div class="tile"> Description  </div>
-                        <div class="tile is-1"> Edit  </div>
-                        <div class="tile is-1"> Delete  </div>
-                        <!-- <input type="text input" class="input is-warning is-small" placeholder="Service Name" v-model="service.serviceName"> -->
-                    </div>
+                    <table class="table is-striped is-fullwidth is-hoverable">
+                        <thead>
+                            <tr>
+                            <th> <h3> Service Name </h3> </th>
+                            <th> <h3> Price  </h3> </th>
+                            <th> <h3> Description  </h3> </th>
+                            <th> <h3> Edit </h3> </th>
+                            <th> <h3> Delete </h3> </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                                <tr v-for="(service, index) in services" v-bind:key="index">
+                                    <th> {{ service.serviceName }} </th>
+                                    <th> {{ service.price }}  </th>
+                                    <th> {{ service.description }} </th>
+                                    <th> <span class="tile file-icon" v-on:click="showEditForm(service)">
+                                        <font-awesome-icon icon="edit"/> <!-- edit icon -->
+                                    </span> </th>
+
+                                    <th> <span class="file-icon" v-on:click="showDeleteConfirm(service)">
+                                        <font-awesome-icon icon="trash-alt" /> <!-- trash icon -->
+                                    </span> </th>
+                                </tr>
+
+                        </tbody>
+
+                    </table>
                 </div>
-
-
-                <!-- list of services -->
-                <div v-for="(service, index) in services" v-bind:key="index">
-                    <div class="tile is-child">
-                        <div class="tile">
-                            <div class="tile is-3"> {{ service.serviceName }} </div>
-                            <div class="tile is-1"> {{ service.price }}  </div>
-                            <div class="tile"> {{ service.description }}</div>
-                            <!-- <span class="icon"> 
-                                <i class="fas fa-edit"></i>
-                            </span> -->
-                        
-                            <a class="button" v-on:click="showEditForm(services[index])">edit </a>
-                            <a class="button" v-on:click="removeService(service.id)">delete </a>
-                        </div>
-                    </div>
-
-                </div>
-<!-- 
-                edit form  -->
-                <!-- <form v-on:submit.prevent="onSubmit" v-if="showEdit" > -->
-                <form v-if="showEdit" >
-                        <p v-if="error">{{ error }}</p>
-                        <!-- service name field  -->
-                        <div class="field">
-                            <label class="label">Service Name</label>
-                            <div class="control">
-                            <input
-                                class="input"
-                                type="text"
-                                placeholder=""
-                                v-model="editServiceName"
-                            >
-                            
-                            </div>
-                        </div>
-
-                        <!-- description field -->
-                        <div class="field">
-                            <label class="label">Description</label>
-                            <div class="control">
-                            <input class="input" type="text" placeholder="" v-model="editDescription">
-                            </div>
-                        </div>
-
-                        <!-- description field -->
-                        <div class="field">
-                            <label class="label">Price</label>
-                            <div class="control">
-                            <input class="input" placeholder="" v-model="editPrice">
-                            </div>
-                        </div>
-
-                        <!-- Submit, Preview, cancel buttons -->
-                        <div class="field is-grouped">
-                            <div class="control">
-                                <button class="button is-link">Preview</button>
-                            </div>
-                            <div class="control">
-                                <button class="button is-success" type="submit" v-on:click="updateService()">Save Changes</button>
-                            </div>
-                            <div class="control">
-                                <button class="button is-danger" type="reset">Cancel</button>
-                            </div>
-                        </div>
-                    </form>
-
 
             </div>
             <div class="tile is-3"></div>
         </div>
         <!-- </form> -->
         <!-- </modal> -->
-        <!-- <UpdateService 
+        <UpdateService 
             v-bind:is-showing="showEdit"
+            v-bind:service="selectedService"
             v-on:success="successUpdate()" 
-            v-on:cancel="cancelUpdate()"> </UpdateService> -->
+            v-on:cancel="cancelUpdate()"> </UpdateService>
+
+        <DeleteConfirm 
+            v-bind:is-showing="showDelConfirm"
+            v-bind:del="confirmDel"
+            v-on:success="successDelete()" 
+            v-on:cancel="cancelDelete()"> </DeleteConfirm>
+
     </div>
 </template>
 
@@ -121,16 +80,22 @@ import Modal  from "../components/Modal.vue";
 import { iService } from "../models/service.interface";
 import { Service } from "../../../api/entity";
 import UpdateService  from "@/components/UpdateService.vue";
+import DeleteConfirm  from "@/components/DeleteConfirm.vue";
 @Component({
-  components: { Modal, UpdateService }
+  components: { Modal, UpdateService, DeleteConfirm}
 })
 
 export default class OwnerEditServices extends Vue{
     // @Prop(Boolean) isShowing: boolean = false;
     public showEdit: boolean = false;
+    public showDelConfirm: boolean = false;
+    public confirmDel: boolean = false;
+    public delId: number = -1;
+
     public editServiceName = "";
     public editDescription = "";
     public editPrice = 0;
+    public editImage = "";
     public editSrv : Service = {
         id: 0,
         serviceName: "",
@@ -146,6 +111,7 @@ export default class OwnerEditServices extends Vue{
 
     public services: Service[] = [];
     public display = true;
+    public selectedService: Service| undefined;
     mounted() {
       this.getServices();
     }
@@ -164,6 +130,16 @@ export default class OwnerEditServices extends Vue{
     cancelUpdate() {
         this.showEdit = false;
     }
+
+    successDelete() {
+        this.showDelConfirm = false;
+        this.removeService(this.delId);
+    }
+
+    cancelDelete() {
+        this.showDelConfirm = false;
+    }
+
     success() {
         this.error = false;
        
@@ -182,22 +158,26 @@ export default class OwnerEditServices extends Vue{
         });
     }
     cancel() {
-        this.$emit("cancel");
+        this.showEdit = false;
+        this.$emit("cancel");  
     }
 
     showEditForm(srv : Service) {
-        console.log("srv ", srv);
         this.editSrv = srv;
         this.editServiceName = srv.serviceName;
         this.editDescription = srv.description;
         this.editPrice = srv.price;
-        console.log("editSrv ", srv);
         this.showUpdate();
+        this.selectedService = srv;
     }
     showUpdate() {
         this.showEdit = true;
     }
 
+    showDeleteConfirm(srv : Service) {
+        this.delId = srv.id;
+        this.showDelConfirm = true;
+    }
     removeService( srvId : number | undefined ) {
         axios
         .delete(APIConfig.buildUrl("/owner/edit-services/" + srvId ))
@@ -207,7 +187,6 @@ export default class OwnerEditServices extends Vue{
     }
 
     updateService() {
-        console.log("updatesrv: ", this.editSrv);
         axios
         .put(APIConfig.buildUrl("/owner/edit-services/" + this.editSrv.id ), 
             {serviceName: this.editServiceName,
@@ -230,10 +209,21 @@ export interface ServiceForm {
 </script>
 
 <style scoped lang="scss">
+thead {
+    background-color: #ffe7c1;
+}
 
+.menu {
+    margin-top: 20px;
+}
 h2 {
-    font-family: 'Questrial';
-    font-size: 28px;
+    font-family: 'Arial';
+    font-size: 34px;
+}
+
+h3 {
+    font-family: 'Arial';
+    font-size: 20px;
 }
 
 </style>

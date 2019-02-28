@@ -5,3 +5,4 @@ export * from "./service.entity";
 export * from "./mainCategories.entity";
 export * from "./subCategories.entity";
 export * from "./announcement.entity";
+export * from "./shopitem.entity";

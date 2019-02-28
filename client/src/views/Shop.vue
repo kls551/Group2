@@ -158,6 +158,14 @@
     itemCol4: iShopItem[] = this.col(this.items, 3);
     itemCol5: iShopItem[] = this.col(this.items, 4);
 
+    /** Database version... needs to be tested...
+    itemCol1: iShopItem[] = this.col(this.shopItems, 0);
+    itemCol2: iShopItem[] = this.col(this.shopItems, 1);
+    itemCol3: iShopItem[] = this.col(this.shopItems, 2);
+    itemCol4: iShopItem[] = this.col(this.shopItems, 3);
+    itemCol5: iShopItem[] = this.col(this.shopItems, 4);
+    */
+
     col(inItems: iShopItem[], colNum: number) {
       const result = []
       const len = inItems.length

@@ -13,6 +13,4 @@ export class MainCategory {
   @OneToMany(type => SubCategory, subCategory => subCategory.mainCategory)
   public subCategories!: SubCategory[];
   
-//   @ManyToOne((type) => SubCategory, subcategory => subcategory.name)
-//   public subCategory!: SubCategory;
 }

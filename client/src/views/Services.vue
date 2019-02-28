@@ -20,7 +20,6 @@
               <div class="tile is-1"> <br> </div> 
             <div class="tile box is-parent is-vertical">
               <div class="title is-4 tile is-children"> {{ service.serviceName }} </div>
-              <!-- <div class="title"> {{services[index]}} </div> -->
               <div class="tile is-children">
                 <figure class="image is-128x128">
                   <img src="https://bulma.io/images/placeholders/128x128.png">
@@ -34,12 +33,9 @@
                   </div>
                 
 
-                  <div class="hours tile box media-content"> 
-                    <p>
-                      Hours: 10am - 7pm <br>
+                  <div class="hours tile box is-3 media-content"> 
                       Price:
-                      $ {{service.price}}<br>
-                    </p>
+                      $ {{service.price}}
                   </div>
                   <div class="tile is-1"> <br> </div>
                 </div>

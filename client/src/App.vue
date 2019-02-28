@@ -57,7 +57,7 @@
 
               <router-link to="/owner/add-item" tag="li" exact-active-class="is-active"><a>New Item</a></router-link>
 
-              <router-link to="/owner/edit-services" tag="li" exact-active-class="is-active"><a>Services</a></router-link>
+              <router-link to="/owner/edit-services" tag="li" exact-active-class="is-active"><a>Services</a></router-link>           
           </ul>
         </div>
       </div>

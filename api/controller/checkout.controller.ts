@@ -46,6 +46,15 @@ export class OrderController extends DefaultController {
         });
       });
     });
+
+    router.route("/orders")
+    .get((req: Request, res: Response) => {
+      const orderRepo = getRepository(Order);
+      orderRepo.find().then((orders: Order[]) => {
+        res.status(200).send(orders);
+      });
+    });
+    
     // router.route("/todos/:id")
     // .put((req: Request, res: Response) => {
     //   const todoRepo = getRepository(ToDo);

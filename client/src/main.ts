@@ -4,15 +4,16 @@ import router from "./router";
 import store from "./store";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faUpload, faUser, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faUpload, faUser, faTrash, faTrashAlt, faEdit, faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faUpload, faUser, faEdit);
+library.add(faUpload, faUser, faEdit, faTrash, faAngleDown, faTrashAlt);
 
 Vue.config.productionTip = false;
 
 require("./assets/mybulma/sass/mystyles.scss")
 Vue.component("font-awesome-icon", FontAwesomeIcon);
+
 
 new Vue({
   router,

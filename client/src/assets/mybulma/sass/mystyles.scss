@@ -21,5 +21,10 @@ $navbar-item-img-max-height: 10rem;
 $tabs-link-active-color: $lightorange;
 $dropdown-content-radius: 15px;
 $dropdown-item-active-background-color: $lightorange;
+$menu-label-color: $orange;
+$table-head-cell-border-width: 0 0 2px;
+$table-cell-border: 1px solid 	#C0C0C0;
+$box-radius: 10px;
+// $table-striped-row-even-background-color: #ecefb6;
 
 @import "~bulma/bulma";

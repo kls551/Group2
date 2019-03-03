@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
 import { MainCategory } from "../entity";
 
 @Entity()
@@ -10,6 +10,9 @@ export class SubCategory {
   @Column()
   public name!: string;
   
-  // @OneToMany((type) => MainCategory, maincategory => maincategory.name, { cascade: true })
-  // public mainCategories!: MainCategory[];
+  @ManyToOne(type => MainCategory, mainCategory => mainCategory.subCategories, {
+    onDelete: 'CASCADE'
+  })
+  public mainCategory!: MainCategory;
+  
 }

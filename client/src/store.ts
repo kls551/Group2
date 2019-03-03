@@ -6,6 +6,7 @@ import axios, { AxiosResponse } from "axios";
 
 import { iUser } from "@/models/user.interface";
 import { iAnnouncement } from './models/announcement.interface';
+import { iService } from "@/models/service.interface";
 
 Vue.use(Vuex);
 

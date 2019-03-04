@@ -39,7 +39,7 @@
                             </div>
                             <div class="dropdown-menu" id="dropdown-menu" role="menu">
                                 <div class="dropdown-content" v-for="(main, index) in mainCategoryList" v-bind:key="index">
-                                    <a class="dropdown-item" v-on:click="saveMainCat(main.name)">{{ main.name }}</a>
+                                    <a class="dropdown-item" v-on:click="saveMainCat(main.id, main.name)">{{ main.name }}</a>
                                 </div>
                             </div>
                         </div>
@@ -49,13 +49,13 @@
                     <input type="text" class="input is-warning is-medium" placeholder="Category Name" v-model="subCategoryName">
                     <div class="level-right">
                         <button class="button is-success" type="submit" style="margin-top: 15px;" 
-                        v-on:click="addSubCategory(mainCategoryName)">Add</button>
+                        v-on:click="addSubCategory(mainCategoryId)">Add</button>
                     </div>
                 </div>
 
                 <!-- Table -->
                 <div class="tile is-child box">
-                    <h2><b>Main Category :</b> Bikes </h2>
+                    <h2><b>Main Category :</b> {{ mainCategoryName }} </h2>
                     <table class="table is-hoverable is-fullwidth">
                     <thead>
                         <tr>
@@ -64,22 +64,11 @@
                         <th>Delete</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody v-for="(subcat, index) in subCategoryList" v-bind:key="index">
                         <tr>
-                            <th>Mountain</th>
-                            <!-- <td><font-awesome-icon="edit" /></td> -->
-                            <td>edit icon</td>
-                            <td>delete icon</td>
-                        </tr>
-                        <tr>
-                            <th>Racing</th>
-                            <td>edit icon</td>
-                            <td>delete icon</td>
-                        </tr>
-                        <tr>
-                            <th>Cruisers</th>
-                            <td>edit icon</td>
-                            <td>delete icon</td>
+                            <th>{{ subcat.name }}</th>
+                            <td><a><font-awesome-icon icon="edit" /></a></td>
+                            <td><a v-on:click="deleteSubCategory(subcat.id)"><font-awesome-icon icon="trash-alt" /></a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -102,6 +91,7 @@ export default class subCategory extends Vue {
     mainCategoryList: MainCategory[] = [];
     subCategoryList: SubCategory[] = [];
     subCategoryName: String = "";
+    mainCategoryId: Number = 0;
     mainCategoryName: String = "";
 
     editMe: Boolean = false;
@@ -112,6 +102,7 @@ export default class subCategory extends Vue {
 
     mounted(){
         this.getMainCategories();
+        //this.getSubCategories(this.mainCategoryId);
     }
 
     getMainCategories() {
@@ -126,21 +117,37 @@ export default class subCategory extends Vue {
             });
     }
 
-    saveMainCat(mainCat:string) {
-        this.mainCategoryName = mainCat;
+    getSubCategories(mainCatId:Number) {
+        axios
+        .get(APIConfig.buildUrl("/subcategory"), { params: {
+            main_id: mainCatId
+        }})
+        .then((response: AxiosResponse<SubCategory[]>) => {
+                this.subCategoryList = response.data;
+                this.$emit("success");
+        })
+        .catch((res: AxiosError) => {
+                this.error = res.response && res.response.data.error;
+        });
     }
 
-    addSubCategory(mainCat:string) {
-        debugger; 
+    saveMainCat(mainCatId:number, mainCatName:string) {
+        this.mainCategoryId = mainCatId;
+        this.mainCategoryName = mainCatName;
+        this.getSubCategories(mainCatId);
+    }
+
+    addSubCategory(mainCatId:number) {
         axios
         .post(APIConfig.buildUrl("/subcategory"), {               
             name: this.subCategoryName,
-            mainCategory: mainCat,
+            mainCategoryId: mainCatId,
         })
         .then((response: AxiosResponse) => {
             debugger; 
+            this.getSubCategories(this.mainCategoryId);
             this.subCategoryName = "";
-            this.mainCategoryName = "";
+            this.mainCategoryId = 0;
             this.$emit("success");
             //this.getCategories();
         })
@@ -148,6 +155,15 @@ export default class subCategory extends Vue {
             debugger;
             this.error = errorResponse.response.data.reason;
         });
+    }
+
+    deleteSubCategory(index:number) {
+        axios
+        .delete(APIConfig.buildUrl("/subcategory/" + index), {           
+        })
+        .then(() => {
+            this.getSubCategories(this.mainCategoryId);
+        })
     }
 
     // deleteSubCategory(index:number) {
@@ -186,12 +202,12 @@ export default class subCategory extends Vue {
 
 interface MainCategory {
     categoryname: string;
-//    subCategories: SubCategory[];
+    subCategories: SubCategory[];
 }
 
 interface SubCategory {
     name: string;
-    mainCategory: MainCategory;
+    mainCategoryId: number;
 }
 
 </script>

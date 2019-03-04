@@ -45,6 +45,23 @@
           <input class="input" type="text" placeholder="Credit Card number" v-model="checkout.cnum"/>
         </div>
       </div>
+
+      <div class="columns">
+        <div class="column is-half">
+      <div class="field">
+        <label class="label">Expiration Date</label>
+        <div class="control">
+          <input class="input" type="text" placeholder="Expr Date" v-model="checkout.expr"/>
+        </div>
+      </div></div>
+        <div class="column">
+      <div class="field">
+        <label class="label">Zip</label>
+        <div class="control">
+          <input class="input" type="text" placeholder="Zip" v-model="checkout.zip"/>
+        </div>
+      </div> </div> </div>   
+
       <div class="control">
         <label class="radio">
           <input type="radio" name="Pickup" v-model="checkout.Pickup" v-bind:value="true">
@@ -74,6 +91,8 @@ export default class order extends Vue {
     address: "",
     city: "",
     cnum: "",
+    zip: "",
+    expr: "",
     orderedDate: new Date,
     Pickup: false,
     user: 0
@@ -111,6 +130,8 @@ export interface orderForm {
   city: string;
   cnum: string;
   Pickup: boolean;
+  expr: string;
+  zip: string;
   orderedDate: Date | null;
 }
 </script>

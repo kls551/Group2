@@ -1,5 +1,6 @@
 <template>
 <!-- Main container -->
+
 <div class="container" style="margin-top: 15px; margin-bottom: 15px;">
     <!-- Preview Announcment -->
     <div class="box">
@@ -7,19 +8,23 @@
         <table class="table is-hoverable is-fullwidth">
             <thead>
                 <tr>
-                    <th><abbr title="Id">Order Num</abbr></th>
-                    <th><abbr title="User">User</abbr></th>
-                    <th><abbr title="Date">Date</abbr></th>
-                    <th v-if="isAd">Delete</th>
+                    <th><abbr title="Id">Item Name</abbr></th>
+                    <th><abbr title="Price">Price</abbr></th>
+                    <th><abbr title="Quantity">Quantity</abbr></th>
+                    <th>Edit</th>
+                    <th v-if="isAd">Delete</th> 
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(item, index) in orders" v-bind:key="index">
+                <tr v-for="(item, index) in items" v-bind:key="index">
                     <th>{{item.name}}</th>
                     <td>{{item.price}}</td>
                     <td>{{item.quantity}}</td>
+                    <td>
+                        <button class="button is-success" v-on:click="showEditForm(index)">Edit</button>
+                    </td>
                     <td v-if="isAd">
-                        <button class="button is-danger" v-on:click="deleteItem(order.id)">Delete?</button>
+                        <button class="button is-danger" v-on:click="deleteItem(item.id)">Delete?</button>
                     </td>
                 </tr>
             </tbody>
@@ -27,41 +32,24 @@
         <div class="columns">
             <div class="column is-half is-offset-one-quarter" v-if="showEdit">
                 <div class="box is-small">
-                    <h3> Editing ({{editEmail}}) </h3>
+                    <h3> Editing: {{editName}} </h3>
                     <div class="field">
-                        <label class="label is-small">FirstName</label>
+                        <label class="label is-small">New Quantity</label>
                         <div class="control">
-                            <input class="input is-small" type="text" placeholder="e.g Alex" v-model="editFn">
-  </div>
-                        </div>
-                        <div class="field">
-                            <label class="label is-small">LastName</label>
-                            <div class="control">
-                                <input class="input is-small" type="text" placeholder="e.g.Smith" v-model="editLn">
-  </div>
-                            </div>
-                            <div class="field">
-                                <label class="label is-small">Role</label>
-                                <div class="control">
-                                    <input class="input is-small" type="number" placeholder="e.g.0" v-model="editRole">
-  </div>
-                                </div>
-                                <nav class="level">
-                                    <div class="level-left">
-                                        <button class="button is-success is-small" v-on:click="editItem(editIndex)">Update</button></div>
-                                    <div class="level-right">
-                                        <button class="button is-danger is-small" v-on:click="cancelEdit()">Cancel</button></div>
-                                </nav>
-                            </div>
+                            <input class="input is-small" type="text" placeholder="enter a number" v-model="newQty">
                         </div>
                     </div>
-
-                    <button class="button is-success" v-if="isAd" v-on:click="showSignupModal()">Add User</button>
-                    <Signup v-bind:is-showing="showSignup" v-on:success="successSignup()" v-on:cancel="cancelSignup()" />
-                    <Edit v-bind:is-showing="showEdit" v-on:success="successEdit()" v-on:cancel="cancelEdit()" />
+                    <nav class="level">
+                        <div class="level-left">
+                            <button class="button is-success is-small" v-on:click="editItem(editIndex)">Update</button></div>
+                        <div class="level-right">
+                            <button class="button is-danger is-small" v-on:click="cancelEdit()">Cancel</button></div>
+                    </nav>
                 </div>
-
             </div>
+        </div>
+    </div>
+</div>
 </template>
 
 <script lang="ts">
@@ -81,9 +69,6 @@ import {
 import {
     iShopItem
 } from "../models/shopitem.interface";
-import {
-    iUser
-} from "../models/user.interface";
 
 @Component({
     components: {
@@ -95,17 +80,13 @@ export default class Orders extends Vue {
     public showEdit: boolean = false;
     error: string | boolean = false;
     items: iShopItem[] = [];
-    users: iUser[] = [];
-    edit: iUser | undefined;
-    editFn: string = "";
-    editEmail: string = "";
-    editLn: string = "";
-    editRole: number = 0;
+    edit: iShopItem | undefined;
+    newQty: number = 0;
+    editName: string = "";
     editIndex: number = 0;
 
     mounted() {
         this.preview();
-        //this.getUsers();
     }
 
     preview() {
@@ -121,46 +102,33 @@ export default class Orders extends Vue {
             });
     }
 
-    getUser(userId: number){
-        //var i = this.orders[0].userId;
-
-            axios
-            .get(APIConfig.buildUrl("/users/" + userId))
-            .then((response: AxiosResponse < iUser >) => {
-                return response.data;
-            })
-            .catch((res: AxiosError) => {
-                this.error = res.response && res.response.data.error;
-            });
-    
-    }
-
-    /*pairs(){
-        return this.orders.map((order, i) => {
-            return {
-                order: order,
-                user: this.users[i]
+    deleteItem(index: number) {
+        this.$snackbar.open({
+            duration: 2000,
+            message: "Confirm Deletion",
+            type: "is-danger",
+            position: "is-top",
+            actionText: "Delete",
+            queue: false,
+            onAction: () => {
+                this.error = false;
+                axios
+                .delete(APIConfig.buildUrl("/shopitems/" + index))
+                .then((response: AxiosResponse) => {
+                    this.preview();
+                })
+                .catch((response: AxiosResponse) => {
+                    this.error = "bad";
+                });
             }
         });
-    }*/
-
-    deleteItem(index: number) {
-        axios.delete(APIConfig.buildUrl("/orders/" + index), {
-            headers: {
-                token: this.$store.state.userToken
-            }
-        })
-        .then(() => {
-            this.preview();
-        })
     }
-/*    editItem(index: number) {
-        this.edit = this.users[index];
+
+    editItem(index: number) {
+        this.edit = this.items[index];
         if (this.edit) {
-            this.edit.firstName = this.editFn;
-            this.edit.lastName = this.editLn;
-            this.edit.isAdmin = this.editRole;
-            axios.put(APIConfig.buildUrl("/users/" + this.edit.id), {
+            this.edit.count = this.newQty;
+            axios.put(APIConfig.buildUrl("/shopitems/" + this.edit.id + "/" + this.edit.count), {
                     ...this.edit
                 })
                 .then(() => {
@@ -168,10 +136,14 @@ export default class Orders extends Vue {
                     this.successEdit();
                 })
         }
-    } */
+    } 
 
     get isAd(): boolean {
         return (this.$store.state.user.isAdmin === 1);
+    }
+
+    get isEmp(): boolean {
+        return (this.$store.state.user.isAdmin === 1 || this.$store.state.user.isAdmin === 0);
     }
 
     get picture(): boolean {
@@ -192,14 +164,12 @@ export default class Orders extends Vue {
         this.preview();
     }
 
-/*    showEditForm(index: number) {
-        this.editEmail = this.users[index].emailAddress;
-        this.editFn = this.users[index].firstName;
-        this.editLn = this.users[index].lastName;
-        this.editRole = this.users[index].isAdmin;
+    showEditForm(index: number) {
+        this.editName = this.items[index].name;
+        this.newQty = this.items[index].count;
         this.editIndex = index;
         this.showEdit = true;
-    } */
+    } 
 
     successEdit() {
         this.showEdit = false;

@@ -12,9 +12,8 @@
               </p>
 
               <!-- Dropdown menu for sorting options -->
-              <div class="panel-block" v-on:click="sorts.show = !sorts.show">
+              <div class="panel-block">
                 <span class="cat-name"> {{ sorts.name }} </span>
-                <font-awesome-icon icon="angle-down" />
               </div>
 
               <a class="panel-block menu-contents" v-show="sorts.show" v-for="option in sorts.subcategories" :key="option.id">

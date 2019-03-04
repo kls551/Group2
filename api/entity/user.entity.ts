@@ -27,6 +27,4 @@ export class User {
 
   @OneToMany(type => Order, (order) => order.userId)
   public orders!: Order[];
-
-
 }

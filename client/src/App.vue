@@ -4,9 +4,9 @@
     <!-- main nav bar -->
     <div class="navbar">
       <div class="navbar-brand">
-        <a class="navbar-item" href="https://bulma.io">
+        <router-link class="navbar-item" to="/">
           <img src="./assets/Foxcycle.png" width="150">
-        </a> 
+        </router-link> 
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -52,7 +52,7 @@
               <router-link to="/owner/manage-inventory" tag="li" exact-active-class="is-active"><a>Inventory</a></router-link>
 
               <router-link to="/owner/announcment" tag="li" exact-active-class="is-active"><a>Announcement</a></router-link>
-
+              <router-link to="/owner/about" tag="li" exact-active-class="is-active"><a>About</a></router-link>
               <router-link to="/owner/accounts" tag="li" exact-active-class="is-active"><a>Accounts</a></router-link>
 
               <router-link to="/owner/add-item" tag="li" exact-active-class="is-active"><a>New Item</a></router-link>
@@ -74,7 +74,7 @@
       v-on:cancel="cancelCheckout()"
     />
     <trackorder
-      v-bind:is-showing="trackorder"
+      v-bind:is-showing="showTrackOrder"
       v-on:success="successtrack()"
       v-on:cancel="canceltrack()"
     />
@@ -145,8 +145,6 @@ export default class App extends Vue {
 
   successLogin() {
     this.showLogin = false;
-    
-    this.$router.push({ name: "ownerManageCategories" });
   }
 
   cancelLogin() {

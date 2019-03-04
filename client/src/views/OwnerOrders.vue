@@ -1,89 +1,223 @@
 <template>
-    <section>
-        <br> <br> <br>
-
-        <button class="button field is-light is-small" @click="checkedRows = []"
-            :disabled="!checkedRows.length">
-            <b-icon icon="close"></b-icon>
-            <span>Clear checked</span>
-        </button>
-
-        <b-tabs>
-            <b-tab-item label="Orders">
-                <b-table
-                    :data="data"
-                    :columns="columns"
-                    :checked-rows.sync="checkedRows"
-                    :is-row-checkable="(row) => row.id !== 3"
-                    checkable>
-
-                    <template slot="bottom-left">
-                        <div class="buttons has-addons">
-                            <span class="button">Delete Selected</span>
-                            <span class="button">Save Changes</span>
+<!-- Main container -->
+<div class="container" style="margin-top: 15px; margin-bottom: 15px;">
+    <!-- Preview Announcment -->
+    <div class="box">
+        <h2> Orders </h2>
+        <table class="table is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                    <th><abbr title="Id">Order Num</abbr></th>
+                    <th><abbr title="User">User</abbr></th>
+                    <th><abbr title="Date">Date</abbr></th>
+                    <th v-if="isAd">Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(order, index) in orders" v-bind:key="index">
+                    <th>{{order.id}}</th>
+                    <td>{{getUser(order.userId, 0)}}</td>
+                    <td>{{order.shipped}}</td>
+                    <td v-if="isAd">
+                        <button class="button is-danger" v-on:click="deleteItem(order.id)">Delete?</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="columns">
+            <div class="column is-half is-offset-one-quarter" v-if="showEdit">
+                <div class="box is-small">
+                    <h3> Editing ({{editEmail}}) </h3>
+                    <div class="field">
+                        <label class="label is-small">FirstName</label>
+                        <div class="control">
+                            <input class="input is-small" type="text" placeholder="e.g Alex" v-model="editFn">
+  </div>
                         </div>
-                    </template>
-                    
-                </b-table>
-            </b-tab-item>
-        </b-tabs>
+                        <div class="field">
+                            <label class="label is-small">LastName</label>
+                            <div class="control">
+                                <input class="input is-small" type="text" placeholder="e.g.Smith" v-model="editLn">
+  </div>
+                            </div>
+                            <div class="field">
+                                <label class="label is-small">Role</label>
+                                <div class="control">
+                                    <input class="input is-small" type="number" placeholder="e.g.0" v-model="editRole">
+  </div>
+                                </div>
+                                <nav class="level">
+                                    <div class="level-left">
+                                        <button class="button is-success is-small" v-on:click="editItem(editIndex)">Update</button></div>
+                                    <div class="level-right">
+                                        <button class="button is-danger is-small" v-on:click="cancelEdit()">Cancel</button></div>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
 
-       
+                    <button class="button is-success" v-if="isAd" v-on:click="showSignupModal()">Add User</button>
+                    <Signup v-bind:is-showing="showSignup" v-on:success="successSignup()" v-on:cancel="cancelSignup()" />
+                    <Edit v-bind:is-showing="showEdit" v-on:success="successEdit()" v-on:cancel="cancelEdit()" />
+                </div>
 
-        <br>
-
-
-    </section>
+            </div>
 </template>
 
-<script>
-    export default {
-        data() {
-            const data = [
-                { 'onum': 1395, 'cust': 'Jesse Simmons', email: 'jsims@gmail.com', 'items': 'Replacement Tire, Mountain Bike X', 'total': '$370.49' , 'date': '2016-10-15'},
-                { 'onum': 3028, 'cust': 'John Gilbert', email: 'gilbert@gmail.com', 'items': 'Air Pump', 'total': '$17.26' , 'date': '2016-12-15'},
-                { 'onum': 4393, 'cust': 'Tina Jacobs', email: 'tintin@aol.com', 'items': 'Beach Cruiser F90', 'total': '$287.60', 'date': '2016-04-26'},
-                { 'onum': 2846, 'cust': 'Clarence Lee', email: 'clarelee@yahoo.com', 'items': 'Break Cord, Sprocket', 'total': '$31.42', 'date': '2016-04-10'},
-                { 'onum': 6560, 'cust': 'Anne Flores', email: 'anneflor70@gmail.com', 'items': 'Sport Bike S42, Fox Sport Seat', 'total': '$567.80', 'date': '2016-12-06'}
-            ]
+<script lang="ts">
+import Signup from "@/components/Signup.vue";
+import axios, {
+    AxiosResponse,
+    AxiosError
+} from "axios";
+import {
+    APIConfig
+} from "../utils/api.utils";
+import {
+    Component,
+    Prop,
+    Vue
+} from "vue-property-decorator";
+import {
+    iOrder
+} from "../models/order.interface";
+import {
+    iUser
+} from "../models/user.interface";
 
-            return {
-                data,
-                checkedRows: [data[1], data[3]],
-                columns: [
-                    {
-                        field: 'onum',
-                        label: 'Order Number',
-                        width: '80',
-                        numeric: true
-                    },
-                    {
-                        field: 'cust',
-                        label: 'Customer',
-                    },
-                    {
-                        field: 'email',
-                        label: 'Email',
-                    },
-                    {
-                        field: 'items',
-                        label: 'Items',
-                    },
-                    {
-                        field: 'total',
-                        label: 'Total',
-                        centered: true
-                    },
-                    {
-                        field: 'date',
-                        label: 'Date',
-                    },
-                    {
-                        field: 'status',
-                        label: 'Status',
-                    }
-                ]
-            }
-        }
+@Component({
+    components: {
+        Signup
     }
-</script>
+})
+export default class Orders extends Vue {
+    public showSignup: boolean = false;
+    public showEdit: boolean = false;
+    error: string | boolean = false;
+    orders: iOrder[] = [];
+    users: iUser[] = [];
+    edit: iOrder | undefined;
+    editFn: string = "";
+    editEmail: string = "";
+    editLn: string = "";
+    editRole: number = 0;
+    editIndex: number = 0;
+
+    mounted() {
+        this.preview();
+        //this.getUsers();
+    }
+
+    preview() {
+        axios
+            .get(APIConfig.buildUrl("/orders"))
+            .then((response: AxiosResponse < iOrder[] > ) => {
+                this.orders = response.data;
+                console.log(this.orders);
+                this.$emit("success");
+            })
+            .catch((res: AxiosError) => {
+                this.error = res.response && res.response.data.error;
+            });
+    }
+
+    getUser(userId: number){
+        //var i = this.orders[0].userId;
+
+            axios
+            .get(APIConfig.buildUrl("/users/" + userId))
+            .then((response: AxiosResponse < iUser >) => {
+                return response.data;
+            })
+            .catch((res: AxiosError) => {
+                this.error = res.response && res.response.data.error;
+            });
+    
+    }
+
+    pairs(){
+        return this.orders.map((order, i) => {
+            return {
+                order: order,
+                user: this.users[i]
+            }
+        });
+    }
+
+    deleteItem(index: number) {
+        axios.delete(APIConfig.buildUrl("/orders/" + index), {
+            headers: {
+                token: this.$store.state.userToken
+            }
+        })
+        .then(() => {
+            this.preview();
+        })
+    }
+/*    editItem(index: number) {
+        this.edit = this.users[index];
+        if (this.edit) {
+            this.edit.firstName = this.editFn;
+            this.edit.lastName = this.editLn;
+            this.edit.isAdmin = this.editRole;
+            axios.put(APIConfig.buildUrl("/users/" + this.edit.id), {
+                    ...this.edit
+                })
+                .then(() => {
+                    this.preview();
+                    this.successEdit();
+                })
+        }
+    } */
+
+    get isAd(): boolean {
+        return (this.$store.state.user.isAdmin === 1);
+    }
+
+    get picture(): boolean {
+        return false;
+    }
+
+    showSignupModal() {
+        this.showSignup = true;
+    }
+
+    successSignup() {
+        this.showSignup = false;
+        this.preview();
+    }
+
+    cancelSignup() {
+        this.showSignup = false;
+        this.preview();
+    }
+
+/*    showEditForm(index: number) {
+        this.editEmail = this.users[index].emailAddress;
+        this.editFn = this.users[index].firstName;
+        this.editLn = this.users[index].lastName;
+        this.editRole = this.users[index].isAdmin;
+        this.editIndex = index;
+        this.showEdit = true;
+    } */
+
+    successEdit() {
+        this.showEdit = false;
+        this.preview();
+    }
+    cancelEdit() {
+        this.showEdit = false;
+        this.preview();
+    }
+}
+</script>  
+
+<style lang="scss" scoped>
+h2 {
+    font-family: 'Questrial';
+    font-size: 28px;
+}
+h3 {
+    font-family: 'Questrial';
+}
+</style>

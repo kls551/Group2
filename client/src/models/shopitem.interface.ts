@@ -1,8 +1,11 @@
 export interface iShopItem {
-    id: number;
-    name: string;
-    ship: boolean;
-    count: number;
-    description: string;
-    price: number;
-  }
+  id: number;
+  name: string;
+  details: string;
+  price: number;
+  quantity: number;
+  category: string;
+  inStorePickup: boolean;
+  postedDate: Date;
+  imageUrl: string;
+}

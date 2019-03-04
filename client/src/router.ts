@@ -46,11 +46,6 @@ export default new Router({
       name: "myProfile",
       component: MyProfile
     },
-    // {
-    //   path: "/todos",
-    //   name: "todos",
-    //   component: ToDos
-    // },
     {
       path: "/owner/announcment",
       name: "announcment",
@@ -63,12 +58,6 @@ export default new Router({
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/Accounts.vue")
     },
-    // {
-    //   path: "/trackorder",
-    //   name: "trackorder",
-    //   component: () =>
-    //     import(/* webpackChunkName: "about" */ "./views/trackorder.vue")
-    // },
     {
       path: "/shop/itemview",
       name: "itemview",
@@ -110,6 +99,12 @@ export default new Router({
       name: "ownerAddItem",
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/NewItem.vue")
+    },
+    {
+      path:"/owner/about",
+      name: "ownerAbout",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/OwnerAbout.vue")
     },
     {
       path:"/owner/create-services",

@@ -2,185 +2,147 @@
   <div class="shop">
     <div class="tile is-ancestor top-bar">
 
-      <!-- Category selection -->
-      <div class="tile is-3 is-vertical is-parent">
+      <!-- Categories menu -->
+      <div class="tile is-3 is-vertical is-parent menu">
         <div class="tile is-child box">
-          <nav class="panel">
-            <p class="panel-heading">
-              Categories
-            </p>
+          <section>
+            <nav class="panel">
+              <p class="panel-heading">
+                <span>Categories</span>
+              </p>
 
-            <!-- Dropdown menu for sorting options -->
-            <a class="panel-block is-active">
-              <div class="dropdown">
-                <div class="dropdown-trigger" on-click="showSortMenu()">
-                  <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-                    <span>Sort Options</span>
-                    <span class="icon is-small">
-                      <i class="fas fa-user" aria-hidden="true"></i>
-                    </span>
-                  </button>
-                </div>
-                <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                  <div class="dropdown-content">
-                    <a href="#" class="dropdown-item">
-                      Any
-                    </a>
-                    <a class="dropdown-item">
-                      Trek
-                    </a>
-                    <a href="#" class="dropdown-item is-active">
-                      Specialized
-                    </a>
-                    <a href="#" class="dropdown-item">
-                      Giant
-                    </a>
-                  </div>
-                </div>
+              <!-- Dropdown menu for sorting options -->
+              <div class="panel-block">
+                <span class="cat-name"> {{ sorts.name }} </span>
               </div>
-            </a>
 
-            <!-- Category options -->
-            <a v-for="category in categories" :key="category.id" class="panel-block">
-              {{ category.name }}
-            </a>
+              <a class="panel-block menu-contents" v-show="sorts.show" v-for="option in sorts.subcategories" :key="option.id">
+                <b-radio v-model="radio" name="options"> {{ option.name }} </b-radio>
+              </a>
 
-            <!-- Search button -->
-            <div class="panel-block">
-              <button class="button is-link is-outlined is-fullwidth">
-                Search
-              </button>
-            </div>
-          </nav>
+              <!-- Category options -->
+              <div v-for="category in categories" :key="category.id">
+                <div class="panel-block" v-on:click="category.show = !category.show">
+                  <span class="cat-name"> <b-checkbox> {{ category.name }} </b-checkbox> </span>
+                  <font-awesome-icon icon="angle-down" />
+                </div>
+
+                <a class="panel-block menu-contents" v-show="category.show" v-for="sub in category.subcategories" :key="sub.id">
+                  <b-checkbox type="is-lightorange"> {{ sub.name }} </b-checkbox>
+                </a>
+              </div>
+
+              <!-- Filter button -->
+              <div class="panel-block">
+                <button class="button is-link is-outlined is-fullwidth">
+                  Filter
+                </button>
+              </div>
+            </nav>
+          </section>
         </div>
       </div>
 
       <!-- Shop layout -->
-      <div class="tile">
-        <div class="tile is-parent is-vertical">
-          <div v-for="item in itemSet1" :key="item.id" class="tile is-child box" onclick="location.href='shop/itemview';" style="cursor: pointer;">
+      <div class="tile is-child columns is-multiline shop-layout">
+        <div v-for="item in shopItems" :key="item.id" class="column is-narrow">
+          <div class="card" onclick="location.href='shop/itemview';" style="cursor: pointer;">
             <figure class="image is-128x128 center">
               <img src="https://bulma.io/images/placeholders/128x128.png">
             </figure>
             <ul class="product">
-              <li class="is-size-5"> {{ item.name }} </li>
-              <li> ${{ item.price }} </li>
+              <li class="item-name is-size-5"> {{ item.name }} </li>
+              <li class="item-price"> ${{ item.price }} </li>
             </ul>
           </div>
         </div>
-
-        <div class="tile is-parent is-vertical">
-          <div v-for="item in itemSet2" :key="item.id" class="tile is-child box" onclick="location.href='shop/itemview';" style="cursor: pointer;">
-            <figure class="image is-128x128 center">
-              <img src="https://bulma.io/images/placeholders/128x128.png">
-            </figure>
-            <ul class="product">
-              <li class="is-size-5"> {{ item.name }} </li>
-              <li> ${{ item.price }} </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="tile is-parent is-vertical">
-          <div v-for="item in itemSet3" :key="item.id" class="tile is-child box" onclick="location.href='shop/itemview';" style="cursor: pointer;">
-            <figure class="image is-128x128 center">
-              <img src="https://bulma.io/images/placeholders/128x128.png">
-            </figure>
-            <ul class="product">
-              <li class="is-size-5"> {{ item.name }} </li>
-              <li> ${{ item.price }} </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="tile is-parent is-vertical">
-          <div v-for="item in itemSet4" :key="item.id" class="tile is-child box" onclick="location.href='shop/itemview';" style="cursor: pointer;">
-            <figure class="image is-128x128 center">
-              <img src="https://bulma.io/images/placeholders/128x128.png">
-            </figure>
-            <ul class="product">
-              <li class="is-size-5"> {{ item.name }} </li>
-              <li> ${{ item.price }} </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="tile is-parent is-vertical">
-          <div v-for="item in itemSet5" :key="item.id" class="tile is-child box" onclick="location.href='shop/itemview';" style="cursor: pointer;">
-            <figure class="image is-128x128 center">
-              <img src="https://bulma.io/images/placeholders/128x128.png">
-            </figure>
-            <ul class="product">
-              <li class="is-size-5"> {{ item.name }} </li>
-              <li> ${{ item.price }} </li>
-            </ul>
-          </div>
-        </div>
-
       </div>
+
     </div>
   </div>
 </template>
 
 
 <script lang="ts">
+  import axios, { AxiosResponse, AxiosError } from "axios";
+  import { APIConfig } from "../utils/api.utils";
   import { Component, Prop, Vue } from "vue-property-decorator";
   import { iShopItem } from "../models/shopitem.interface";
-  import { iMainCategory } from "../models/mainCategory.interface";
+  import { iMainCategory } from "../models/category.interface";
+  import { iSubCategory } from "../models/category.interface";
 
+  @Component
   export default class Shop extends Vue {
-    items: iShopItem[] = [
-      { id: 789, name: 'M480 Mountain Bike', ship: true, count: 5, description: 'Good for trails', price: 1200 },
-      { id: 903, name: 'M680 Mountain Bike', ship: true, count: 11, description: 'Good for trails', price: 2000 },
-      { id: 234, name: 'M1080 Mountain Bike', ship: false, count: 3, description: 'Good for trails', price: 3100 },
-      { id: 678, name: 'R480 Road Bike', ship: true, count: 8, description: 'Good for roads', price: 1000 },
-      { id: 239, name: 'R680 Road Bike', ship: false, count: 2, description: 'Good for roads', price: 1500 },
-      { id: 112, name: 'R1080 Road Bike', ship: true, count: 10, description: 'Good for roads', price: 2100 },
-      { id: 914, name: 'C400 Cruising Bike', ship: true, count: 6, description: 'Good for cruising', price: 800 },
-      { id: 503, name: 'C600 Cruising Bike', ship: true, count: 9, description: 'Good for cruising', price: 1200 },
-      { id: 716, name: 'C800 Cruising Bike', ship: false, count: 6, description: 'Good for cruising', price: 1800 }
-    ];
-    categories: iMainCategory[] = [
-      { id: 0, name: "Mountain" },
-      { id: 1, name: "Road" },
-      { id: 2, name: "Cruising" },
-      { id: 3, name: "Kids" },
-      { id: 4, name: "Accessories" }
-    ];
-    brands: iMainCategory[] = [
-      { id: 90, name: "Any" },
-      { id: 91, name: "Trek" },
-      { id: 92, name: "Specialized" },
-      { id: 93, name: "Schwinn" },
-      { id: 94, name: "Giant" }
-    ]
-    itemSet1: iShopItem[] = this.col(this.items, 0);
-    itemSet2: iShopItem[] = this.col(this.items, 1);
-    itemSet3: iShopItem[] = this.col(this.items, 2);
-    itemSet4: iShopItem[] = this.col(this.items, 3);
-    itemSet5: iShopItem[] = this.col(this.items, 4);
+    error: string | boolean = false;
+    shopItems: iShopItem[] = [];
+    categories: iMainCategory[] = [];
+    counter = 0;
 
-    col(inItems: iShopItem[], colNum: number) {
-      const result = []
-      const len = inItems.length
-      for (var i = 0; i < len; i++) {
-        if (i % 5 == colNum) {
-          result.push(inItems[i])
-        }
-      }
-      return result
+    items: iShopItem[] = [
+      { id: 789, name: 'M480 Mountain Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
+      { id: 903, name: 'M680 Mountain Bike', price: 2000, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
+      { id: 234, name: 'M1080 Mountain Bike', price: 3100, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
+      { id: 678, name: 'R480 Road Bike', price: 1000, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
+      { id: 239, name: 'R680 Road Bike', price: 1500, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
+      { id: 112, name: 'R1080 Road Bike', price: 2100, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
+      { id: 914, name: 'C400 Cruising Bike', price: 800, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
+      { id: 503, name: 'C600 Cruising Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
+      { id: 716, name: 'C800 Cruising Bike', price: 1800, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" }
+    ];
+
+    sorts: iMainCategory = { id: 89, name: "Sorting Options", show: true,
+              subcategories: [
+                { id: 90, name: "Alphabetical" },
+                { id: 91, name: "Price (Low to High)" },
+                { id: 92, name: "Price (High to Low)" }]
+    };
+
+    categories2: iMainCategory[] = [
+      { id: 93, name: "Brands", show: false,
+        subcategories: [
+          { id: 94, name: "Giant" },
+          { id: 95, name: "Specialized" },
+          { id: 96, name: "Schwinn" },
+          { id: 97, name: "Trek" }] },
+      { id: 98, name: "Mountain bikes", show: false,
+        subcategories: [] },
+      { id: 99, name: "Road bikes", show: false,
+        subcategories: [
+          { id: 1, name: "Racing" },
+          { id: 2, name: "Commuter" }
+        ]}
+    ];
+
+    mounted() {
+      this.display();
     }
 
-    //showSortMenu() {
-    //  document.getElementById("dropdown-menu").classList.toggle("show");
-    //}
+    display() {
+      axios
+        .get(APIConfig.buildUrl("/shopitems"))
+        .then((response: AxiosResponse) => {
+          this.shopItems = response.data;
+          this.$emit("success");
+          console.log(this.shopItems);
+          return axios.get(APIConfig.buildUrl("/maincategory"));
+        })
+        .then((response: AxiosResponse) => {
+          this.categories = response.data;
+          this.$emit("success");
+          console.log(this.categories);
+        })
+        .catch((res: AxiosError) => {
+            this.error = res.response && res.response.data.error;
+        });
+    }
+
   }
 </script>
 
 
 <style lang="scss">
    .top-bar {
-      padding-top: 32px;
+      padding-top: 50px;
    }
    .product {
       text-align: center;
@@ -190,5 +152,34 @@
       display: block;
       margin-left: auto;
       margin-right: auto;
+   }
+   .card {
+     border-radius: 7px;
+     padding: 12px 5px 12px 5px;
+     margin-bottom: 15px;
+     height: 250px;
+     width: 160px;
+   }
+   .item-price {
+     position: absolute;
+     left: 0;
+     right: 0;
+     bottom: 1;
+     margin: auto;
+   }
+   .cat-name {
+     margin-right: 5px;
+   }
+   .menu-contents {
+     padding-left: 40px;
+   }
+   .column {
+     margin: 5px;
+   }
+   .shop-layout {
+     margin: 0px 5px 0px 5px;
+   }
+   .menu {
+     margin-top: 5px;
    }
 </style>

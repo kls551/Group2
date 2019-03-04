@@ -12,7 +12,7 @@
                     <th><abbr title="Price">Price</abbr></th>
                     <th><abbr title="Quantity">Quantity</abbr></th>
                     <th>Edit</th>
-                    <th v-if="isAd">Delete</th> 
+                    <th v-if="isAd">Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -127,8 +127,8 @@ export default class Orders extends Vue {
     editItem(index: number) {
         this.edit = this.items[index];
         if (this.edit) {
-            this.edit.count = this.newQty;
-            axios.put(APIConfig.buildUrl("/shopitems/" + this.edit.id + "/" + this.edit.count), {
+            this.edit.quantity = this.newQty;
+            axios.put(APIConfig.buildUrl("/shopitems/" + this.edit.id + "/" + this.edit.quantity), {
                     ...this.edit
                 })
                 .then(() => {
@@ -136,7 +136,7 @@ export default class Orders extends Vue {
                     this.successEdit();
                 })
         }
-    } 
+    }
 
     get isAd(): boolean {
         return (this.$store.state.user.isAdmin === 1);
@@ -166,10 +166,10 @@ export default class Orders extends Vue {
 
     showEditForm(index: number) {
         this.editName = this.items[index].name;
-        this.newQty = this.items[index].count;
+        this.newQty = this.items[index].quantity;
         this.editIndex = index;
         this.showEdit = true;
-    } 
+    }
 
     successEdit() {
         this.showEdit = false;
@@ -180,7 +180,7 @@ export default class Orders extends Vue {
         this.preview();
     }
 }
-</script>  
+</script>
 
 <style lang="scss" scoped>
 h2 {

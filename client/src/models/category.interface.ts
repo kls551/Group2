@@ -8,5 +8,4 @@ export interface iMainCategory {
 export interface iSubCategory {
     id: number;
     name: string;
-    maincategory: iMainCategory;
 }

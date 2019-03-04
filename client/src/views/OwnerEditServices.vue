@@ -91,6 +91,7 @@ export default class OwnerEditServices extends Vue{
     public showDelConfirm: boolean = false;
     public confirmDel: boolean = false;
     public delId: number = -1;
+    public newService: boolean = false;
 
     public editServiceName = "";
     public editDescription = "";
@@ -102,6 +103,7 @@ export default class OwnerEditServices extends Vue{
         description: "",
         price: 0
     };
+    
     service: ServiceForm = {
         serviceName: "",
         description: "",
@@ -126,6 +128,7 @@ export default class OwnerEditServices extends Vue{
 
     successUpdate() {
       this.showEdit = false;
+      this.getServices();
     }
     cancelUpdate() {
         this.showEdit = false;

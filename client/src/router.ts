@@ -122,6 +122,12 @@ export default new Router({
       name: "ownerEditServices",
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/OwnerEditServices.vue")
+    },
+    {
+      path:"/order-confirm",
+      name: "orderConfirmation",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/OrderConfirmation.vue")
     }
   ]
 });

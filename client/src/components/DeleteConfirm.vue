@@ -37,19 +37,17 @@ export default class DeleteConfirm extends Vue {
 //   @Prop(String) title!: string;
     error: string | boolean = false;
     @Prop(Boolean) isShowing: boolean = false;
+    @Prop(Boolean) del: boolean = false;
 
-    // @Watch("isShowing")
-    // handleShowing(isShowingStart: boolean, isShowingEnd: boolean) {
-    //     if (!isShowingStart && isShowingEnd) {
-    //         this.service = {
-    //             serviceName: "",
-    //             description: "",
-    //             price: undefined
-    //         };
-    //     }
-    // } 
+    @Watch("isShowing")
+    handleShowing(isShowingStart: boolean, isShowingEnd: boolean) {
+        if (!isShowingStart && isShowingEnd) {
+            
+        }
+    } 
 
     success() {
+        this.del = true;
         this.$emit("success");
     }
 

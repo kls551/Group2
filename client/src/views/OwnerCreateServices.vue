@@ -1,4 +1,4 @@
-<template>
+<template v-bind:created="newService">
     <!-- Main container -->
     <div class="container" style="margin-top: 15px; margin-bottom: 15px;" >
 
@@ -55,9 +55,9 @@
                         <button class="button is-link">Preview</button>
                     </div>
                     <div class="control">
-                        <router-link to="/owner/edit-services" exact-active-class="is-active">
-                            <a> <button class="button is-success" type="submit" v-on:click="success()">Submit</button> </a>
-                        </router-link>
+                        
+                            <button class="button is-success" type="submit" v-on:click="success()">Submit</button>
+                      
                     </div>
                     <div class="control">
                         <router-link to="/owner/edit-services" exact-active-class="is-active">
@@ -88,32 +88,30 @@ import { iService } from "../models/service.interface";
 
 export default class OwnerCreateServices extends Vue{
     @Prop(Boolean) isShowing: boolean = false;
+    @Prop(Boolean) created: boolean = false;
     service: addServiceForm = {
         serviceName: "",
         description: "",
-        price: undefined,
-        serviceImage: ""
+        price: undefined
     };
 
     error: string | boolean = false;
     success() {
         this.error = false;
-        console.log("submit is pressed --- handling post ");
         axios 
         .post(APIConfig.buildUrl("/owner/edit-services"), {
             // console.log("service ", this.service);
             // ...this.service
             ...{serviceName : this.service.serviceName,
                 description : this.service.description,
-                price : this.service.price,
-                serviceImage: this.service.serviceImage}
+                price : this.service.price}
         } )
         .then ((response : AxiosResponse<iService> ) => {
-            this.$emit("success");
-            this.service.serviceName = "",
-            this.service.description  = "",
-            this.service.price = undefined,
-            this.service.serviceImage = ""
+        
+            this.service.serviceName = "";
+            this.service.description  = "";
+            this.service.price = undefined;
+            this.$router.push("/owner/edit-services");
         })
         .catch((errorResponse: any) => {
             console.log("error ", errorResponse);
@@ -121,6 +119,7 @@ export default class OwnerCreateServices extends Vue{
     }
 
     cancel() {
+        this.created = true;
         this.$emit("cancel");
     }
 }
@@ -129,7 +128,6 @@ export interface addServiceForm {
   serviceName: string;
   description: string;
   price: number | undefined;
-  serviceImage: string;
 }
 </script>
 

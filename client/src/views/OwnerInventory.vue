@@ -117,8 +117,8 @@ export default class Orders extends Vue {
                 .then((response: AxiosResponse) => {
                     this.preview();
                 })
-                .catch((response: AxiosResponse) => {
-                    this.error = "bad";
+                .catch((res: AxiosError) => {
+                    this.error = res.response && res.response.data.error;
                 });
             }
         });

@@ -1,29 +1,28 @@
 <template>
   <div class="about">
     <div class="columns">
-      <div class="rightMargin column is-two-fifths" 
-      >
+      <div class="rightMargin column is-two-fifths" v-if="loaded">
         <h1>Address</h1>
-        <h2>{{editAddress}}</h2>
+        <h2>{{about.address}}</h2>
 
         <h1>Hours</h1>
-        <h2>Monday:    {{editMonday}}</h2>
-        <h2>Tuesday:   {{editTuesday}}</h2>
-        <h2>Wednesday: {{editWednesday}}</h2>
-        <h2>Thurssday: {{editThursday}}</h2>
-        <h2>Friday:    {{editFriday}}</h2>
-        <h2>Saturday:  {{editSaturday}}</h2>
-        <h2>Sunday:    {{editSunday}}</h2>
+        <h2>Monday:    {{about.monday}}</h2>
+        <h2>Tuesday:   {{about.tuesday}}</h2>
+        <h2>Wednesday: {{about.wednesday}}</h2>
+        <h2>Thurssday: {{about.thursday}}</h2>
+        <h2>Friday:    {{about.friday}}</h2>
+        <h2>Saturday:  {{about.saturday}}</h2>
+        <h2>Sunday:    {{about.sunday}}</h2>
 
         <h1>Contact Info</h1>
-        <h2>Email:   {{editEmail}}</h2>
-        <h2>Phone:   {{editPhone}}</h2>
+        <h2>Email:   {{about.email}}</h2>
+        <h2>Phone:   {{about.phone}}</h2>
       </div>
       
       <div class="column is-three-fifths">
       <br> <br>
         <figure class="image is-1by1">
-          <img alt="Map" src="../assets/Fox_map.jpeg" 
+          <img alt="Map" :src="about.profileUrl" 
                 style="margin-left:30px">
         </figure>
         <br>
@@ -54,17 +53,8 @@ import {
 export default class About extends Vue {
     error: string | boolean = false;
     about: iAbout | undefined;
+    loaded: boolean = false;
 
-    editAddress: string = "";
-    editEmail: string = "";
-    editPhone: string = "";
-    editMonday: string = "";
-    editTuesday: string = "";
-    editWednesday: string = "";
-    editThursday: string = "";
-    editFriday: string = "";
-    editSaturday: string = "";
-    editSunday: string = "";
   uploadedFile: any = null;
     currentStatddus: number | null = null;
   fileCount: number = 0;
@@ -103,16 +93,8 @@ export default class About extends Vue {
                 if(this.about)
                 {
                 this.$emit("success");
-                this.editAddress = this.about.address;
-                this.editEmail = this.about.email;
-                this.editPhone = this.about.phone;
-                this.editMonday = this.about.monday;
-                this.editTuesday = this.about.tuesday;
-                this.editWednesday = this.about.wednesday;
-                this.editThursday = this.about.thursday;
-                this.editFriday = this.about.friday;
-                this.editSaturday = this.about.saturday;
-                this.editSunday = this.about.sunday;
+                this.about.profileUrl = APIConfig.buildUrl(`/${response.data.profileUrl}`);
+                this.loaded = true;
                 }
                 
             })

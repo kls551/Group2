@@ -49,14 +49,14 @@
                 </div>
               
       <form enctype="multipart/form-data" novalidate>
-        <div class="profilePhoto">
+        <div class="aboutMap">
           <img :src="profileUrl"/>
         </div>
         <div class="file">
           <label class="file-label">
             <input
               type="file"
-              name="profilePhoto"
+              name="aboutMap"
               :disabled="isSaving"
               v-on:change="filesChanged"
               accept="image/*"

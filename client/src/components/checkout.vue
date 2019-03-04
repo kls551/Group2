@@ -51,14 +51,14 @@
       <div class="field">
         <label class="label">Expiration Date</label>
         <div class="control">
-          <input class="input" type="text" placeholder="Expr Date" v-model="checkout.address"/>
+          <input class="input" type="text" placeholder="Expr Date" v-model="checkout.expr"/>
         </div>
       </div></div>
         <div class="column">
       <div class="field">
         <label class="label">Zip</label>
         <div class="control">
-          <input class="input" type="text" placeholder="Zip" v-model="checkout.city"/>
+          <input class="input" type="text" placeholder="Zip" v-model="checkout.zip"/>
         </div>
       </div> </div> </div>   
 
@@ -91,6 +91,8 @@ export default class order extends Vue {
     address: "",
     city: "",
     cnum: "",
+    zip: "",
+    expr: "",
     orderedDate: new Date,
     Pickup: false,
     user: 0
@@ -128,6 +130,8 @@ export interface orderForm {
   city: string;
   cnum: string;
   Pickup: boolean;
+  expr: string;
+  zip: string;
   orderedDate: Date | null;
 }
 </script>

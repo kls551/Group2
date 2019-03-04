@@ -20,14 +20,14 @@ export class AboutController extends DefaultController {
 
     .post(
       multer({
-        dest: Path.join(__dirname, "..", "public", "profilePhotos")
-      }).single("profilePhoto"),
+        dest: Path.join(__dirname, "..", "public", "aboutMaps")
+      }).single("aboutMap"),
       (req: Request, res: Response) => {
         const aboutRepo = getRepository(About);
         aboutRepo.findOne(1).then((about: About | undefined) => {
           if (about) {
             if (req.file) {
-              about.profileUrl = `profilePhotos/${req.file.filename}`;
+              about.profileUrl = `aboutMaps/${req.file.filename}`;
               aboutRepo.save(about).then(() => {
                 res.sendStatus(200);
               });

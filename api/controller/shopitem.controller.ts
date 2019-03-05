@@ -11,6 +11,28 @@ export class ShopItemController extends DefaultController {
   protected initializeRoutes(): express.Router {
     const router = express.Router();
     const shopItemRepo = getRepository(ShopItem);
+
+    router.route("/shopitems/:id")
+    .delete((req: Request, res: Response) => {
+        shopItemRepo.findOneOrFail(req.params.id).then((foundItem: ShopItem) => {
+          shopItemRepo.delete(foundItem).then(result => {
+            res.send(200);
+          });
+        });
+    });
+
+    router.route("/shopitems/:id/:qty")
+        .put((req: Request, res: Response) => {
+            shopItemRepo.findOneOrFail(req.params.id).then((foundItem: ShopItem) => {
+                if (foundItem == undefined) {
+                    return;
+                }
+                foundItem.quantity = req.params.qty;
+                shopItemRepo.save(foundItem).then((updatedItem: ShopItem) => {
+                    res.status(200).send(updatedItem);
+                });
+            });
+        });
     
     router.route("/shopitems")
     .post((req: Request, res: Response) => {

@@ -17,7 +17,7 @@
               </div>
 
               <a class="panel-block menu-contents" v-show="sorts.show" v-for="option in sorts.subcategories" :key="option.id" v-on:change="sortby">
-                <b-radio v-model="whichSort" :name="sorts.name" :native-value="option.id"> {{ option.name }} </b-radio>
+                <b-radio v-model="whichSort" :name="sorts.name" :native-value="option.id" type="lightorange"> {{ option.name }} </b-radio>
               </a>
 
               <!-- Category options -->
@@ -77,7 +77,7 @@
     shopItems: iShopItem[] = [];
     categories: iMainCategory[] = [];
     counter = 0;
-    whichSort: number = 1100;
+    whichSort: number = 0;
 
     items: iShopItem[] = [
       { id: 789, name: 'M480 Mountain Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },

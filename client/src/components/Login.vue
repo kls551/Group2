@@ -31,7 +31,7 @@
     </form>
             </section>
       <footer class="modal-card-foot">
-      <a v-if="!formcheck" class="button is-success" v-on:click="success" disabled>LoginForm</a>
+      <a v-if="!formcheck" class="button is-success" v-on:click="success" disabled>Login</a>
       <a v-if="formcheck" class="button is-success" v-on:click="success">Login</a>
       <a class="button" v-on:click="cancel">Cancel</a>
     </footer>

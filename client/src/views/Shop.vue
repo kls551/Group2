@@ -16,8 +16,8 @@
                 <span class="cat-name"> {{ sorts.name }} </span>
               </div>
 
-              <a class="panel-block menu-contents" v-show="sorts.show" v-for="option in sorts.subcategories" :key="option.id">
-                <b-radio v-model="radio" name="options"> {{ option.name }} </b-radio>
+              <a class="panel-block menu-contents" v-show="sorts.show" v-for="option in sorts.subcategories" :key="option.id" v-on:change="sortby">
+                <b-radio v-model="whichSort" :name="sorts.name" :native-value="option.id"> {{ option.name }} </b-radio>
               </a>
 
               <!-- Category options -->
@@ -77,6 +77,7 @@
     shopItems: iShopItem[] = [];
     categories: iMainCategory[] = [];
     counter = 0;
+    whichSort: number = 1100;
 
     items: iShopItem[] = [
       { id: 789, name: 'M480 Mountain Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
@@ -90,11 +91,11 @@
       { id: 716, name: 'C800 Cruising Bike', price: 1800, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" }
     ];
 
-    sorts: iMainCategory = { id: 89, name: "Sorting Options", show: true,
+    sorts: iMainCategory = { id: 1099, name: "Sorting Options", show: true,
               subcategories: [
-                { id: 90, name: "Alphabetical" },
-                { id: 91, name: "Price (Low to High)" },
-                { id: 92, name: "Price (High to Low)" }]
+                { id: 1100, name: "Alphabetical" },
+                { id: 1101, name: "Price (Low to High)" },
+                { id: 1102, name: "Price (High to Low)" }]
     };
 
     categories2: iMainCategory[] = [
@@ -134,6 +135,33 @@
         .catch((res: AxiosError) => {
             this.error = res.response && res.response.data.error;
         });
+    }
+
+    sortby(): void {
+      // Alphabetically
+      if (this.whichSort == 1100) {
+        this.shopItems.sort((lside: iShopItem, rside: iShopItem) => {
+            if (lside.name < rside.name) return -1;
+            if (lside.name > rside.name) return 1;
+          return 0;
+        });
+      }
+      // Price (Low to High)
+      else if (this.whichSort == 1101) {
+        this.shopItems.sort((lside: iShopItem, rside: iShopItem) => {
+            if (lside.price < rside.price) return -1;
+            if (lside.price > rside.price) return 1;
+          return 0;
+        });
+      }
+      // Price (High to Low)
+      else if (this.whichSort == 1102) {
+        this.shopItems.sort((lside: iShopItem, rside: iShopItem) => {
+            if (lside.price > rside.price) return -1;
+            if (lside.price < rside.price) return 1;
+          return 0;
+        });
+      }
     }
 
   }

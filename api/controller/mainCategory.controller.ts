@@ -38,6 +38,13 @@ export class MainCategoryController extends DefaultController {
         });
       })
 
+      .get((req: Request, res: Response) => {
+        const mainCat = getRepository(MainCategory);
+        mainCat.findOneOrFail(req.params.id).then((foundCategory: MainCategory) => {
+            res.status(200).send(foundCategory);
+          })
+        })
+
       .put((req: Request, res: Response) => {
         const mainCat = getRepository(MainCategory);
         mainCat.findOneOrFail(req.params.id).then((foundCategory: MainCategory) => {

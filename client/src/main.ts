@@ -4,10 +4,11 @@ import router from "./router";
 import store from "./store";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faUpload, faUser, faTrash, faTrashAlt, faEdit, faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import { faUpload, faUser, faTrash, faTrashAlt, faEdit, faAngleDown, faShoppingCart, faUserAlt, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faUpload, faUser, faEdit, faTrash, faAngleDown, faTrashAlt);
+library.add(faUpload, faUser, faEdit, faTrash, faAngleDown, faTrashAlt, faShoppingCart
+  ,faUserAlt, faSignOutAlt);
 
 Vue.config.productionTip = false;
 

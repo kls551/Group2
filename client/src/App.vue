@@ -32,11 +32,11 @@
                 v-if="isLoggedIn"
                 to="/my-profile"
                 exact-active-class="is-active"
-              >My Profile</router-link>
-              <router-link class="navbar-item is-tab" v-if="!isLoggedIn" to="/trackorder">Track Order</router-link>
-              <a class="navbar-item is-tab" v-if="isLoggedIn" v-on:click="showcheckoutModal()">Checkout</a>
+              ><font-awesome-icon icon="user-alt" /></router-link>
+              <router-link class="navbar-item is-tab" to="/trackorder">Track Order</router-link>
+              <router-link class="navbar-item is-tab" v-if="isLoggedIn" to="/cart"><font-awesome-icon icon="shopping-cart" /></router-link>
               <a class="navbar-item is-tab" v-if="!isLoggedIn" v-on:click="showLoginModal()">Log in</a>
-              <a class="navbar-item is-tab" v-if="isLoggedIn" v-on:click="logout">Log out</a>
+              <a class="navbar-item is-tab" v-if="isLoggedIn" v-on:click="logout"><font-awesome-icon icon="sign-out-alt" /></a>
         </div>
       </div>
     </div>
@@ -145,6 +145,10 @@ export default class App extends Vue {
 
   successLogin() {
     this.showLogin = false;
+    
+    if (this.$store.state.user && (this.$store.state.user.isAdmin === 0 || this.$store.state.user.isAdmin === 1)) {
+      this.$router.push({ name: "ownerManageCategories" });
+    }
   }
 
   cancelLogin() {

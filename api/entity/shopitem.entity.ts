@@ -1,4 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, OneToOne, ManyToMany } from "typeorm";
+import { User, MainCategory } from "./";
 
 @Entity()
 export class ShopItem {
@@ -17,8 +18,11 @@ export class ShopItem {
   @Column()
   public quantity!: number;
 
-  @Column()
-  public category!: string;
+  @ManyToOne(type => MainCategory, cat => cat.id)
+  public category!: MainCategory;
+
+  @Column({default: null})
+  public brand!: string;
 
   @Column()
   public inStorePickup!: boolean;
@@ -28,5 +32,10 @@ export class ShopItem {
 
   @Column({default: null})
   public imageUrl!: string;
+
+  @ManyToOne(type => User, user => user.cart, {
+    onDelete: 'CASCADE'
+  })
+  public user!: User;
 
 }

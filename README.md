@@ -44,3 +44,11 @@ run `npm run serve`
 
 
 open browser and go to http://localhost:8080/
+
+to add admin 
+- create an account
+- set up a query to update isAdmin=1
+
+to set up staff
+- create an account
+- set up a query to update isAdmin=0

@@ -3,7 +3,7 @@ import express from "express";
 import { LoginController, UserController, OrderController, 
          ServiceController, AnnouncementController, 
          MainCategoryController, ShopItemController, 
-         SubCategoryController, CartController, BrandsController  } from "./controller";
+         SubCategoryController, CartController, BrandsController, AboutController  } from "./controller";
 
 import { DBConnection } from "./connection";
 
@@ -33,7 +33,8 @@ export class Server {
       app.use("/", new ShopItemController().router);
       app.use("/", new CartController().router);
       app.use("/", new BrandsController().router);
-
+      app.use("/", new AboutController().router);
+      
       return app;
     });
   }

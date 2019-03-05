@@ -4,9 +4,9 @@
     <!-- main nav bar -->
     <div class="navbar">
       <div class="navbar-brand">
-        <a class="navbar-item" href="https://bulma.io">
+        <router-link class="navbar-item" to="/">
           <img src="./assets/Foxcycle.png" width="150">
-        </a> 
+        </router-link> 
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -33,7 +33,7 @@
                 to="/my-profile"
                 exact-active-class="is-active"
               ><font-awesome-icon icon="user-alt" /></router-link>
-              <router-link class="navbar-item is-tab" v-if="!isLoggedIn" to="/trackorder">Track Order</router-link>
+              <router-link class="navbar-item is-tab" to="/trackorder">Track Order</router-link>
               <router-link class="navbar-item is-tab" v-if="isLoggedIn" to="/cart"><font-awesome-icon icon="shopping-cart" /></router-link>
               <a class="navbar-item is-tab" v-if="!isLoggedIn" v-on:click="showLoginModal()">Log in</a>
               <a class="navbar-item is-tab" v-if="isLoggedIn" v-on:click="logout"><font-awesome-icon icon="sign-out-alt" /></a>
@@ -52,7 +52,7 @@
               <router-link to="/owner/manage-inventory" tag="li" exact-active-class="is-active"><a>Inventory</a></router-link>
 
               <router-link to="/owner/announcment" tag="li" exact-active-class="is-active"><a>Announcement</a></router-link>
-
+              <router-link to="/owner/about" tag="li" exact-active-class="is-active"><a>About</a></router-link>
               <router-link to="/owner/accounts" tag="li" exact-active-class="is-active"><a>Accounts</a></router-link>
 
               <router-link to="/owner/add-item" tag="li" exact-active-class="is-active"><a>New Item</a></router-link>
@@ -74,7 +74,7 @@
       v-on:cancel="cancelCheckout()"
     />
     <trackorder
-      v-bind:is-showing="trackorder"
+      v-bind:is-showing="showTrackOrder"
       v-on:success="successtrack()"
       v-on:cancel="canceltrack()"
     />

@@ -52,3 +52,5 @@ to add admin
 to set up staff
 - create an account
 - set up a query to update isAdmin=0
+
+update dev.user set isAdmin=1 where id=<insert your user id>

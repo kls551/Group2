@@ -20,16 +20,16 @@
 
             <div class="tile is-8 is-vertical is-parent">
                 <!-- Input box -->
-                <h2 style="padding-bottom: 15px">Manage Categories</h2>
+                <h2 style="padding-bottom: 15px">Manage Brands</h2>
                 <div class="tile is-child box">
-                    <h3 style="padding-bottom: 10px;">New Main Category</h3>
-                    <input type="text" class="input is-warning is-medium" placeholder="Category Name" v-model="categoryName">
+                    <h3 style="padding-bottom: 10px;">New Brand</h3>
+                    <input type="text" class="input is-warning is-medium" placeholder="Category Name" v-model="brandName">
                     <div class="level-right">
                         <div v-if="editMe == true">
-                            <button class="button is-success" type="submit" style="margin-top: 15px;" v-on:click="editCategory">Update</button>
+                            <button class="button is-success" type="submit" style="margin-top: 15px;" v-on:click="editBrand">Update</button>
                         </div>
                         <div v-else>
-                            <button class="button is-success" type="submit" style="margin-top: 15px;" v-on:click="addCategory">Add</button>
+                            <button class="button is-success" type="submit" style="margin-top: 15px;" v-on:click="addBrand">Add</button>
                         </div>
                     </div>
                 </div>
@@ -39,17 +39,16 @@
                     <table class="table is-hoverable is-fullwidth">
                     <thead>
                         <tr>
-                        <th>Main Categories</th>
+                        <th>Brand</th>
                         <th>Edit</th>
                         <th>Delete</th>
                         </tr>
                     </thead>
-                    <tbody v-for="(cat, index) in mainCategoryList" v-bind:key="index">
+                    <tbody v-for="(brand, index) in brandCategoryList" v-bind:key="index">
                         <tr>
-                            <td>{{ cat.name }}</td>
-                            <!-- <td><font-awesome-icon="edit" /></td> -->
-                            <td><a v-on:click="editTrue(cat.name, cat.id)"><font-awesome-icon icon="edit" /></a></td>
-                            <td><a v-on:click="deleteCategory(cat.id)"><font-awesome-icon icon="trash-alt" /></a></td>
+                            <td>{{ brand.name }}</td>
+                            <td><a v-on:click="editTrue(brand.name, brand.id)"><font-awesome-icon icon="edit" /></a></td>
+                            <td><a v-on:click="deleteCategory(brand.id)"><font-awesome-icon icon="trash-alt" /></a></td>
                         </tr>
                         
                     </tbody>
@@ -68,24 +67,24 @@ import { APIConfig } from "../utils/api.utils";
 import { Component, Prop, Vue } from "vue-property-decorator";
 
 @Component
-export default class mainCategory extends Vue {
+export default class brands extends Vue {
 
-    mainCategoryList: MainCategory[] = [];
-    categoryName: String = "";
+    brandCategoryList: Brands[] = [];
+    brandName: String = "";
     editMe: Boolean = false;
     editIndex: Number = 0;
 
     error: string | boolean = false;
 
     mounted(){
-        this.getCategories();
+        this.getBrands();
     }
 
-    getCategories() {
+    getBrands() {
         axios
-            .get(APIConfig.buildUrl("/maincategory"))
-            .then((response: AxiosResponse<MainCategory[]>) => {
-                this.mainCategoryList = response.data;
+            .get(APIConfig.buildUrl("/brands"))
+            .then((response: AxiosResponse<Brands[]>) => {
+                this.brandCategoryList = response.data;
                 this.$emit("success");
             })
             .catch((res: AxiosError) => {
@@ -93,50 +92,48 @@ export default class mainCategory extends Vue {
             });
     }
 
-    addCategory() {
-        console.log(this.categoryName);
+    addBrand() {
         axios
-        .post(APIConfig.buildUrl("/maincategory"), {           
-            name: this.categoryName,
+        .post(APIConfig.buildUrl("/brands"), {           
+            name: this.brandName,
             // subCategories: this.subCategories,
         })
         .then((response: AxiosResponse) => {
-            this.categoryName = "";
+            this.brandName = "";
             this.$emit("success");
-            this.getCategories();
+            this.getBrands();
         })
         .catch((errorResponse: any) => {
-            debugger;
             this.error = errorResponse.response.data.reason;
         });
     }
 
     deleteCategory(index:number) {
         axios
-        .delete(APIConfig.buildUrl("/maincategory/" + index), {           
+        .delete(APIConfig.buildUrl("/brands/" + index), {           
         })
         .then(() => {
-            this.getCategories();
+            this.getBrands();
         })
     }
 
     editTrue(name:string, index: number){
         this.editMe = true;
-        this.categoryName = name;
+        this.brandName = name;
         this.editIndex = index;
     }
 
-    editCategory() {
+    editBrand() {
         console.log(this.editIndex);
         axios
-        .put(APIConfig.buildUrl("/maincategory/" + this.editIndex), {
-            name: this.categoryName
+        .put(APIConfig.buildUrl("/brands/" + this.editIndex), {
+            name: this.brandName
         })
         .then(() => {
-            this.categoryName = "";
+            this.brandName = "";
             this.editIndex = 0;
             this.editMe = false;
-            this.getCategories();
+            this.getBrands();
         })
     }
 
@@ -145,14 +142,10 @@ export default class mainCategory extends Vue {
     }  
 }
 
-interface MainCategory {
-    categoryname: string;
+interface Brands {
+    brandname: string;
 }
 
-interface SubCategory {
-    name: string;
-    mainCategory: MainCategory;
-}
 
 </script>
 

@@ -23,6 +23,7 @@ export class ShopItemController extends DefaultController {
         shopitem.inStorePickup = req.body.inStorePickup;
         shopitem.postedDate = req.body.postedDate;
         shopitem.imageUrl = req.body.imageUrl;
+        shopitem.brand = req.body.brand;
         shopItemRepo.save(shopitem).then((savedShopItem: ShopItem) => {
             res.status(200).send({ shopitem });
         });

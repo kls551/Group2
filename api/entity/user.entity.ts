@@ -1,5 +1,5 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn, OneToMany } from "typeorm";
-import { Order } from "./order.entity";
+import { Order, ShopItem } from "./";
 
 @Entity()
 export class User {
@@ -28,5 +28,7 @@ export class User {
   @OneToMany(type => Order, (order) => order.userId)
   public orders!: Order[];
 
+  @OneToMany(type => ShopItem, (shopitem) => shopitem.id)
+  public cart!: ShopItem[];
 
 }

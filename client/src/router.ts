@@ -122,6 +122,18 @@ export default new Router({
       name: "ownerEditServices",
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/OwnerEditServices.vue")
+    },
+    {
+      path:"/cart",
+      name: "cart",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/Cart.vue")
+    },
+    {
+      path: "/owner/manage-brands",
+      name: "ownerManageBrands",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/Brands.vue")
     }
   ]
 });

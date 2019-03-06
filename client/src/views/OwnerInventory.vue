@@ -146,24 +146,6 @@ export default class Orders extends Vue {
         return (this.$store.state.user.isAdmin === 1 || this.$store.state.user.isAdmin === 0);
     }
 
-    get picture(): boolean {
-        return false;
-    }
-
-    showSignupModal() {
-        this.showSignup = true;
-    }
-
-    successSignup() {
-        this.showSignup = false;
-        this.preview();
-    }
-
-    cancelSignup() {
-        this.showSignup = false;
-        this.preview();
-    }
-
     showEditForm(index: number) {
         this.editName = this.items[index].name;
         this.newQty = this.items[index].quantity;

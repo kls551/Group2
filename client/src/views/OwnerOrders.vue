@@ -9,59 +9,76 @@
                 <tr>
                     <th><abbr title="Id">Order Num</abbr></th>
                     <th><abbr title="User">User</abbr></th>
-                    <th><abbr title="Date">Date</abbr></th>
+                    <th><abbr title="Email">User Email</abbr></th>
+                    <th><abbr title="Date">Order Date</abbr></th>
+                    <th><abbr title="Status">Status</abbr></th>
                     <th v-if="isAd">Delete</th>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(order, index) in orders" v-bind:key="index">
-                    <th>{{order.id}}</th>
-                    <td>{{getUser(order.userId, 0)}}</td>
-                    <td>{{order.shipped}}</td>
+                    <th>{{ order.id }}</th>
+                    <td>{{ users[index].firstName }}</td>
+                    <td>{{ users[index].emailAddress }}</td>
+                    <td>{{ new Date(order.orderedDate).toDateString() }}</td>
+                    <td>
+                    <b-dropdown v-model="order.status" aria-role="list">
+                        <button class="button is-primary" type="button" slot="trigger">
+                            <template v-if="order.status === 0">
+                                <span>Processing</span>
+                            </template>
+                            <template v-else-if="order.status === 1">
+                                <span>Complete</span>
+                            </template>
+                            <template v-else-if="order.status === 2">
+                                <span>Shipped</span>
+                            </template>
+                            <template v-else-if="order.status === 3">
+                                <span>Cancelled</span>
+                            </template>
+                        </button>
+
+                        <b-dropdown-item :value="0" aria-role="listitem">
+                            <div class="media">
+                                <div class="media-content">
+                                    <h3>Processing</h3>
+                                </div>
+                            </div>
+                        </b-dropdown-item>
+
+                        <b-dropdown-item :value="1" aria-role="listitem">
+                            <div class="media">
+                                <div class="media-content">
+                                    <h3>Complete</h3>
+                                </div>
+                            </div>
+                        </b-dropdown-item>
+
+                        <b-dropdown-item :value="2" aria-role="listitem">
+                            <div class="media">
+                                <div class="media-content">
+                                    <h3>Shipped</h3>
+                                </div>
+                            </div>
+                        </b-dropdown-item>
+
+                        <b-dropdown-item :value="3" aria-role="listitem" v-if="isAd">
+                            <div class="media">
+                                <div class="media-content">
+                                    <h3>Cancelled</h3>
+                                </div>
+                            </div>
+                        </b-dropdown-item>
+                    </b-dropdown>
+                    </td>
                     <td v-if="isAd">
                         <button class="button is-danger" v-on:click="deleteItem(order.id)">Delete?</button>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <div class="columns">
-            <div class="column is-half is-offset-one-quarter" v-if="showEdit">
-                <div class="box is-small">
-                    <h3> Editing ({{editEmail}}) </h3>
-                    <div class="field">
-                        <label class="label is-small">FirstName</label>
-                        <div class="control">
-                            <input class="input is-small" type="text" placeholder="e.g Alex" v-model="editFn">
-  </div>
-                        </div>
-                        <div class="field">
-                            <label class="label is-small">LastName</label>
-                            <div class="control">
-                                <input class="input is-small" type="text" placeholder="e.g.Smith" v-model="editLn">
-  </div>
-                            </div>
-                            <div class="field">
-                                <label class="label is-small">Role</label>
-                                <div class="control">
-                                    <input class="input is-small" type="number" placeholder="e.g.0" v-model="editRole">
-  </div>
-                                </div>
-                                <nav class="level">
-                                    <div class="level-left">
-                                        <button class="button is-success is-small" v-on:click="editItem(editIndex)">Update</button></div>
-                                    <div class="level-right">
-                                        <button class="button is-danger is-small" v-on:click="cancelEdit()">Cancel</button></div>
-                                </nav>
-                            </div>
-                        </div>
-                    </div>
-
-                    <button class="button is-success" v-if="isAd" v-on:click="showSignupModal()">Add User</button>
-                    <Signup v-bind:is-showing="showSignup" v-on:success="successSignup()" v-on:cancel="cancelSignup()" />
-                    <Edit v-bind:is-showing="showEdit" v-on:success="successEdit()" v-on:cancel="cancelEdit()" />
-                </div>
-
-            </div>
+    </div>
+</div>
 </template>
 
 <script lang="ts">
@@ -105,7 +122,6 @@ export default class Orders extends Vue {
 
     mounted() {
         this.preview();
-        //this.getUsers();
     }
 
     preview() {
@@ -114,38 +130,29 @@ export default class Orders extends Vue {
             .then((response: AxiosResponse < iOrder[] > ) => {
                 this.orders = response.data;
                 console.log(this.orders);
-                this.$emit("success");
+                this.getUsers();
             })
             .catch((res: AxiosError) => {
                 this.error = res.response && res.response.data.error;
             });
     }
 
-    getUser(userId: number){
-        //var i = this.orders[0].userId;
-
+    getUsers(){
+        var i;
+        for(i = 0; i < this.orders.length; i++){
             axios
-            .get(APIConfig.buildUrl("/users/" + userId))
+            .get(APIConfig.buildUrl("/users/" + this.orders[i].userId))
             .then((response: AxiosResponse < iUser >) => {
-                return response.data;
+                this.users.push(response.data.user);
             })
             .catch((res: AxiosError) => {
                 this.error = res.response && res.response.data.error;
             });
-    
-    }
-
-    pairs(){
-        return this.orders.map((order, i) => {
-            return {
-                order: order,
-                user: this.users[i]
-            }
-        });
+        }
     }
 
     deleteItem(index: number) {
-        axios.delete(APIConfig.buildUrl("/orders/" + index), {
+        axios.delete(APIConfig.buildUrl("/trackorder/" + index), {
             headers: {
                 token: this.$store.state.userToken
             }
@@ -154,60 +161,21 @@ export default class Orders extends Vue {
             this.preview();
         })
     }
-/*    editItem(index: number) {
-        this.edit = this.users[index];
+    editOrder(index: number, value: number) {
+        this.edit = this.orders[index];
         if (this.edit) {
-            this.edit.firstName = this.editFn;
-            this.edit.lastName = this.editLn;
-            this.edit.isAdmin = this.editRole;
-            axios.put(APIConfig.buildUrl("/users/" + this.edit.id), {
+            this.edit.status = value;
+            axios.put(APIConfig.buildUrl("/orders/" + this.edit.id + "/" + value), {
                     ...this.edit
                 })
                 .then(() => {
                     this.preview();
-                    this.successEdit();
                 })
         }
-    } */
+    } 
 
     get isAd(): boolean {
         return (this.$store.state.user.isAdmin === 1);
-    }
-
-    get picture(): boolean {
-        return false;
-    }
-
-    showSignupModal() {
-        this.showSignup = true;
-    }
-
-    successSignup() {
-        this.showSignup = false;
-        this.preview();
-    }
-
-    cancelSignup() {
-        this.showSignup = false;
-        this.preview();
-    }
-
-/*    showEditForm(index: number) {
-        this.editEmail = this.users[index].emailAddress;
-        this.editFn = this.users[index].firstName;
-        this.editLn = this.users[index].lastName;
-        this.editRole = this.users[index].isAdmin;
-        this.editIndex = index;
-        this.showEdit = true;
-    } */
-
-    successEdit() {
-        this.showEdit = false;
-        this.preview();
-    }
-    cancelEdit() {
-        this.showEdit = false;
-        this.preview();
     }
 }
 </script>  

@@ -28,7 +28,7 @@
                 </div>
 
                 <a class="panel-block menu-contents" v-show="category.show" v-for="sub in category.subcategories" :key="sub.id">
-                  <b-checkbox type="is-lightorange"> {{ sub.name }} </b-checkbox>
+                  <b-checkbox> {{ sub.name }} </b-checkbox>
                 </a>
               </div>
 
@@ -54,6 +54,17 @@
               <li class="item-price"> ${{ item.price }} </li>
             </ul>
           </div>
+          <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
+            <div class="card">
+              <figure class="image is-128x128 center">
+                <img src="https://bulma.io/images/placeholders/128x128.png">
+              </figure>
+              <ul class="product">
+                <li class="item-name is-size-5"> {{ item.name }} </li>
+                <li class="item-price"> ${{ item.price }} </li>
+              </ul>
+            </div>
+          </router-link>
         </div>
       </div>
 
@@ -76,8 +87,19 @@
     shopItems: iShopItem[] = [];
     categories: iMainCategory[] = [];
     counter = 0;
-    whichSort: number = 1100;
-    image1: String = "";
+    whichSort: number = 0;
+
+    items: iShopItem[] = [
+      { id: 789, name: 'M480 Mountain Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
+      { id: 903, name: 'M680 Mountain Bike', price: 2000, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
+      { id: 234, name: 'M1080 Mountain Bike', price: 3100, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
+      { id: 678, name: 'R480 Road Bike', price: 1000, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
+      { id: 239, name: 'R680 Road Bike', price: 1500, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
+      { id: 112, name: 'R1080 Road Bike', price: 2100, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
+      { id: 914, name: 'C400 Cruising Bike', price: 800, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
+      { id: 503, name: 'C600 Cruising Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
+      { id: 716, name: 'C800 Cruising Bike', price: 1800, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" }
+    ];
 
     sorts: iMainCategory = { id: 1099, name: "Sorting Options", show: true,
               subcategories: [

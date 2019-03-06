@@ -16,13 +16,18 @@ export class ShopItemController extends DefaultController {
     const itemImgRepo = getRepository(Imgs);
 
     router.route("/shopitems/:id")
-    .delete((req: Request, res: Response) => {
-        shopItemRepo.findOneOrFail(req.params.id).then((foundItem: ShopItem) => {
-          shopItemRepo.delete(foundItem).then(result => {
-            res.send(200);
+      .delete((req: Request, res: Response) => {
+          shopItemRepo.findOneOrFail(req.params.id).then((foundItem: ShopItem) => {
+            shopItemRepo.delete(foundItem).then(result => {
+              res.send(200);
+            });
           });
+      })
+      .get((req: Request, res: Response) => {
+        shopItemRepo.findOneOrFail(req.params.id).then((foundItem: ShopItem) => {
+          res.status(200).send(foundItem);
         });
-    });
+      });
 
     router.route("/shopitems/:id/:qty")
         .put((req: Request, res: Response) => {

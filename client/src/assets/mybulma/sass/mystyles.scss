@@ -5,7 +5,12 @@
 // set brand colors
 $orange: #FF530D;
 $lightorange: #FF812C;
+$lightorange-invert: #007ED3;
 $grey: rgb(214, 220, 228);
+
+$colors: (
+  "lightorange": ($lightorange, $lightorange-invert)
+);
 
 // update Bulma's navbar component variables
 $navbar-height: 5rem;

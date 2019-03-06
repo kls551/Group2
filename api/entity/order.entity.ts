@@ -1,3 +1,4 @@
+
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "../entity";
 @Entity()
@@ -10,6 +11,9 @@ export class Order {
 
   @Column({default:null})
   public complete!: boolean;
+
+  @Column({default:null})
+  public status!: number;
 
   @Column({default:null})
   public pickup!: boolean;

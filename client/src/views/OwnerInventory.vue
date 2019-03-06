@@ -117,8 +117,8 @@ export default class Orders extends Vue {
                 .then((response: AxiosResponse) => {
                     this.preview();
                 })
-                .catch((response: AxiosResponse) => {
-                    this.error = "bad";
+                .catch((res: AxiosError) => {
+                    this.error = res.response && res.response.data.error;
                 });
             }
         });
@@ -144,24 +144,6 @@ export default class Orders extends Vue {
 
     get isEmp(): boolean {
         return (this.$store.state.user.isAdmin === 1 || this.$store.state.user.isAdmin === 0);
-    }
-
-    get picture(): boolean {
-        return false;
-    }
-
-    showSignupModal() {
-        this.showSignup = true;
-    }
-
-    successSignup() {
-        this.showSignup = false;
-        this.preview();
-    }
-
-    cancelSignup() {
-        this.showSignup = false;
-        this.preview();
     }
 
     showEditForm(index: number) {

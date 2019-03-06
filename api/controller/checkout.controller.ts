@@ -63,7 +63,7 @@ export class OrderController extends DefaultController {
       });
     });
 
-    router.route("/shopitems/:id/:stat")
+    router.route("/orders/:id/:stat")
         .put((req: Request, res: Response) => {
             const orderRepo = getRepository(Order);
             orderRepo.findOneOrFail(req.params.id).then((orderItem: Order) => {

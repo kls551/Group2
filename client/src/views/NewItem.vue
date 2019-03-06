@@ -7,7 +7,7 @@
 
       <div class="rightMargin column" style="margin-right: 0px">
         <figure class="image is-3by2">
-            <img alt="Map" src="../assets/beach-cruiser.jpg" style="margin-top: 20px;">
+            <img alt="Map" src=https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Left_side_of_Flying_Pigeon.jpg/1200px-Left_side_of_Flying_Pigeon.jpg style="margin-top: 20px;">
         </figure>
 
         <div class="tile box" style="margin-top: 20px">
@@ -61,7 +61,7 @@
                 <input class="input" type="text" placeholder="0" v-model="itemQuantity">
             </div>
           </div>
-        
+
             </div>
         </div>
 
@@ -117,6 +117,12 @@
                     <textarea class="textarea" placeholder="Add Details" v-model="itemDetail"></textarea>
                 </div>
             </div>
+            <div class="field">
+                <label class="label">ImageUrl</label>
+                <div class="control">
+                    <input class="input" type="text" placeholder="URL" v-model="itemImageURL">
+                </div>
+            </div>
 
             <div class="control">
                   <button class="button is-success" type="submit" v-on:click="addItem">Add Item</button>
@@ -143,6 +149,10 @@ import {
 } from "../utils/api.utils";
 import {Component,Prop,Vue} from "vue-property-decorator";
 
+const STATUS_INITIAL = 0;
+const STATUS_SAVING = 1;
+const STATUS_SUCCESS = 2;
+const STATUS_FAILED = 3;
 
 @Component
 export default class NewItem extends Vue {
@@ -153,11 +163,11 @@ export default class NewItem extends Vue {
     itemQuantity: Number = 0;
     iteminStorePickup: Boolean = false;
     itemPostedDate: Date = new Date();
-    itemImageURL: String = "";
+    itemImageURL: String[] = [];
     selectedMainCategory: MainCategory = {'mainId': 0, 'categoryname': "", 'subCategories': []};
     selectedBrand: Brand = {'brandname': ""};
+    itemid: number | null = null;
 
-    fileCount: number = 0;
     mainCategoryList: MainCategory[] = [];
     mainCategoryId: Number = 0;
     subCategoryList: SubCategory[] = [];
@@ -232,7 +242,8 @@ export default class NewItem extends Vue {
                 imageUrl: this.itemImageURL,
                 brand: this.selectedBrand.brandname
             })
-            .then((response: AxiosResponse) => {
+            .then((response: AxiosResponse<{ id: number }>) => {    
+                this.itemid = response.data.id;
                 this.$emit("success");
                 this.itemName = "";
                 this.itemDetail = "";
@@ -244,7 +255,6 @@ export default class NewItem extends Vue {
                 this.error = errorResponse.response.data.reason;
             });
     }
-
 }
 
 interface MainCategory {

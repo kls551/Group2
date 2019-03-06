@@ -48,7 +48,6 @@
         <div v-for="item in shopItems" :key="item.id" class="column is-narrow">
           <div class="card" onclick="location.href='shop/itemview';" style="cursor: pointer;">
             <figure class="image is-128x128 center">
-              <img src="https://bulma.io/images/placeholders/128x128.png">
             </figure>
             <ul class="product">
               <li class="item-name is-size-5"> {{ item.name }} </li>
@@ -78,18 +77,7 @@
     categories: iMainCategory[] = [];
     counter = 0;
     whichSort: number = 1100;
-
-    items: iShopItem[] = [
-      { id: 789, name: 'M480 Mountain Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-      { id: 903, name: 'M680 Mountain Bike', price: 2000, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-      { id: 234, name: 'M1080 Mountain Bike', price: 3100, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-      { id: 678, name: 'R480 Road Bike', price: 1000, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-      { id: 239, name: 'R680 Road Bike', price: 1500, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-      { id: 112, name: 'R1080 Road Bike', price: 2100, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-      { id: 914, name: 'C400 Cruising Bike', price: 800, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-      { id: 503, name: 'C600 Cruising Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-      { id: 716, name: 'C800 Cruising Bike', price: 1800, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" }
-    ];
+    image1: String = "";
 
     sorts: iMainCategory = { id: 1099, name: "Sorting Options", show: true,
               subcategories: [
@@ -122,9 +110,11 @@
       axios
         .get(APIConfig.buildUrl("/shopitems"))
         .then((response: AxiosResponse) => {
+          console.log(response.data[4].images[0].img);
           this.shopItems = response.data;
+          if(response.data[1].images[0].img)
+            this.image1 = response.data[1].images[0].img;
           this.$emit("success");
-          console.log(this.shopItems);
           return axios.get(APIConfig.buildUrl("/maincategory"));
         })
         .then((response: AxiosResponse) => {

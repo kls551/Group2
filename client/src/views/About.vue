@@ -102,18 +102,6 @@ export default class About extends Vue {
                 this.error = res.response && res.response.data.error;
             });
     }
-
-    // deleteItem(index: number) {
-    //     axios.delete(APIConfig.buildUrl("/announcement/" + index), {
-    //             headers: {
-    //                 token: this.$store.state.userToken
-    //             }
-    //         })
-    //         .then(() => {
-    //             this.preview();
-    //         })
-    // }
-
     get picture(): boolean {
         return false;
     }

@@ -2,15 +2,18 @@ import DefaultController from "./default.controller";
 
 import { NextFunction, Request, Response, Router } from "express";
 import express from "express";
+import multer from "multer";
+import Path from "path";
 
-import { ShopItem } from "../entity";
+import { ShopItem,Imgs } from "../entity";
 
-import { getRepository } from "typeorm";
+import { getRepository, getConnection, Connection } from "typeorm";
 
 export class ShopItemController extends DefaultController {
   protected initializeRoutes(): express.Router {
     const router = express.Router();
     const shopItemRepo = getRepository(ShopItem);
+    const itemImgRepo = getRepository(Imgs);
 
     router.route("/shopitems/:id")
     .delete((req: Request, res: Response) => {
@@ -44,17 +47,25 @@ export class ShopItemController extends DefaultController {
         shopitem.category = req.body.category;
         shopitem.inStorePickup = req.body.inStorePickup;
         shopitem.postedDate = req.body.postedDate;
-        shopitem.imageUrl = req.body.imageUrl;
         shopitem.brand = req.body.brand;
         shopItemRepo.save(shopitem).then((savedShopItem: ShopItem) => {
-            res.status(200).send({ shopitem });
+            const img = new Imgs();
+            img.img = req.body.imageUrl;
+            img.ShopItem = savedShopItem;
+            itemImgRepo.save(img);
+            res.status(200).send({ id : savedShopItem.id });
         });
     })
     .get((req: Request, res: Response) => {
-        shopItemRepo.find().then((shopitems: ShopItem[]) => {
-          res.status(200).send(shopitems);
-        })
+        const users =  getConnection()
+        .getRepository(ShopItem)
+        .createQueryBuilder("shopitem")
+        .leftJoinAndSelect("shopitem.images", "imgs")
+        .getMany().then(obj => {console.log(obj)
+            res.status(200).send(obj);
+        });
     });
+
     return router;
 }
 }

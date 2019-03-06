@@ -33,6 +33,12 @@ export default new Router({
         import(/* webpackChunkName: "about" */ "./views/Shop.vue")
     },
     {
+      path: "/shop/:itemId",
+      name: "shopItem",
+      component: () =>
+         import("./views/ItemView.vue")
+    },
+    {
       path: "/services",
       name: "services",
       // route level code-splitting

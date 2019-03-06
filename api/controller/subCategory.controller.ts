@@ -59,6 +59,16 @@ export class SubCategoryController extends DefaultController {
           });
         })
 
+        .put((req: Request, res: Response) => {
+          const subCat = getRepository(SubCategory);
+          subCat.findOneOrFail(req.params.id).then((foundCategory: SubCategory) => {
+            foundCategory.name = req.body.name;
+            subCat.save(foundCategory).then(result => {
+              res.send(200);
+            });
+          });
+        });
+
       return router;
 
     }

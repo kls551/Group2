@@ -13,13 +13,18 @@ export class ShopItemController extends DefaultController {
     const shopItemRepo = getRepository(ShopItem);
 
     router.route("/shopitems/:id")
-    .delete((req: Request, res: Response) => {
-        shopItemRepo.findOneOrFail(req.params.id).then((foundItem: ShopItem) => {
-          shopItemRepo.delete(foundItem).then(result => {
-            res.send(200);
+      .delete((req: Request, res: Response) => {
+          shopItemRepo.findOneOrFail(req.params.id).then((foundItem: ShopItem) => {
+            shopItemRepo.delete(foundItem).then(result => {
+              res.send(200);
+            });
           });
+      })
+      .get((req: Request, res: Response) => {
+        shopItemRepo.findOneOrFail(req.params.id).then((foundItem: ShopItem) => {
+          res.status(200).send(foundItem);
         });
-    });
+      });
 
     router.route("/shopitems/:id/:qty")
         .put((req: Request, res: Response) => {
@@ -33,7 +38,7 @@ export class ShopItemController extends DefaultController {
                 });
             });
         });
-    
+
     router.route("/shopitems")
     .post((req: Request, res: Response) => {
         const shopitem = new ShopItem();
@@ -55,6 +60,7 @@ export class ShopItemController extends DefaultController {
           res.status(200).send(shopitems);
         })
     });
+
     return router;
 }
 }

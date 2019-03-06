@@ -72,7 +72,8 @@
                 <div class="column">
                     <label class="label">Main Category</label>
                     <div class="field" v-for="main in mainCategoryList" :key="main.id">
-                        <b-radio name="options" v-model="selectedMainCategory" v-on:input="saveMainCat(main.id)">
+                        <b-radio name="options" v-model="selected" :native-value="main.id"
+                                 v-on:input="saveMainCat(main.id)">
                             {{ main.name }}
                         </b-radio>
                     </div>
@@ -81,12 +82,12 @@
 
                 <!-- Subcategory select multiple -->
                 <div v-if="mainselected === true" class="column">
-                    <label class="label">Sub Category</label>
+                    <label class="label">Sub Categories</label>
                     <b-select
                         multiple
-                        native-size="8"
+                        native-size="4"
                         v-model="selectedSubCategories">
-                        <option v-for="(main, index) in subCategoryList" v-bind:key="index">{{ main.name }}</option>
+                        <option v-for="(sub, index) in subCategoryList" v-bind:key="index" :value="sub.id">{{ sub.name }}</option>
                     </b-select>
                 </div>
                 <div v-else></div>
@@ -94,7 +95,7 @@
                 <div class="column">
                     <label class="label">Brand</label>
                     <div class="field" v-for="(brand, index) in brandList" v-bind:key="index">
-                        <b-radio name="options" v-model="selectedBrand">
+                        <b-radio name="brands" v-model="selectedBrand" :native-value="brand.id">
                             {{ brand.name }}
                         </b-radio>
                     </div>
@@ -122,8 +123,7 @@
                   <button class="button is-success" type="submit" v-on:click="addItem">Add Item</button>
              </div>
         <br>
-
-        
+    
         </div>
 
       </div>
@@ -154,8 +154,9 @@ export default class NewItem extends Vue {
     iteminStorePickup: Boolean = false;
     itemPostedDate: Date = new Date();
     itemImageURL: String = "";
-    selectedMainCategory: MainCategory = {'mainId': 0, 'categoryname': "", 'subCategories': []};
-    selectedBrand: Brand = {'brandname': ""};
+    selected: Number = 0;
+    selectedBrand: Number = 0;
+    selectedSubCategories: Number[] = [];
 
     fileCount: number = 0;
     mainCategoryList: MainCategory[] = [];
@@ -216,7 +217,6 @@ export default class NewItem extends Vue {
 
 
     addItem() {
-        console.log(this.selectedMainCategory);
         if (this.itemName == "" || this.itemPrice == 0) {
             return;
         }
@@ -226,11 +226,12 @@ export default class NewItem extends Vue {
                 details: this.itemDetail,
                 price: this.itemPrice,
                 quantity: this.itemQuantity,
-                category: this.selectedMainCategory.mainId,
+                category: this.selected,
+                subcategories: this.selectedSubCategories,
                 inStorePickup: this.iteminStorePickup,
                 postedDate: this.itemPostedDate,
                 imageUrl: this.itemImageURL,
-                brand: this.selectedBrand.brandname
+                brand: this.selectedBrand
             })
             .then((response: AxiosResponse) => {
                 this.$emit("success");

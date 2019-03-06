@@ -186,6 +186,11 @@ export default class App extends Vue {
   color: #2c3e50;
 }
 
+h2 {
+    font-family: 'Questrial';
+    font-size: 28px;
+}
+
 
 
 </style>

@@ -28,7 +28,7 @@
                 </div>
 
                 <a class="panel-block menu-contents" v-show="category.show" v-for="sub in category.subcategories" :key="sub.id">
-                  <b-checkbox type="is-lightorange"> {{ sub.name }} </b-checkbox>
+                  <b-checkbox> {{ sub.name }} </b-checkbox>
                 </a>
               </div>
 
@@ -46,15 +46,17 @@
       <!-- Shop layout -->
       <div class="tile is-child columns is-multiline shop-layout">
         <div v-for="item in shopItems" :key="item.id" class="column is-narrow">
-          <div class="card" onclick="location.href='shop/itemview';" style="cursor: pointer;">
-            <figure class="image is-128x128 center">
-              <img src="https://bulma.io/images/placeholders/128x128.png">
-            </figure>
-            <ul class="product">
-              <li class="item-name is-size-5"> {{ item.name }} </li>
-              <li class="item-price"> ${{ item.price }} </li>
-            </ul>
-          </div>
+          <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
+            <div class="card">
+              <figure class="image is-128x128 center">
+                <img src="https://bulma.io/images/placeholders/128x128.png">
+              </figure>
+              <ul class="product">
+                <li class="item-name is-size-5"> {{ item.name }} </li>
+                <li class="item-price"> ${{ item.price }} </li>
+              </ul>
+            </div>
+          </router-link>
         </div>
       </div>
 
@@ -77,7 +79,7 @@
     shopItems: iShopItem[] = [];
     categories: iMainCategory[] = [];
     counter = 0;
-    whichSort: number = 1100;
+    whichSort: number = 0;
 
     items: iShopItem[] = [
       { id: 789, name: 'M480 Mountain Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },

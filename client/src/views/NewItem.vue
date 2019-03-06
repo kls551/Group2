@@ -66,53 +66,39 @@
         </div>
 
 
-        <!-- Main Category Drop Down -->
-            <!-- <label class="label">Main Category</label>
-                <div class="dropdown is-hoverable" style="margin-bottom: 15px;">
-                            <div class="dropdown-trigger">
-                                <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-
-                                <span style="color: grey" v-if="itemCategory === ''">Ex: Bikes</span>
-                                <span style="color: grey" v-else>{{ itemCategory }}</span>
-
-                                <span class="icon is-small">
-                                    <i class="fas fa-angle-down"></i>
-                                </span>
-                                </button>
-                            </div>
-                            <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                                <div class="dropdown-content" v-for="(main, index) in mainCategoryList" v-bind:key="index">
-                                    <a class="dropdown-item" v-on:click="saveMainCat(main.name)">{{ main.name }}</a>
-                                </div>
-                            </div>
-                </div> -->
+        <!-- Main Category Radio Buttons -->
 
             <div class="columns">
                 <div class="column">
                     <label class="label">Main Category</label>
-                    <div class="control scroll-container">
-                        <label class="radio">
-                            <input type="radio" name="answer">
-                            Yes
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="answer">
-                            No
-                        </label>
+                    <div class="field" v-for="main in mainCategoryList" :key="main.id">
+                        <b-radio name="options" v-model="selectedMainCategory" v-on:input="saveMainCat(main.id)">
+                            {{ main.name }}
+                        </b-radio>
                     </div>
+                    
                 </div>
+
+                <!-- Subcategory select multiple -->
+                <div v-if="mainselected === true" class="column">
+                    <label class="label">Sub Category</label>
+                    <b-select
+                        multiple
+                        native-size="8"
+                        v-model="selectedSubCategories">
+                        <option v-for="(main, index) in subCategoryList" v-bind:key="index">{{ main.name }}</option>
+                    </b-select>
+                </div>
+                <div v-else></div>
+
                 <div class="column">
-                    <label class="label">Sub Categories</label>
-                    <div class="control scroll-container">
-                        <label class="radio">
-                            <input type="radio" name="answer">
-                            Yes
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="answer">
-                            No
-                        </label>
+                    <label class="label">Brand</label>
+                    <div class="field" v-for="(brand, index) in brandList" v-bind:key="index">
+                        <b-radio name="options" v-model="selectedBrand">
+                            {{ brand.name }}
+                        </b-radio>
                     </div>
+                    
                 </div>
             </div>
 
@@ -157,20 +143,32 @@ import {
 } from "../utils/api.utils";
 import {Component,Prop,Vue} from "vue-property-decorator";
 
+
 @Component
-export default class OwnerAnnouncement extends Vue {
+export default class NewItem extends Vue {
     error: string | boolean = false;
     itemName: String = "";
     itemDetail: String = "";
     itemPrice: Number = 0;
     itemQuantity: Number = 0;
-    itemCategory: String = "";
     iteminStorePickup: Boolean = false;
     itemPostedDate: Date = new Date();
     itemImageURL: String = "";
+    selectedMainCategory: MainCategory = {'mainId': 0, 'categoryname': "", 'subCategories': []};
+    selectedBrand: Brand = {'brandname': ""};
 
     fileCount: number = 0;
     mainCategoryList: MainCategory[] = [];
+    mainCategoryId: Number = 0;
+    subCategoryList: SubCategory[] = [];
+    mainselected: Boolean = false;
+    brandList: Brand[] = [];
+
+    mounted() {
+        this.getMainCategories();
+        this.getSubCategories(this.mainCategoryId);
+        this.getBrands();
+    }
 
     getMainCategories() {
         axios
@@ -184,11 +182,41 @@ export default class OwnerAnnouncement extends Vue {
             });
     }
 
-    saveMainCat(mainCat:string) {
-        this.itemCategory = mainCat;
+    getSubCategories(mainCatId:Number) {
+        axios
+        .get(APIConfig.buildUrl("/subcategory"), { params: {
+            main_id: mainCatId
+        }})
+        .then((response: AxiosResponse<SubCategory[]>) => {
+                this.subCategoryList = response.data;
+                this.$emit("success");
+        })
+        .catch((res: AxiosError) => {
+                this.error = res.response && res.response.data.error;
+        });
     }
 
+    getBrands() {
+        axios
+            .get(APIConfig.buildUrl("/brands"))
+            .then((response: AxiosResponse<Brand[]>) => {
+                this.brandList = response.data;
+                this.$emit("success");
+            })
+            .catch((res: AxiosError) => {
+                this.error = res.response && res.response.data.error;
+            });
+    }
+
+    saveMainCat(mainCatId:number) {
+        this.mainCategoryId = mainCatId;
+        this.mainselected = true;
+        this.getSubCategories(mainCatId);
+    }
+
+
     addItem() {
+        console.log(this.selectedMainCategory);
         if (this.itemName == "" || this.itemPrice == 0) {
             return;
         }
@@ -198,10 +226,11 @@ export default class OwnerAnnouncement extends Vue {
                 details: this.itemDetail,
                 price: this.itemPrice,
                 quantity: this.itemQuantity,
-                category: this.itemCategory,
+                category: this.selectedMainCategory.mainId,
                 inStorePickup: this.iteminStorePickup,
                 postedDate: this.itemPostedDate,
-                imageUrl: this.itemImageURL
+                imageUrl: this.itemImageURL,
+                brand: this.selectedBrand.brandname
             })
             .then((response: AxiosResponse) => {
                 this.$emit("success");
@@ -209,7 +238,6 @@ export default class OwnerAnnouncement extends Vue {
                 this.itemDetail = "";
                 this.itemPrice = 0;
                 this.itemQuantity = 0;
-                this.itemCategory = "";
                 this.iteminStorePickup = false;
             })
             .catch((errorResponse: any) => {
@@ -217,42 +245,23 @@ export default class OwnerAnnouncement extends Vue {
             });
     }
 
-  //   save(formData: FormData) {
-  //   // upload data to the server
-  //     this.currentStatus = STATUS_SAVING;
-  //     this.upload(formData)
-  //       .then(() => {
-  //         this.currentStatus = STATUS_SUCCESS;
-  //       })
-  //       .catch(err => {
-  //         this.uploadError = err.response;
-  //         this.currentStatus = STATUS_FAILED;
-  //       });
-  // }
-
-    // filesChanged(event: any) {
-    //     const name = event.target.name;
-    //     const files = event.target.files;
-    //     this.fileCount = event.target.files.length;
-    //     // handle file changes
-    //     const formData = new FormData();
-
-    //     if (!files.length) return;
-
-    //     // append the files to FormData
-    //     Array.from(Array(files.length).keys()).map(x => {
-    //       formData.append(name, files[x], files[x].name);
-    //     });
-
-    //     // save it
-    //     this.save(formData);
-    // }
 }
 
 interface MainCategory {
+    mainId: number;
     categoryname: string;
-//    subCategories: SubCategory[];
+    subCategories: SubCategory[];
 }
+
+interface Brand {
+    brandname: string;
+}
+
+interface SubCategory {
+    name: string;
+    mainCategoryId: number;
+}
+
 </script>  
 
 <style scoped lang="scss">

@@ -1,21 +1,21 @@
 <template>
-  <div class="about">
+  <div class="itemView">
     <div class="columns">
-      
+
       <div class="rightMargin column">
         <figure class="image is-3by2">
             <img alt="Map" src="../assets/beach-cruiser.jpg"
                     style="margin-top:150px">
           </figure>
       </div>
-      
+
       <div class="leftMargin column">
         <h1>Beach Cruiser</h1>
         <hr width="30%">
         <br>
         <div class="columns">
           <div class="column is-3">
-            <h2>$320.56</h2>
+            <h2>$0.00</h2>
           </div>
           <div class="column">
             <div class="dropdown is-hoverable">
@@ -66,6 +66,39 @@
   </div>
 </template>
 
+<script lang="ts">
+  import Vue from "vue";
+  import { Component, Prop } from "vue-property-decorator";
+
+  import axios, { AxiosResponse, AxiosError } from "axios";
+  import { APIConfig } from "@/utils/api.utils";
+  import { iShopItem } from "@/models/shopitem.interface";
+
+  @Component
+  export default class ItemView extends Vue {
+    error: string | boolean = false;
+    shopItem: iShopItem | undefined;
+    message: string = "hi";
+
+    mounted() {
+      this.display();
+    }
+
+    display() {
+      axios
+        .get(APIConfig.buildUrl("/shopitems/" + this.$route.params.itemId))
+        .then((response: AxiosResponse) => {
+          this.shopItem = response.data;
+          this.$emit("success");
+          console.log(this.shopItem);
+        })
+        .catch((res: AxiosError) => {
+            this.error = res.response && res.response.data.error;
+        });
+    }
+  }
+</script>
+
 <style scoped lang="scss">
 h1 {
   margin-top: 90px;
@@ -73,9 +106,9 @@ h1 {
   font-weight: bold;
 }
 hr {
-   background-color: black; 
-   height: 2px; 
-   border: 0; 
+   background-color: black;
+   height: 2px;
+   border: 0;
 }
 h2 {
   font-size: 22px;
@@ -93,7 +126,7 @@ h2 {
   padding-left:17px;
   margin-bottom: 4px;
 }
-article{
+article {
   height:300px;
   width:400px;
 }

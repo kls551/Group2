@@ -135,16 +135,14 @@
         
           </div>
                 <span><button v-if="addMoreimg" class="button is-warning" type="submit" v-on:click="addMore">Add More Image</button></span>
-                  
-                <span><button class="button is-success" type="submit" v-on:click="addItem">Add Item</button></span>
+                <span><button v-if="!addMoreimg" class="button is-success" type="submit" v-on:click="addItem">Add Item</button></span>
 
-        
+                <span><button v-if="addMoreimg" class="button is-danger" type="submit" v-on:click="cancel">Cancel</button></span>
         </div>
 
       </div>
     </div>
     </div>
-  </div>
 
 </template>
 
@@ -179,7 +177,6 @@ export default class NewItem extends Vue {
     selectedBrand: Brand = {'brandname': ""};
     itemid: number | null = null;
     addMoreimg: Boolean = false;
-    itemNameUp: String = "";
     addwithmoreimg: Boolean = false;
 
     mainCategoryList: MainCategory[] = [];
@@ -246,6 +243,7 @@ export default class NewItem extends Vue {
         })
         .then((response: AxiosResponse) => {
             console.log(response.data);
+            this.itemImageURL = "";
         })
         .catch((errorResponse: any) => {
             this.error = errorResponse.response.data.reason;
@@ -259,6 +257,13 @@ export default class NewItem extends Vue {
         this.itemQuantity = 0;
         this.itemImageURL = "";
         this.iteminStorePickup = false;
+    }
+
+    cancel() {
+        this.clear();
+        this.itemid = 0;
+        this.addMoreimg = false;
+        this.itemImageURL = "";
     }
 
     addItem() {
@@ -281,7 +286,6 @@ export default class NewItem extends Vue {
             .then((response: AxiosResponse<{ id: number }>) => { 
                 if(!this.addwithmoreimg) {
                     this.itemid = response.data.id;
-                    this.itemNameUp = response.data.name;
                     this.$emit("success");
                     this.clear();
                 }

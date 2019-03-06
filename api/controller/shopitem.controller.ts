@@ -36,7 +36,16 @@ export class ShopItemController extends DefaultController {
                 });
             });
         });
-    
+    router.route("/itemimages/:id")
+    .post((req: Request, res: Response) => {
+        shopItemRepo.findOneOrFail(req.params.id).then((savedShopItem: ShopItem) => {
+            const img = new Imgs();
+            img.img = req.body.img;
+            img.ShopItem = savedShopItem;
+            itemImgRepo.save(img);
+            res.status(200).send({ id : savedShopItem.id })});
+    });
+
     router.route("/shopitems")
     .post((req: Request, res: Response) => {
         const shopitem = new ShopItem();
@@ -53,7 +62,7 @@ export class ShopItemController extends DefaultController {
             img.img = req.body.imageUrl;
             img.ShopItem = savedShopItem;
             itemImgRepo.save(img);
-            res.status(200).send({ id : savedShopItem.id });
+            res.status(200).send({ id : savedShopItem.id});
         });
     })
     .get((req: Request, res: Response) => {

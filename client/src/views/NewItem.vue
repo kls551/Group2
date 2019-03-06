@@ -6,7 +6,7 @@
     <div class="columns">
 
       <div class="rightMargin column" style="margin-right: 0px">
-        <figure class="image is-3by2">
+        <!-- <figure class="image is-3by2">
             <img alt="Map" src=https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Left_side_of_Flying_Pigeon.jpg/1200px-Left_side_of_Flying_Pigeon.jpg style="margin-top: 20px;">
         </figure>
 
@@ -30,7 +30,7 @@
               </label>
             </div>
           </div>
-        </div>
+        </div> -->
 
       </div>
       
@@ -124,10 +124,19 @@
                 </div>
             </div>
 
+        <div class="field">
             <div class="control">
-                  <button class="button is-success" type="submit" v-on:click="addItem">Add Item</button>
-             </div>
-        <br>
+                <label class="checkbox">
+                    <input type="checkbox" v-model="addwithmoreimg">
+                    Add With More Imgs
+                </label>
+            </div>  
+        </div>
+        
+          </div>
+                <span><button v-if="addMoreimg" class="button is-warning" type="submit" v-on:click="addMore">Add More Image</button></span>
+                  
+                <span><button class="button is-success" type="submit" v-on:click="addItem">Add Item</button></span>
 
         
         </div>
@@ -148,6 +157,7 @@ import {
     APIConfig
 } from "../utils/api.utils";
 import {Component,Prop,Vue} from "vue-property-decorator";
+import { resolve } from "path";
 
 const STATUS_INITIAL = 0;
 const STATUS_SAVING = 1;
@@ -157,16 +167,20 @@ const STATUS_FAILED = 3;
 @Component
 export default class NewItem extends Vue {
     error: string | boolean = false;
+    imageCount: Number = 0;
     itemName: String = "";
     itemDetail: String = "";
     itemPrice: Number = 0;
     itemQuantity: Number = 0;
     iteminStorePickup: Boolean = false;
     itemPostedDate: Date = new Date();
-    itemImageURL: String[] = [];
+    itemImageURL: String = "";
     selectedMainCategory: MainCategory = {'mainId': 0, 'categoryname': "", 'subCategories': []};
     selectedBrand: Brand = {'brandname': ""};
     itemid: number | null = null;
+    addMoreimg: Boolean = false;
+    itemNameUp: String = "";
+    addwithmoreimg: Boolean = false;
 
     mainCategoryList: MainCategory[] = [];
     mainCategoryId: Number = 0;
@@ -178,6 +192,7 @@ export default class NewItem extends Vue {
         this.getMainCategories();
         this.getSubCategories(this.mainCategoryId);
         this.getBrands();
+        this.imageCount;
     }
 
     getMainCategories() {
@@ -224,6 +239,27 @@ export default class NewItem extends Vue {
         this.getSubCategories(mainCatId);
     }
 
+    addMore() {
+        console.log(this.itemid);
+        axios.post(APIConfig.buildUrl("/itemimages/" + this.itemid), {
+            img : this.itemImageURL
+        })
+        .then((response: AxiosResponse) => {
+            console.log(response.data);
+        })
+        .catch((errorResponse: any) => {
+            this.error = errorResponse.response.data.reason;
+        });
+    }
+    
+    clear() {
+        this.itemName = "";
+        this.itemDetail = "";
+        this.itemPrice = 0;
+        this.itemQuantity = 0;
+        this.itemImageURL = "";
+        this.iteminStorePickup = false;
+    }
 
     addItem() {
         console.log(this.selectedMainCategory);
@@ -242,14 +278,19 @@ export default class NewItem extends Vue {
                 imageUrl: this.itemImageURL,
                 brand: this.selectedBrand.brandname
             })
-            .then((response: AxiosResponse<{ id: number }>) => {    
-                this.itemid = response.data.id;
-                this.$emit("success");
-                this.itemName = "";
-                this.itemDetail = "";
-                this.itemPrice = 0;
-                this.itemQuantity = 0;
-                this.iteminStorePickup = false;
+            .then((response: AxiosResponse<{ id: number }>) => { 
+                if(!this.addwithmoreimg) {
+                    this.itemid = response.data.id;
+                    this.itemNameUp = response.data.name;
+                    this.$emit("success");
+                    this.clear();
+                }
+                else
+                {
+                    this.itemid = response.data.id;
+                    this.addMoreimg = true;
+                    this.itemImageURL = "";
+                }
             })
             .catch((errorResponse: any) => {
                 this.error = errorResponse.response.data.reason;

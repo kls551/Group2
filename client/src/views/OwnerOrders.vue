@@ -38,7 +38,7 @@
                             </template>
                         </button>
 
-                        <b-dropdown-item :value="0" aria-role="listitem">
+                        <b-dropdown-item :value="0" aria-role="listitem" v-if="canChangeStat(order)" v-on:click="editOrder(index, 0)">
                             <div class="media">
                                 <div class="media-content">
                                     <h3>Processing</h3>
@@ -46,7 +46,7 @@
                             </div>
                         </b-dropdown-item>
 
-                        <b-dropdown-item :value="1" aria-role="listitem">
+                        <b-dropdown-item :value="1" aria-role="listitem" v-if="canChangeStat(order)" v-on:click="editOrder(index, 1)">
                             <div class="media">
                                 <div class="media-content">
                                     <h3>Complete</h3>
@@ -54,7 +54,7 @@
                             </div>
                         </b-dropdown-item>
 
-                        <b-dropdown-item :value="2" aria-role="listitem">
+                        <b-dropdown-item :value="2" aria-role="listitem" v-on:click="editOrder(index, 2)">
                             <div class="media">
                                 <div class="media-content">
                                     <h3>Shipped</h3>
@@ -62,7 +62,7 @@
                             </div>
                         </b-dropdown-item>
 
-                        <b-dropdown-item :value="3" aria-role="listitem" v-if="isAd">
+                        <b-dropdown-item :value="3" aria-role="listitem" v-if="isAd" v-on:click="editOrder(index, 3)">
                             <div class="media">
                                 <div class="media-content">
                                     <h3>Cancelled</h3>
@@ -143,7 +143,7 @@ export default class Orders extends Vue {
             axios
             .get(APIConfig.buildUrl("/users/" + this.orders[i].userId))
             .then((response: AxiosResponse < iUser >) => {
-                this.users.push(response.data.user);
+                this.users.push(response.data);
             })
             .catch((res: AxiosError) => {
                 this.error = res.response && res.response.data.error;
@@ -161,11 +161,12 @@ export default class Orders extends Vue {
             this.preview();
         })
     }
-    editOrder(index: number, value: number) {
+
+    editOrder(index: number, stat: number) {
         this.edit = this.orders[index];
         if (this.edit) {
-            this.edit.status = value;
-            axios.put(APIConfig.buildUrl("/orders/" + this.edit.id + "/" + value), {
+            this.edit.status = stat;
+            axios.put(APIConfig.buildUrl("/orders/" + this.edit.id + "/" + stat), {
                     ...this.edit
                 })
                 .then(() => {
@@ -173,6 +174,10 @@ export default class Orders extends Vue {
                 })
         }
     } 
+
+    canChangeStat(order: iOrder): boolean{
+        return (order.status !== 2 && order.status !== 3);
+    }
 
     get isAd(): boolean {
         return (this.$store.state.user.isAdmin === 1);

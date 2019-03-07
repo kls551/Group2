@@ -27,5 +27,6 @@ export default class MyProfile extends Vue {
       this.$router.push({ name: "home" });
     }
   }
+  
 }
 </script>

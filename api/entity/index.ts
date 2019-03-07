@@ -8,3 +8,4 @@ export * from "./announcement.entity";
 export * from "./shopitem.entity";
 export * from "./brands.entity";
 export * from "./about.entity";
+export * from "./itemImg.entity";

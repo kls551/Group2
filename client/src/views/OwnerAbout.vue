@@ -134,6 +134,7 @@ export default class OwnerAbout extends Vue {
   uploadError: string | null = null;
     editIndex: number = 0;
     editId: number = 0;
+
   upload(formData: FormData) {
     if (this.about) {
       const url = `${APIConfig.url}/about`;
@@ -199,12 +200,6 @@ export default class OwnerAbout extends Vue {
 
   get isFailed() {
     return this.currentStatus === STATUS_FAILED;
-  }
-  get profileUrl(): string {
-    if (this.about) {
-      return APIConfig.buildUrl(`/profilePhotos/5f50f3d590761181d337b40c5cc54283`);
-    }
-    return "";
   }
 
     mounted() {

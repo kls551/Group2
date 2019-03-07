@@ -46,6 +46,14 @@
       <!-- Shop layout -->
       <div class="tile is-child columns is-multiline shop-layout">
         <div v-for="item in shopItems" :key="item.id" class="column is-narrow">
+          <div class="card" onclick="location.href='shop/itemview';" style="cursor: pointer;">
+            <figure class="image is-128x128 center">
+            </figure>
+            <ul class="product">
+              <li class="item-name is-size-5"> {{ item.name }} </li>
+              <li class="item-price"> ${{ item.price }} </li>
+            </ul>
+          </div>
           <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
             <div class="card">
               <figure class="image is-128x128 center">
@@ -123,9 +131,11 @@
       axios
         .get(APIConfig.buildUrl("/shopitems"))
         .then((response: AxiosResponse) => {
+          console.log(response.data[4].images[0].img);
           this.shopItems = response.data;
+          if(response.data[1].images[0].img)
+            this.image1 = response.data[1].images[0].img;
           this.$emit("success");
-          console.log(this.shopItems);
           return axios.get(APIConfig.buildUrl("/maincategory"));
         })
         .then((response: AxiosResponse) => {

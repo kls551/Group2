@@ -27,6 +27,14 @@ export class OrderController extends DefaultController {
         }
       );
     })
+    .delete((req: Request, res: Response) => {
+      const orderRepo = getRepository(Order);
+      orderRepo.findOneOrFail(req.params.id).then((foundOrd: Order) => {
+        orderRepo.delete(foundOrd).then(result => {
+          res.send(200);
+        });
+      });
+    });
 
     router.route("/checkout")
     .post((req: Request, res: Response) => {
@@ -54,6 +62,20 @@ export class OrderController extends DefaultController {
         res.status(200).send(orders);
       });
     });
+
+    router.route("/orders/:id/:stat")
+        .put((req: Request, res: Response) => {
+            const orderRepo = getRepository(Order);
+            orderRepo.findOneOrFail(req.params.id).then((orderItem: Order) => {
+                if (orderItem == undefined) {
+                    return;
+                }
+                orderItem.status = req.params.stat;
+                orderRepo.save(orderItem).then((updatedItem: Order) => {
+                    res.status(200).send(updatedItem);
+                });
+            });
+        });
     
     // router.route("/todos/:id")
     // .put((req: Request, res: Response) => {

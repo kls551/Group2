@@ -1,5 +1,5 @@
-import { Column, Entity, JoinColumn, OneToMany, ManyToOne, PrimaryGeneratedColumn, OneToOne, ManyToMany } from "typeorm";
-import { User, MainCategory, Imgs } from "./";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, OneToMany, JoinTable, JoinColumn, OneToOne, ManyToMany} from "typeorm";
+import { User, MainCategory, SubCategory, Imgs  } from "./";
 
 @Entity()
 export class ShopItem {
@@ -20,6 +20,10 @@ export class ShopItem {
 
   @ManyToOne(type => MainCategory, cat => cat.id)
   public category!: MainCategory;
+
+  @ManyToMany((type) => SubCategory, subcat => subcat.id)
+  @JoinTable()
+  public subcategories!: SubCategory[];
 
   @Column({default: null})
   public brand!: string;

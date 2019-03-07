@@ -1,23 +1,15 @@
 <template>
-<div class="container" style="margin-top: 15px; margin-bottom: 15px">
+<div style="margin-top: 40px; margin-bottom: 40px">
     <!-- Four Grid Pictures -->
 
+    <h2>Welcome to Foxcycle</h2>
+    <h3 style="border-bottom: 1.5px solid orange; padding-bottom: 15px;">Browse and buy from our online shop, contact us, or learn about our services</h3>
+    <br>
     <!-- Preview Announcment -->
-    <div class="box">
-        <article class="message is-warning" v-for="(ann, index) in announcements" v-bind:key="index">
-            <div class="message-header">
-                <p>{{ann.title}}</p>
-                <!-- <button class="delete" aria-label="delete"></button> -->
-            </div>
-            <div class="message-body">
-                {{ann.body}}
-            </div>
-        </article>
-    </div>
-    
-    <div class="tile is-ancestor">
-        <div class="tile is-1"></div>
-        <div class="tile is-5 is-vertical is-parent">
+    <div class="columns">
+        <div class="column is-two-thirds">
+            <div class="tile is-ancestor">
+        <div class="tile is-6 is-vertical is-parent">
 
             <!-- Shop Mountain -->
             <div class="tile is-child">
@@ -41,7 +33,7 @@
         </div>
 
         <!-- Shop Racing -->
-        <div class="tile is-5 is-parent is-vertical">
+        <div class="tile is-6 is-parent is-vertical">
             <div class="tile is-child">
                 <figure class="image is-3by2">
                     <img src="../assets/beach-cruiser.jpg">
@@ -62,7 +54,27 @@
             </div>
         </div>
     </div>
-    <div class="tile is-1"></div>
+
+        </div>
+
+        <div class="column">
+            <div class="box">
+                <h2>Announcments</h2>
+                <article class="message is-warning" v-for="(ann, index) in announcements" v-bind:key="index">
+                    <div class="message-header">
+                        <p>{{ann.title}}</p>
+                        <!-- <button class="delete" aria-label="delete"></button> -->
+                    </div>
+                    <div class="message-body">
+                        {{ann.body}}
+                    </div>
+                </article>
+            </div>
+        </div>
+
+    </div>
+    
+    
 
 </div>
 </template>
@@ -121,6 +133,17 @@ export default class Home extends Vue {
     height: auto;
     transition: .5s ease;
     backface-visibility: hidden;
+}
+
+h2 {
+    font-family: 'Questrial';
+    font-size: 28px;
+    font-weight: 800;
+}
+
+h3 {
+    font-family: 'Questrial';
+    font-size: 20px;
 }
 
 .middle {

@@ -19,16 +19,22 @@ export class About {
 
   @Column({default:null})
   public monday!: string;
+
   @Column({default:null})
   public tuesday!: string;
+
   @Column({default:null})
   public wednesday!: string;
+
   @Column({default:null})
   public thursday!: string;
+
   @Column({default:null})
   public friday!: string;
+
   @Column({default:null})
   public saturday!: string;
+  
   @Column({default:null})
   public sunday!: string;
 }

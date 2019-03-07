@@ -60,6 +60,7 @@ export class ShopItemController extends DefaultController {
         shopitem.quantity = req.body.quantity;
         shopitem.category = req.body.category;
         shopitem.inStorePickup = req.body.inStorePickup;
+        shopitem.subcategories = req.body.subcategories;
         shopitem.postedDate = req.body.postedDate;
         shopitem.brand = req.body.brand;
         shopItemRepo.save(shopitem).then((savedShopItem: ShopItem) => {

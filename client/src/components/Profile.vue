@@ -73,6 +73,16 @@ export default class Profile extends Vue {
   @Prop({ default: null })
   user!: iUser | null;
 
+  // editPassword(new_password: string) {
+  //       if (this.user) {
+  //           axios.put(APIConfig.buildUrl("/users/" + this.user.id), {
+  //                   password: new_password
+  //               })
+  //               .then(() => {
+  //               })
+  //       }
+  //   }
+
   upload(formData: FormData) {
     if (this.user) {
       const url = `${APIConfig.url}/users/${this.user.id}`;

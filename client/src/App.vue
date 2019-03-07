@@ -92,9 +92,7 @@ import checkout from "@/components/checkout.vue";
 import { APIConfig } from "@/utils/api.utils";
 import Buefy from 'buefy';
 import 'buefy/dist/buefy.css';
-
 Vue.use(Buefy);
-
 @Component({
   components: {
     Signup,
@@ -107,7 +105,6 @@ export default class App extends Vue {
   public showLogin: boolean = false;
   public showcheckout: boolean = false;
   public showtrack: boolean = false;
-
   showSignupModal() {
     this.showSignup = true;
   }
@@ -117,7 +114,6 @@ export default class App extends Vue {
   cancelSignup() {
     this.showSignup = false;
   }
-
   showcheckoutModal() {
     this.showcheckout = true;
   }
@@ -127,7 +123,6 @@ export default class App extends Vue {
   cancelCheckout() {
     this.showcheckout = false;
   }
-
   showTrackOrder() {
     this.showtrack = true;
   }
@@ -137,28 +132,21 @@ export default class App extends Vue {
   canceltrack() {
     this.showtrack = false;
   }
-
-
   showLoginModal() {
     this.showLogin = true;
   }
-
   successLogin() {
     this.showLogin = false;
-    
     if (this.$store.state.user && (this.$store.state.user.isAdmin === 0 || this.$store.state.user.isAdmin === 1)) {
       this.$router.push({ name: "ownerManageCategories" });
     }
   }
-
   cancelLogin() {
     this.showLogin = false;
   }
-
   get isLoggedIn(): boolean {
     return !!this.$store.state.user;
   }
-
   get isStaff(): boolean {
     return this.$store.state.user && (this.$store.state.user.isAdmin === 0 || this.$store.state.user.isAdmin === 1);
   }
@@ -178,14 +166,10 @@ export default class App extends Vue {
 
 
 <style lang="scss">
-
 #app {
   font-family: 'Questrial', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
 }
-
-
-
 </style>

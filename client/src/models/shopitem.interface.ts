@@ -7,5 +7,5 @@ export interface iShopItem {
   category: string;
   inStorePickup: boolean;
   postedDate: Date;
-  images: string[];
+  images: String[];
 }

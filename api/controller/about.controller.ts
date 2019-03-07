@@ -50,6 +50,7 @@ export class AboutController extends DefaultController {
     // })
     .get((req: Request, res: Response) => {
         aboutRepo.findOneOrFail().then((about: About) => {
+          console.log(about);
           res.status(200).send(about);
         })
     })

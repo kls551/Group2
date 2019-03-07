@@ -3,7 +3,7 @@
     <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title">Signup</p>
+          <p class="modal-card-title">Login</p>
           <button class="delete" aria-label="close" v-on:click="cancel"></button>
         </header>
         <section class="modal-card-body">
@@ -31,7 +31,7 @@
     </form>
             </section>
       <footer class="modal-card-foot">
-      <a v-if="!formcheck" class="button is-success" v-on:click="success" disabled>LoginForm</a>
+      <a v-if="!formcheck" class="button is-success" v-on:click="success" disabled>Login</a>
       <a v-if="formcheck" class="button is-success" v-on:click="success">Login</a>
       <a class="button" v-on:click="cancel">Cancel</a>
     </footer>

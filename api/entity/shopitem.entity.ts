@@ -1,5 +1,5 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, OneToMany, JoinTable, ManyToMany} from "typeorm";
-import { User, MainCategory, SubCategory } from "./";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, OneToMany, JoinTable, JoinColumn, OneToOne, ManyToMany} from "typeorm";
+import { User, MainCategory, SubCategory, Imgs  } from "./";
 
 @Entity()
 export class ShopItem {
@@ -34,8 +34,8 @@ export class ShopItem {
   @Column()
   public postedDate!: Date;
 
-  @Column({default: null})
-  public imageUrl!: string;
+  @OneToMany(type => Imgs, Imgs => Imgs.ShopItem)
+  public images!: Imgs[];
 
   @ManyToOne(type => User, user => user.cart, {
     onDelete: 'CASCADE'

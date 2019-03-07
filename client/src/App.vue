@@ -137,10 +137,7 @@ export default class App extends Vue {
   }
   successLogin() {
     this.showLogin = false;
-    console.log("signed in ");
-    console.log("user ", this.$store.state.user )
     if (this.$store.state.user && (this.$store.state.user.isAdmin === 0 || this.$store.state.user.isAdmin === 1)) {
-      console.log("pushed to link");
       this.$router.push({ name: "ownerManageCategories" });
     }
   }

@@ -43,7 +43,6 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { APIConfig } from "../utils/api.utils";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import Modal from "./Modal.vue";
-
 @Component({
   components: {
     Modal
@@ -56,7 +55,6 @@ export default class Signup extends Vue {
   };
   error: string | boolean = false;
   @Prop(Boolean) isShowing: boolean = false;
-
   @Watch("isShowing")
   handleShowing(isShowingStart: boolean, isShowingEnd: boolean) {
     if (!isShowingStart && isShowingEnd) {
@@ -66,7 +64,6 @@ export default class Signup extends Vue {
       };
     }
   }
-
   success() {
     this.error = false;
     axios
@@ -85,7 +82,6 @@ export default class Signup extends Vue {
         this.error = res.response && res.response.data.error;
       });
   }
-
   get formcheck(): boolean {
     if(
     this.signup.emailAddress.length <= 0 ||
@@ -94,17 +90,14 @@ export default class Signup extends Vue {
     else
       return true;
   }
-
   cancel() {
     this.$emit("cancel");
   }
 }
-
 interface LoginResponse {
   token: string;
   userId: number;
 }
-
 export interface LoginForm {
   emailAddress: string;
   password: string;

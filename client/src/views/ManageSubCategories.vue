@@ -26,7 +26,7 @@
                     <!-- Main category drop down -->
                     <h3 style="padding-bottom: 10px">Select Main Category</h3>
                     <div class="select is-rounded">
-                    <select v-on:input="saveMainCat" v-model="mainCategoryId">
+                    <select v-on:change="saveMainCat" v-model="mainCategoryId">
                         <option 
                         v-for="(main, index) in mainCategoryList" v-bind:key="index"
                         :value="main.id">
@@ -34,8 +34,6 @@
                         </option>
                     </select>
                     </div>
-
-                    {{mainCategoryId}}
 
 
                 <!-- <div class="dropdown is-hoverable">
@@ -79,6 +77,7 @@
                     </div>
                 </div>
 
+                {{ getMainName(mainCategoryId) }} 
                 <!-- Table -->
                 <div class="tile is-child box">
                     <h2><b>Main Category :</b> {{ mainCategoryName }} </h2>

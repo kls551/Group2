@@ -10,18 +10,18 @@
       </div>
 
       <div class="leftMargin column">
-        <h1>Beach Cruiser</h1>
+        <h1>{{ shopItem.name }}</h1>
         <hr width="30%">
         <br>
         <div class="columns">
           <div class="column is-3">
-            <h2>$0.00</h2>
+            <h2>${{ shopItem.price }}</h2>
           </div>
           <div class="column">
             <div class="dropdown is-hoverable">
               <div class="dropdown-trigger">
                 <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-                  <span>Qty</span>
+                  <span>{{ shopItem.quantity }}</span>
                   <span class="icon is-small">
                     <i class="fas fa-angle-down" aria-hidden="true"></i>
                   </span>
@@ -52,12 +52,14 @@
           <span class="button buttonStyle">Add To Cart</span>
           <span class="button buttonStyle">Buy Now</span>
         </div>
-        <p class="subtitle is-6">In-Store Pickup Only</p>
+
+        <p class="subtitle is-6" v-if="shopItem.inStorePickup">In-Store Pickup Only</p>
+        <p class="subtitle is-6" v-else>Order online available</p>
 
         <br>
         <article class="message">
           <div class="message-body">
-            This is a cool bike
+            {{ shopItem.details }}
           </div>
         </article>
 
@@ -77,8 +79,8 @@
   @Component
   export default class ItemView extends Vue {
     error: string | boolean = false;
-    shopItem: iShopItem | undefined;
-    message: string = "hi";
+    shopItem: iShopItem =
+      { id: 0, name: "", price: 0, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" };
 
     mounted() {
       this.display();

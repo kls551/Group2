@@ -73,14 +73,17 @@
   import { Component, Prop } from "vue-property-decorator";
 
   import axios, { AxiosResponse, AxiosError } from "axios";
-  import { APIConfig } from "@/utils/api.utils";
-  import { iShopItem } from "@/models/shopitem.interface";
+  import { APIConfig } from "../utils/api.utils";
+  import { iShopItem } from "../models/shopitem.interface";
 
   @Component
   export default class ItemView extends Vue {
     error: string | boolean = false;
+    url: String[] = [""];
     shopItem: iShopItem =
-      { id: 0, name: "", price: 0, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" };
+      { id: 0, name: "", price: 0, details: "", quantity: 0,
+      category: "", inStorePickup: false, postedDate: new Date("2019-02-27"),
+      images: this.url};
 
     mounted() {
       this.display();

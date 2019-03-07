@@ -78,7 +78,6 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { APIConfig } from "@/utils/api.utils";
 import { iUser } from "@/models/user.interface";
-import { EditServiceForm } from '@/components/UpdateService.vue';
 
 const STATUS_INITIAL = 0;
 const STATUS_SAVING = 1;

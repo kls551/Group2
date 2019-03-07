@@ -48,13 +48,14 @@ import Modal from "./Modal.vue";
     Modal
   }
 })
-export default class Signup extends Vue {
+export default class Login extends Vue {
   signup: LoginForm = {
     emailAddress: "",
     password: ""
   };
   error: string | boolean = false;
   @Prop(Boolean) isShowing: boolean = false;
+
   @Watch("isShowing")
   handleShowing(isShowingStart: boolean, isShowingEnd: boolean) {
     if (!isShowingStart && isShowingEnd) {

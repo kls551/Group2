@@ -125,14 +125,25 @@ export default class Accounts extends Vue {
             });
     }
     deleteItem(index: number) {
-        axios.delete(APIConfig.buildUrl("/users/" + index), {
-                headers: {
-                    token: this.$store.state.userToken
-                }
-            })
-            .then(() => {
-                this.preview();
-            })
+        this.$snackbar.open({
+            duration: 2000,
+            message: "Confirm Deletion",
+            type: "is-danger",
+            position: "is-top",
+            actionText: "Delete",
+            queue: false,
+            onAction: () => {
+                this.error = false;
+                axios
+                    .delete(APIConfig.buildUrl("/users/" + index))
+                    .then((response: AxiosResponse) => {
+                        this.preview();
+                    })
+                    .catch((res: AxiosError) => {
+                        this.error = res.response && res.response.data.error;
+                    });
+            }
+        });
     }
     editItem(index: number) {
         this.edit = this.users[index];
@@ -193,6 +204,7 @@ h2 {
     font-family: 'Questrial';
     font-size: 28px;
 }
+
 h3 {
     font-family: 'Questrial';
 }

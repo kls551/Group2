@@ -1,39 +1,39 @@
 <template>
     <modal
         v-bind:is-showing="isShowing"
-        title="Edit Service"
+        title="Edit Profile"
         success-button="Save Changes"
         v-on:success="success"
         v-on:cancel="cancel" >
 
         <form v-on:submit.prevent="onSubmit">
         <p v-if="error">{{ error }}</p>
-        <!-- service name field  -->
+        <!-- first name field  -->
         <div class="field">
-            <label class="label">Service Name</label>
+            <label class="label">First Name</label>
             <div class="control">
             <input
                 class="input"
                 type="text"
-                placeholder=editingSrv.serviceName
-                v-model="service.serviceName"
+                placeholder=user.firstName
+                v-model="user.firstName"
             >
             </div>
         </div>
 
-        <!-- description field -->
+        <!-- last name field -->
         <div class="field">
-            <label class="label">Description</label>
+            <label class="label">Last Name</label>
             <div class="control">
-            <input class="input" type="text" placeholder="description" v-model="service.description">
+            <input class="input" type="text" placeholder=user.lastName v-model="user.lastName">
             </div>
         </div>
 
-        <!-- description field -->
+        <!-- password field -->
         <div class="field">
-            <label class="label">Price</label>
+            <label class="label">Password</label>
             <div class="control">
-            <input class="input" placeholder="price" v-model="service.price">
+            <input class="input" placeholder="new password" v-model="user.Password">
             </div>
         </div>
 
@@ -48,6 +48,7 @@ import { APIConfig } from "../utils/api.utils";
 import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 import Modal from "./Modal.vue";
 import  { Service } from "../../../api/entity";
+import { iUser }  from "../models/user.interface";
 // import ServiceForm from "../views/OwnerEditServices.vue";
 
 
@@ -57,7 +58,7 @@ import  { Service } from "../../../api/entity";
   }
 })
 
-export default class UpdateService extends Vue {
+export default class UpdateProfile extends Vue {
 //   @Prop(String) title!: string;
     error: string | boolean = false;
     @Prop(Boolean) isShowing: boolean = false;
@@ -72,20 +73,19 @@ export default class UpdateService extends Vue {
     // @Prop() srvId : number | undefined = 0;
     // successButton: string | undefined;
     // @Prop ()
-    service: EditServiceForm = {
-        serviceName: "",
-        description: "",
-        price: undefined
-    };
+    // service: EditServiceForm = {
+    //     serviceName: "",
+    //     description: "",
+    //     price: undefined
+    // };
+
+    @Prop({ default: null })
+    user!: iUser | null;
 
     @Watch("isShowing")
     handleShowing(isShowingStart: boolean, isShowingEnd: boolean) {
         if (!isShowingStart && isShowingEnd) {
-            this.service = {
-                serviceName: "",
-                description: "",
-                price: undefined
-            };
+            console.log("watching changes");
         }
     } 
 
@@ -98,9 +98,4 @@ export default class UpdateService extends Vue {
     }
 }
 
-export interface EditServiceForm {
-    serviceName: string;
-    description: string;
-    price: number | undefined;
-}
 </script>

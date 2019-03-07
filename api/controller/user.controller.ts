@@ -37,6 +37,8 @@ export class UserController extends DefaultController {
           }
         );
       });
+
+
     router.route("/users/:id")
     .post(
       this.isAuthenticated(true),
@@ -101,6 +103,31 @@ export class UserController extends DefaultController {
         });
       });
     });
+
+
+    router.route("/users/:id")
+    .put((req: Request, res: Response) => {
+      const userRepo = getRepository(User);
+
+      userRepo.findOne(req.params.id).then(
+        (user: User | undefined) => {
+          if (user) {
+            user.firstName = req.body.firstName;
+            user.lastName = req.body.lastName;
+            user.password = req.body.password;
+            userRepo.save( user)
+            .then(() => res.sendStatus(200));
+          }
+          else {
+
+            console.log(req.params.id + " user not found");
+            res.sendStatus(404).send("user not found");
+          }
+        }
+      )
+    })
+
+
     return router;
   }
 

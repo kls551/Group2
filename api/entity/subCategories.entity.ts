@@ -10,8 +10,8 @@ export class SubCategory {
   @Column()
   public name!: string;
 
-  @ManyToOne((type) => ShopItem, shopitem => shopitem.id)
-  public shopitem!: ShopItem;
+  // @ManyToOne((type) => ShopItem, shopitem => shopitem.id)
+  // public shopitem!: ShopItem;
   
   @ManyToOne(type => MainCategory, mainCategory => mainCategory.subCategories, {
     onDelete: 'CASCADE'

@@ -80,7 +80,7 @@
                 perPage: 20,
                 total: 0
             }
-        },
+        }
 
         preview() {
             axios

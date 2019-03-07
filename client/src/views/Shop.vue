@@ -78,7 +78,6 @@
     error: string | boolean = false;
     shopItems: iShopItem[] = [];
     categories: iMainCategory[] = [];
-    counter = 0;
     whichSort: number = 0;
 
     items: iShopItem[] = [

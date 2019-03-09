@@ -24,7 +24,7 @@
                     <td>{{user.lastName}}</td>
                     <td>{{user.profileUrl}}</td>
                     <td>{{user.emailAddress}}</td>
-                    <td>{{user.isAdmin}}</td>
+                    <td>{{user.isAdmin === 1 ? "Admin" : user.isAdmin === 0 ? "Staff" : "User"}}</td>
                     <td v-if="isAd">
                         <button class="button is-success" v-on:click="showEditForm(index)">Edit</button>
                     </td>
@@ -42,19 +42,19 @@
                         <label class="label is-small">FirstName</label>
                         <div class="control">
                             <input class="input is-small" type="text" placeholder="e.g Alex" v-model="editFn">
-  </div>
+                        </div>
                         </div>
                         <div class="field">
                             <label class="label is-small">LastName</label>
                             <div class="control">
                                 <input class="input is-small" type="text" placeholder="e.g.Smith" v-model="editLn">
-  </div>
+                        </div>
                             </div>
                             <div class="field">
                                 <label class="label is-small">Role</label>
                                 <div class="control">
                                     <input class="input is-small" type="number" placeholder="e.g.0" v-model="editRole">
-  </div>
+                                </div>
                                 </div>
                                 <nav class="level">
                                     <div class="level-left">

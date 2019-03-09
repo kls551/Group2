@@ -34,6 +34,11 @@ Group2: Enter Team Name Here:_
 
 open browser and go to http://localhost:8080/
 
+## Database Queries
+- To setup bare minimum database
+- Run Api side before running these queries
+- [Setup](api/Database/init.sql)
+
 #### to add admin 
 - create an account
 - set up a query to update isAdmin=1

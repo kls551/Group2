@@ -46,3 +46,11 @@ update dev.user set isAdmin=1 where email="<email here>"`
 ```
 update dev.user set isAdmin=0 where firstName="<email here>"`
 ```
+
+## To setup About page initially
+- create this query
+```
+insert into about values
+(1, "313 Madonna Road, San Luis Obispo, CA 93401", "foxcycle@cycle.come",
+"415-344-2134", "", "10AM-8PM", "10AM-8PM","10AM-8PM","10AM-8PM","10AM-8PM","10AM-8PM","10AM-8PM")
+```

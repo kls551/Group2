@@ -1,5 +1,5 @@
 # Project Documents
-* [Wireframe](Documents/New Project.bmpr)
+* [Wireframe]()
 * [Requirement document](https://docs.google.com/document/d/1Jpo7Zb7tmBjNclNY4RTOuzHTpVCeZuOCzqPQIugO4pM/edit?usp=sharing)
 * [Acceptance document](https://docs.google.com/spreadsheets/d/1F6GsC59ohIOi7bILhus72_ViUraa0Stw86vjsejLJFM/edit?usp=sharing)
 

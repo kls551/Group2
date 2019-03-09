@@ -117,6 +117,9 @@
         .get(APIConfig.buildUrl("/shopitems"))
         .then((response: AxiosResponse) => {
           this.shopItems = response.data;
+          // if(response.data[1].images[0].img)
+          //   this.image1 = response.data[1].images[0].img;
+          console.log(this.shopItems[0].images[0].img);
           this.$emit("success");
           return axios.get(APIConfig.buildUrl("/maincategory"));
         })

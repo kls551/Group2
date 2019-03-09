@@ -6,7 +6,7 @@
     <div class="tile is-ancestor">
         <div class="tile is-2"></div>
         <div class="tile is-8 is-vertical is-parent">
-            <h2 v-if="!showEdit">Create Announcement</h2>
+            <h2 v-if="!showEdit">Create Announcment</h2>
             <h2 v-if="showEdit">Editing "{{editTitle}}"</h2>
             <div class="tile is-child box">
                 <span>Title</span>

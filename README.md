@@ -15,24 +15,24 @@ Group2: Enter Team Name Here:_
 * Testing: Alex Quelle
 
 # Running Instruction
--in terminal run `git clone git@github.com:CSC307Winter2019/Group2.git`
--cd into the Group2 directory
--run `docker-compose up`
--open two more terminal windows
+- in terminal run `git clone git@github.com:CSC307Winter2019/Group2.git`
+- cd into the Group2 directory
+- run `docker-compose up`
+- open two more terminal windows
 
 ## api side
--first new terminal window
--cd into Group2 directory
--cd into api
--run `npm install`
--run `npm run dev`
+- first new terminal window
+- cd into Group2 directory
+- cd into api
+- run `npm install`
+- run `npm run dev`
 
 ## Client side
-second new terminal window
-cd into Group2 directory
-cd into client
-run `npm install`
-run `npm run serve`
+- second new terminal window
+- cd into Group2 directory
+- cd into client
+- run `npm install`
+- run `npm run serve`
 
 open browser and go to http://localhost:8080/
 

@@ -43,21 +43,21 @@
 
     <!-- Owner and Staff Login Tabs Only -->
       <div class="container" style="margin-top: 15px; margin-bottom: 15px" v-if="isLoggedIn">
-        <div class="tabs is-boxed is-centered" v-show="isStaff">
+        <div class="tabs is-boxed is-centered">
           <ul>
-              <router-link to="/owner/manage-main-categories" tag="li" exact-active-class="is-active"><a>Manage Categories</a></router-link>
+              <router-link to="/owner/manage-main-categories" v-show="isOwner" tag="li" exact-active-class="is-active"><a>Manage Categories</a></router-link>
 
-              <router-link to="/owner/manage-orders" tag="li" exact-active-class="is-active"><a>Orders</a></router-link>
+              <router-link to="/owner/manage-orders" v-show="isStaff || isOwner" tag="li" exact-active-class="is-active"><a>Orders</a></router-link>
 
-              <router-link to="/owner/manage-inventory" tag="li" exact-active-class="is-active"><a>Inventory</a></router-link>
+              <router-link to="/owner/manage-inventory" v-show="isStaff || isOwner" tag="li" exact-active-class="is-active"><a>Inventory</a></router-link>
 
-              <router-link to="/owner/announcment" tag="li" exact-active-class="is-active"><a>Announcement</a></router-link>
-              <router-link to="/owner/about" tag="li" exact-active-class="is-active"><a>About</a></router-link>
-              <router-link to="/owner/accounts" tag="li" exact-active-class="is-active"><a>Accounts</a></router-link>
+              <router-link to="/owner/announcment" v-show="isOwner" tag="li" exact-active-class="is-active"><a>Announcement</a></router-link>
+              <router-link to="/owner/about" v-show="isOwner" tag="li" exact-active-class="is-active"><a>About</a></router-link>
+              <router-link to="/owner/accounts" v-show="isOwner" tag="li" exact-active-class="is-active"><a>Accounts</a></router-link>
 
-              <router-link to="/owner/add-item" tag="li" exact-active-class="is-active"><a>New Item</a></router-link>
+              <router-link to="/owner/add-item" v-show="isOwner" tag="li" exact-active-class="is-active"><a>New Item</a></router-link>
 
-              <router-link to="/owner/edit-services" tag="li" exact-active-class="is-active"><a>Services</a></router-link>           
+              <router-link to="/owner/edit-services" v-show="isOwner" tag="li" exact-active-class="is-active"><a>Services</a></router-link>           
           </ul>
         </div>
       </div>
@@ -135,22 +135,29 @@ export default class App extends Vue {
   showLoginModal() {
     this.showLogin = true;
   }
+
   successLogin() {
     this.showLogin = false;
-    if (this.$store.state.user && (this.$store.state.user.isAdmin === 0 || this.$store.state.user.isAdmin === 1)) {
-      this.$router.push({ name: "ownerManageCategories" });
+    // direct owner to management page 
+    if (this.$store.state.user && (this.$store.state.user.isAdmin === 1)) {
+      this.$router.push("/owner/manage-main-categories");
+    }
+    else if (this.$store.state.user && (this.$store.state.user.isAdmin === 0)) {
+      this.$router.push("/owner/manage-orders");
     }
   }
   cancelLogin() {
     this.showLogin = false;
   }
   get isLoggedIn(): boolean {
-    return !!this.$store.state.user;
+    return this.$store.state.user;
   }
   get isStaff(): boolean {
-    return this.$store.state.user && (this.$store.state.user.isAdmin === 0 || this.$store.state.user.isAdmin === 1);
+    return this.$store.state.user && (this.$store.state.user.isAdmin === 0);
   }
-  
+  get isOwner(): boolean {
+    return this.$store.state.user && (this.$store.state.user.isAdmin === 1);
+  }
   logout() {
     axios
       .post(APIConfig.buildUrl("/logout"), null, {

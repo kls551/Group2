@@ -63,22 +63,27 @@ export class UserController extends DefaultController {
         });
       }
     )
-    .put((req: Request, res: Response) => {
-      const userRepo = getRepository(User);
-      userRepo.findOne(req.params.id).then(
-        (user: User | undefined) => {
-          if (user) {
-            userRepo.update( user.id,
-              {firstName: req.body.firstName,
-               lastName: req.body.lastName,
-               isAdmin: req.body.isAdmin}
-            ).then(() => res.sendStatus(200));
+    .put(multer({
+      dest: Path.join(__dirname, "..", "public", "profilePhotos")
+        }).single("profilePhoto"),
+        (req: Request, res: Response) => {
+        const userRepo = getRepository(User);
+        userRepo.findOne(req.params.id).then(
+          (user: User | undefined) => {
+            if (user) {
+              user.firstName = req.body.firstName;
+              user.lastName = req.body.lastName;
+              user.password = req.body.password;
+              userRepo.save( user)
+              .then(() => res.sendStatus(200));
+            }
+            else {
+
+              console.log(req.params.id + " user not found");
+              res.sendStatus(404).send("user not found");
+            }
           }
-          else {
-            res.sendStatus(404);
-          }
-        }
-      )
+        )
     })
     .get((req: Request, res: Response) => {
       const userRepo = getRepository(User);
@@ -103,30 +108,6 @@ export class UserController extends DefaultController {
         });
       });
     });
-
-
-    router.route("/users/:id")
-    .put((req: Request, res: Response) => {
-      const userRepo = getRepository(User);
-
-      userRepo.findOne(req.params.id).then(
-        (user: User | undefined) => {
-          if (user) {
-            user.firstName = req.body.firstName;
-            user.lastName = req.body.lastName;
-            user.password = req.body.password;
-            userRepo.save( user)
-            .then(() => res.sendStatus(200));
-          }
-          else {
-
-            console.log(req.params.id + " user not found");
-            res.sendStatus(404).send("user not found");
-          }
-        }
-      )
-    })
-
 
     return router;
   }

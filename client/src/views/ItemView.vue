@@ -80,7 +80,7 @@
   export default class ItemView extends Vue {
     error: string | boolean = false;
     shopItem: iShopItem =
-      { id: 0, name: "", price: 0, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" };
+      { id: 0, name: "", price: 0, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), images: [] };
 
     mounted() {
       this.display();

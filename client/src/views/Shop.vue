@@ -30,6 +30,21 @@
               </a>
 
               <!-- Category options -->
+              <div class="panel-block" v-on:click="brandsShow = !brandsShow">
+                <span class="cat-name"> Brands </span>
+                <font-awesome-icon v-show="!brandsShow" icon="angle-down"/>
+                <font-awesome-icon v-show="brandsShow" icon="angle-up"/>
+              </div>
+
+              <a
+                class="panel-block menu-contents"
+                v-show="brandsShow"
+                v-for="brand in brands"
+                :key="brand.id"
+              >
+                <b-checkbox> {{ brand.name }} </b-checkbox>
+              </a>
+
               <div v-for="category in categories" :key="category.id">
                 <div class="panel-block" v-on:click="category.show = !category.show">
                   <span class="cat-name">
@@ -85,13 +100,16 @@
   import { Component, Prop, Vue } from "vue-property-decorator";
   import { iShopItem, iImg } from "../models/shopitem.interface";
   import { iMainCategory, iSubCategory } from "../models/category.interface";
+  import { iBrand } from "../models/brand.interface";
 
   @Component
   export default class Shop extends Vue {
     error: string | boolean = false;
     shopItems: iShopItem[] = [];
+    brands: iBrand[] = [];
     categories: iMainCategory[] = [];
     whichSort: number = 0;
+    brandsShow = false;
 
     // items: iShopItem[] = [
     //   { id: 789, name: 'M480 Mountain Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
@@ -129,12 +147,16 @@
           this.categories = response.data;
           this.$emit("success");
           console.log(this.categories);
+          return axios.get(APIConfig.buildUrl("/brands"));
+        })
+        .then((response: AxiosResponse) => {
+          this.brands = response.data;
+          this.$emit("success");
+          console.log(this.brands);
         })
         .catch((res: AxiosError) => {
             this.error = res.response && res.response.data.error;
         });
-
-        this.initCatShow();
     }
 
   sortby(): void {
@@ -161,12 +183,6 @@
         if (lside.price < rside.price) return 1;
         return 0;
       });
-    }
-  }
-
-  initCatShow() {
-    for (var i: number = 0; i < this.categories.length; i++) {
-      this.categories[i].show = false;
     }
   }
 }

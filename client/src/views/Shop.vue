@@ -18,7 +18,7 @@
               <a
                 class="panel-block menu-contents"
                 v-show="sorts.show"
-                v-for="option in sorts.subcategories"
+                v-for="option in sorts.subCategories"
                 :key="option.id"
                 v-on:change="sortby"
               >
@@ -41,7 +41,7 @@
                 <a
                   class="panel-block menu-contents"
                   v-show="category.show"
-                  v-for="sub in category.subcategories"
+                  v-for="sub in category.subCategories"
                   :key="sub.id"
                 >
                   <b-checkbox>{{ sub.name }}</b-checkbox>
@@ -103,9 +103,9 @@
     //   { id: 503, name: 'C600 Cruising Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
     //   { id: 716, name: 'C800 Cruising Bike', price: 1800, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" }
     // ];
-
+ 
     sorts: iMainCategory = { id: 1099, name: "Sorting Options", show: true,
-              subcategories: [
+              subCategories: [
                 { id: 1100, name: "Alphabetical" },
                 { id: 1101, name: "Price (Low to High)" },
                 { id: 1102, name: "Price (High to Low)" }]
@@ -120,10 +120,7 @@
         .get(APIConfig.buildUrl("/shopitems"))
         .then((response: AxiosResponse) => {
           this.shopItems = response.data;
-          // if(response.data[1].images[0].img)
-          //   this.image1 = response.data[1].images[0].img;
           console.log(this.shopItems);
-          // [0].images[0].img
           this.$emit("success");
           return axios.get(APIConfig.buildUrl("/maincategory"));
         })
@@ -135,6 +132,8 @@
         .catch((res: AxiosError) => {
             this.error = res.response && res.response.data.error;
         });
+
+        this.initCatShow();
     }
 
   sortby(): void {
@@ -161,6 +160,12 @@
         if (lside.price < rside.price) return 1;
         return 0;
       });
+    }
+  }
+
+  initCatShow() {
+    for (var i: number = 0; i < this.categories.length; i++) {
+      this.categories[i].show = false;
     }
   }
 }

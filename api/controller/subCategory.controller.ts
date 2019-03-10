@@ -36,7 +36,6 @@ export class SubCategoryController extends DefaultController {
         const subCat = new SubCategory();
         subCat.name = req.body.name;
         subCat.mainCategory = req.body.mainCategoryId;
-        subCat.shopitem = req.body.shopItemId;
         subCatRepo.save(subCat).then((savedCategory: SubCategory) => {
             res.status(200).send({ subCat });
           });

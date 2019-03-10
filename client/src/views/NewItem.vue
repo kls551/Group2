@@ -92,6 +92,8 @@
                 </div>
                 <div v-else></div>
 
+                {{selectedSubCategories}}
+
 
                 <div class="column">
                     <label class="label">Brand</label>

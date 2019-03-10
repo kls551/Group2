@@ -4,35 +4,6 @@
     <div class="container" style="margin-top: 25px; margin-bottom: 25px">
       <h2>Add New Item </h2>
     <div class="columns">
-
-      <!-- <div class="rightMargin column" style="margin-right: 0px"> -->
-        <!-- <figure class="image is-3by2">
-            <img alt="Map" src=https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Left_side_of_Flying_Pigeon.jpg/1200px-Left_side_of_Flying_Pigeon.jpg style="margin-top: 20px;">
-        </figure>
-
-        <div class="tile box" style="margin-top: 20px">
-          <div class="field" style="margin-top 20px;">
-            <div class="file" style="margin-left: 150px">
-              <label class="file-label">
-                <input 
-                type="file"
-                accept="image/*"
-                class="input-file file-input" 
-                name="resume">
-                <span class="file-cta">
-                  <span class="file-icon">
-                    <i class="fas fa-upload"></i>
-                  </span>
-                  <span class="file-label">
-                    Choose Image file…
-                  </span>
-                </span>
-              </label>
-            </div>
-          </div>
-        </div> -->
-
-      <!-- </div> -->
       
       <div class="rightMargin column">
       <br>

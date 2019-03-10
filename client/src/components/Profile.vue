@@ -44,12 +44,12 @@
           <input class="input" type="text" placeholder="last name" v-model="user.lastName">
         </div>
       </div>
-      <div class="field">
+      <!-- <div class="field">
         <label class="label">Email Address</label>
         <div class="control">
           <input class="input" type="text" placeholder="email address" v-model="user.emailAddress">
         </div>
-      </div>
+      </div> -->
       <div class="field">
         <label class="label">Password</label>
         <div class="control">

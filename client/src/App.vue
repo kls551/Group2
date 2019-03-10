@@ -7,7 +7,7 @@
         <router-link class="navbar-item" to="/">
           <img src="./assets/Foxcycle.png" width="150">
         </router-link> 
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="true">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
@@ -20,8 +20,6 @@
           <router-link class="navbar-item is-tab" to="/shop" exact-active-class="is-active">Shop</router-link>
           <router-link class="navbar-item is-tab" to="/services" exact-active-class="is-active">Services</router-link>
           <router-link class="navbar-item is-tab" to="/about" exact-active-class="is-active">About</router-link>
-          <!-- <router-link class="navbar-item is-tab" to="/trackorder" exact-active-class="is-active">Track Order</router-link>    -->
-          <!-- <router-link class="navbar-item is-tab" to="/todos" exact-active-class="is-active">my Todos</router-link>     -->
         </div>
 
         <!-- Log in, Checkout, Sign Up Tabs -->

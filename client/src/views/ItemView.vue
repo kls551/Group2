@@ -1,9 +1,9 @@
 <template>
   <div class="itemView">
-    <div class="columns">
+    <div class="columns" v-if="loaded">
       <div class="rightMargin column">
         <figure class="image is-3by2">
-          <img alt="Map" :src="shopItem.images[0].img" style="margin-top:150px">
+          <img alt="Map" :src="shopItem.images[0].img">
         </figure>
       </div>
 
@@ -56,27 +56,21 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+  import Vue from "vue";
+  import { Component, Prop } from "vue-property-decorator";
 
-import axios, { AxiosResponse, AxiosError } from "axios";
-import { APIConfig } from "@/utils/api.utils";
-import { iShopItem } from "@/models/shopitem.interface";
+  import axios, { AxiosResponse, AxiosError } from "axios";
+  import { APIConfig } from "@/utils/api.utils";
+  import { iShopItem, iImg } from "@/models/shopitem.interface";
+  import { } from "@/models/shopItem.interface";
 
-@Component
-export default class ItemView extends Vue {
-  error: string | boolean = false;
-  shopItem: iShopItem = {
-    id: 0,
-    name: "",
-    price: 0,
-    details: "",
-    quantity: 0,
-    category: "",
-    inStorePickup: false,
-    postedDate: new Date("2019-02-27"),
-    images: []
-  };
+  @Component
+  export default class ItemView extends Vue {
+    error: string | boolean = false;
+    loaded: boolean = false;
+    //someImages: iImg[] = [{id: 0, img: ""}];
+    shopItem: iShopItem | undefined;
+    //  { id: 0, name: "", price: 0, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), images: this.someImages };
 
   mounted() {
     this.display();
@@ -89,43 +83,49 @@ export default class ItemView extends Vue {
         this.shopItem = response.data;
         this.$emit("success");
         console.log(this.shopItem);
+        this.loaded = true;
       })
       .catch((res: AxiosError) => {
-        this.error = res.response && res.response.data.error;
+          this.error = res.response && res.response.data.error;
       });
+    }
   }
-}
 </script>
 
 <style scoped lang="scss">
-h1 {
-  margin-top: 90px;
-  font-size: 30px;
-  font-weight: bold;
-}
-hr {
-  background-color: black;
-  height: 2px;
-  border: 0;
-}
-h2 {
-  font-size: 22px;
-}
-.rightMargin {
-  margin-right: 80px;
-}
-.leftMargin {
-  margin-left: 80px;
-}
-.buttonStyle {
-  padding-top: 5px;
-  padding-right: 17px;
-  padding-bottom: 5px;
-  padding-left: 17px;
-  margin-bottom: 4px;
-}
-article {
-  height: 300px;
-  width: 400px;
-}
+  h1 {
+    margin-top: 90px;
+    font-size: 30px;
+    font-weight: bold;
+  }
+  hr {
+     background-color: black;
+     height: 2px;
+     border: 0;
+  }
+  h2 {
+    font-size: 22px;
+  }
+  .rightMargin {
+    margin-right:80px;
+  }
+  .leftMargin {
+    margin-left:80px;
+  }
+  .buttonStyle {
+    padding-top:5px;
+    padding-right:17px;
+    padding-bottom:5px;
+    padding-left:17px;
+    margin-bottom: 4px;
+  }
+  article {
+    height:300px;
+    width:400px;
+  }
+  .image {
+    width: 100%;
+    height: auto;
+    margin-top: 150px;
+  }
 </style>

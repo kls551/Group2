@@ -35,7 +35,8 @@
                   <span class="cat-name">
                     <b-checkbox>{{ category.name }}</b-checkbox>
                   </span>
-                  <font-awesome-icon icon="angle-down"/>
+                  <font-awesome-icon v-show="!category.show" icon="angle-down"/>
+                  <font-awesome-icon v-show="category.show" icon="angle-up"/>
                 </div>
 
                 <a
@@ -103,7 +104,7 @@
     //   { id: 503, name: 'C600 Cruising Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
     //   { id: 716, name: 'C800 Cruising Bike', price: 1800, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" }
     // ];
- 
+
     sorts: iMainCategory = { id: 1099, name: "Sorting Options", show: true,
               subCategories: [
                 { id: 1100, name: "Alphabetical" },

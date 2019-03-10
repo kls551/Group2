@@ -51,11 +51,19 @@
                         </div>
                             </div>
                             <div class="field">
-                                <label class="label is-small">Role</label>
+                                <!-- <label class="label is-small">Role</label>
                                 <div class="control">
-                                    <input class="input is-small" type="number" placeholder="e.g.0" v-model="editRole">
+                                    <input class="input is-small" type="number" placeholder="Admin: 1 Staff: 0 User: others" v-model="editRole">
+                                </div> -->
+                                <div class="select is-small">
+                                <select v-model="editRole">
+                                    <option disabled value="">select account type</option>
+                                    <option value=1>Admin</option>
+                                    <option value=0>Staff</option>
+                                    <option value=-1>User</option>
+                                </select>
                                 </div>
-                                </div>
+                            </div>
                                 <nav class="level">
                                     <div class="level-left">
                                         <button class="button is-success is-small" v-on:click="editItem(editIndex)">Update</button></div>

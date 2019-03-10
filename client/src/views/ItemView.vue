@@ -1,21 +1,10 @@
 <template>
   <div class="itemView">
-<<<<<<< HEAD
     <div class="columns" v-if="loaded">
-
       <div class="rightMargin column">
         <figure class="image is-3by2">
-            <!-- <img alt="Map" src="../assets/beach-cruiser.jpg"
-                    style="margin-top:150px"> -->
-            <img :src="shopItem.images[0].img">
-          </figure>
-=======
-    <div class="columns">
-      <div class="rightMargin column">
-        <figure class="image is-3by2">
-          <img alt="Map" :src="shopItem.images[0].img" style="margin-top:150px">
+          <img alt="Map" :src="shopItem.images[0].img">
         </figure>
->>>>>>> aa61344739d8a3ea13d5062a67362cf1cbfbfa65
       </div>
 
       <div class="leftMargin column">
@@ -67,14 +56,13 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { Component, Prop } from "vue-property-decorator";
+  import Vue from "vue";
+  import { Component, Prop } from "vue-property-decorator";
 
-<<<<<<< HEAD
   import axios, { AxiosResponse, AxiosError } from "axios";
   import { APIConfig } from "@/utils/api.utils";
-  import { iShopItem } from "@/models/shopitem.interface";
-  import { iImg } from "@/models/shopItem.interface";
+  import { iShopItem, iImg } from "@/models/shopitem.interface";
+  import { } from "@/models/shopItem.interface";
 
   @Component
   export default class ItemView extends Vue {
@@ -83,46 +71,11 @@ import { Component, Prop } from "vue-property-decorator";
     //someImages: iImg[] = [{id: 0, img: ""}];
     shopItem: iShopItem | undefined;
     //  { id: 0, name: "", price: 0, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), images: this.someImages };
-=======
-import axios, { AxiosResponse, AxiosError } from "axios";
-import { APIConfig } from "@/utils/api.utils";
-import { iShopItem } from "@/models/shopitem.interface";
-
-@Component
-export default class ItemView extends Vue {
-  error: string | boolean = false;
-  shopItem: iShopItem = {
-    id: 0,
-    name: "",
-    price: 0,
-    details: "",
-    quantity: 0,
-    category: "",
-    inStorePickup: false,
-    postedDate: new Date("2019-02-27"),
-    images: []
-  };
->>>>>>> aa61344739d8a3ea13d5062a67362cf1cbfbfa65
 
   mounted() {
     this.display();
   }
 
-<<<<<<< HEAD
-    display() {
-      axios
-        .get(APIConfig.buildUrl("/shopitems/" + this.$route.params.itemId))
-        .then((response: AxiosResponse) => {
-          this.shopItem = response.data;
-          this.$emit("success");
-          console.log(this.shopItem);
-          this.loaded = true;
-        })
-        .catch((res: AxiosError) => {
-            this.error = res.response && res.response.data.error;
-        });
-    }
-=======
   display() {
     axios
       .get(APIConfig.buildUrl("/shopitems/" + this.$route.params.itemId))
@@ -130,17 +83,16 @@ export default class ItemView extends Vue {
         this.shopItem = response.data;
         this.$emit("success");
         console.log(this.shopItem);
+        this.loaded = true;
       })
       .catch((res: AxiosError) => {
-        this.error = res.response && res.response.data.error;
+          this.error = res.response && res.response.data.error;
       });
->>>>>>> aa61344739d8a3ea13d5062a67362cf1cbfbfa65
+    }
   }
-}
 </script>
 
 <style scoped lang="scss">
-<<<<<<< HEAD
   h1 {
     margin-top: 90px;
     font-size: 30px;
@@ -174,37 +126,6 @@ export default class ItemView extends Vue {
   .image {
     width: 100%;
     height: auto;
+    margin-top: 150px;
   }
-=======
-h1 {
-  margin-top: 90px;
-  font-size: 30px;
-  font-weight: bold;
-}
-hr {
-  background-color: black;
-  height: 2px;
-  border: 0;
-}
-h2 {
-  font-size: 22px;
-}
-.rightMargin {
-  margin-right: 80px;
-}
-.leftMargin {
-  margin-left: 80px;
-}
-.buttonStyle {
-  padding-top: 5px;
-  padding-right: 17px;
-  padding-bottom: 5px;
-  padding-left: 17px;
-  margin-bottom: 4px;
-}
-article {
-  height: 300px;
-  width: 400px;
-}
->>>>>>> aa61344739d8a3ea13d5062a67362cf1cbfbfa65
 </style>

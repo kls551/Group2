@@ -6,13 +6,8 @@
       <div class="navbar-brand">
         <router-link class="navbar-item" to="/">
           <img src="./assets/Foxcycle.png" width="150">
-<<<<<<< HEAD
         </router-link>
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-=======
-        </router-link> 
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="true">
->>>>>>> aa61344739d8a3ea13d5062a67362cf1cbfbfa65
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>

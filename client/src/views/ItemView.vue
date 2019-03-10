@@ -1,12 +1,10 @@
 <template>
   <div class="itemView">
     <div class="columns">
-
       <div class="rightMargin column">
         <figure class="image is-3by2">
-            <img alt="Map" src="../assets/beach-cruiser.jpg"
-                    style="margin-top:150px">
-          </figure>
+          <img alt="Map" :src="shopItem.images[0].img" style="margin-top:150px">
+        </figure>
       </div>
 
       <div class="leftMargin column">
@@ -29,18 +27,10 @@
               </div>
               <div class="dropdown-menu" id="dropdown-menu" role="menu">
                 <div class="dropdown-content">
-                  <a href="#" class="dropdown-item">
-                    1
-                  </a>
-                  <a class="dropdown-item">
-                    2
-                  </a>
-                  <a href="#" class="dropdown-item is-active">
-                    3
-                  </a>
-                  <a href="#" class="dropdown-item">
-                    4
-                  </a>
+                  <a href="#" class="dropdown-item">1</a>
+                  <a class="dropdown-item">2</a>
+                  <a href="#" class="dropdown-item is-active">3</a>
+                  <a href="#" class="dropdown-item">4</a>
                 </div>
               </div>
             </div>
@@ -58,47 +48,53 @@
 
         <br>
         <article class="message">
-          <div class="message-body">
-            {{ shopItem.details }}
-          </div>
+          <div class="message-body">{{ shopItem.details }}</div>
         </article>
-
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-  import Vue from "vue";
-  import { Component, Prop } from "vue-property-decorator";
+import Vue from "vue";
+import { Component, Prop } from "vue-property-decorator";
 
-  import axios, { AxiosResponse, AxiosError } from "axios";
-  import { APIConfig } from "@/utils/api.utils";
-  import { iShopItem } from "@/models/shopitem.interface";
+import axios, { AxiosResponse, AxiosError } from "axios";
+import { APIConfig } from "@/utils/api.utils";
+import { iShopItem } from "@/models/shopitem.interface";
 
-  @Component
-  export default class ItemView extends Vue {
-    error: string | boolean = false;
-    shopItem: iShopItem =
-      { id: 0, name: "", price: 0, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" };
+@Component
+export default class ItemView extends Vue {
+  error: string | boolean = false;
+  shopItem: iShopItem = {
+    id: 0,
+    name: "",
+    price: 0,
+    details: "",
+    quantity: 0,
+    category: "",
+    inStorePickup: false,
+    postedDate: new Date("2019-02-27"),
+    images: []
+  };
 
-    mounted() {
-      this.display();
-    }
-
-    display() {
-      axios
-        .get(APIConfig.buildUrl("/shopitems/" + this.$route.params.itemId))
-        .then((response: AxiosResponse) => {
-          this.shopItem = response.data;
-          this.$emit("success");
-          console.log(this.shopItem);
-        })
-        .catch((res: AxiosError) => {
-            this.error = res.response && res.response.data.error;
-        });
-    }
+  mounted() {
+    this.display();
   }
+
+  display() {
+    axios
+      .get(APIConfig.buildUrl("/shopitems/" + this.$route.params.itemId))
+      .then((response: AxiosResponse) => {
+        this.shopItem = response.data;
+        this.$emit("success");
+        console.log(this.shopItem);
+      })
+      .catch((res: AxiosError) => {
+        this.error = res.response && res.response.data.error;
+      });
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -108,28 +104,28 @@ h1 {
   font-weight: bold;
 }
 hr {
-   background-color: black;
-   height: 2px;
-   border: 0;
+  background-color: black;
+  height: 2px;
+  border: 0;
 }
 h2 {
   font-size: 22px;
 }
 .rightMargin {
-  margin-right:80px;
+  margin-right: 80px;
 }
 .leftMargin {
-  margin-left:80px;
+  margin-left: 80px;
 }
 .buttonStyle {
-  padding-top:5px;
-  padding-right:17px;
-  padding-bottom:5px;
-  padding-left:17px;
+  padding-top: 5px;
+  padding-right: 17px;
+  padding-bottom: 5px;
+  padding-left: 17px;
   margin-bottom: 4px;
 }
 article {
-  height:300px;
-  width:400px;
+  height: 300px;
+  width: 400px;
 }
 </style>

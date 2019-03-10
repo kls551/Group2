@@ -41,8 +41,16 @@
             </div>
             <div class="field" v-if="isAd">
               <label class="label">Type</label>
-              <div class="control">
+              <!-- <div class="control">
                 <input class="input" type="text" placeholder="Type" v-model="signup.isAdmin"/>
+              </div> -->
+              <div class="select is-small">
+              <select v-model="signup.isAdmin">
+                  <option disabled value="">select account type</option>
+                  <option value=1>Admin</option>
+                  <option value=0>Staff</option>
+                  <option value=-1>User</option>
+              </select>
               </div>
             </div>
           </form>

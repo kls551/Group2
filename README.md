@@ -44,9 +44,20 @@ open browser and go to http://localhost:8080/
 #### to add admin 
 - create an account
 - set up a query to update isAdmin=1
-
-to set up staff
+```
+update dev.user set isAdmin=1 where email="<email here>"`
+```
+#### to set up staff
 - create an account
 - set up a query to update isAdmin=0
+```
+update dev.user set isAdmin=0 where firstName="<email here>"`
+```
 
-update dev.user set isAdmin=1 where id=(insert your user id)
+## To setup About page initially
+- create this query
+```
+insert into about values
+(1, "313 Madonna Road, San Luis Obispo, CA 93401", "foxcycle@cycle.come",
+"415-344-2134", "", "10AM-8PM", "10AM-8PM","10AM-8PM","10AM-8PM","10AM-8PM","10AM-8PM","10AM-8PM")
+```

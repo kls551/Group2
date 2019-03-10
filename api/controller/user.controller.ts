@@ -30,7 +30,7 @@ export class UserController extends DefaultController {
         user.isAdmin = isAdmin;
         userRepo.save(user).then(
           createdUser => {
-            res.status(200).send({ createdUser });
+            res.status(200).send(createdUser);
           },
           (reason: any) => {
             res.status(500).send({ reason: "The email was not unique" });

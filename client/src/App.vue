@@ -6,16 +6,16 @@
       <div class="navbar-brand">
         <router-link class="navbar-item" to="/">
           <img src="./assets/Foxcycle.png" width="150">
-        </router-link> 
+        </router-link>
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="true">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
         </a>
       </div>
-      
+
       <div class="navbar-menu">
-        <div class="navbar-start">  
+        <div class="navbar-start">
           <router-link class="navbar-item is-tab" to="/" exact-active-class="is-active">Home</router-link>
           <router-link class="navbar-item is-tab" to="/shop" exact-active-class="is-active">Shop</router-link>
           <router-link class="navbar-item is-tab" to="/services" exact-active-class="is-active">Services</router-link>
@@ -59,7 +59,7 @@
           </ul>
         </div>
       </div>
-      
+
     <router-view class="container"/>
     <Signup
       v-bind:is-showing="showSignup"
@@ -71,11 +71,13 @@
       v-on:success="successCheckout()"
       v-on:cancel="cancelCheckout()"
     />
+    <!-- This doesn't seem to be doing anything, just sending a warning in console
     <trackorder
       v-bind:is-showing="showTrackOrder"
       v-on:success="successtrack()"
       v-on:cancel="canceltrack()"
     />
+    -->
     <Login v-bind:is-showing="showLogin" v-on:success="successLogin()" v-on:cancel="cancelLogin()"/>
   </div>
 </template>

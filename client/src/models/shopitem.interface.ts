@@ -7,5 +7,10 @@ export interface iShopItem {
   category: string;
   inStorePickup: boolean;
   postedDate: Date;
-  images: String[];
+  images: iImg[];
+}
+
+export interface iImg {
+  id: number;
+  img: string;
 }

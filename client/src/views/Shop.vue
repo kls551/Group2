@@ -46,14 +46,6 @@
       <!-- Shop layout -->
       <div class="tile is-child columns is-multiline shop-layout">
         <div v-for="item in shopItems" :key="item.id" class="column is-narrow">
-          <!-- <div class="card" onclick="location.href='shop/itemview';" style="cursor: pointer;">
-            <figure class="image is-128x128 center">
-            </figure>
-            <ul class="product">
-              <li class="item-name is-size-5"> {{ item.name }} </li>
-              <li class="item-price"> ${{ item.price }} </li>
-            </ul>
-          </div> -->
           <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
             <div class="card">
               <figure class="image is-128x128 center">
@@ -77,9 +69,8 @@
   import axios, { AxiosResponse, AxiosError } from "axios";
   import { APIConfig } from "../utils/api.utils";
   import { Component, Prop, Vue } from "vue-property-decorator";
-  import { iShopItem } from "../models/shopitem.interface";
-  import { iMainCategory } from "../models/category.interface";
-  import { iSubCategory } from "../models/category.interface";
+  import { iShopItem, iImg } from "../models/shopitem.interface";
+  import { iMainCategory, iSubCategory } from "../models/category.interface";
 
   @Component
   export default class Shop extends Vue {
@@ -99,7 +90,6 @@
     //   { id: 503, name: 'C600 Cruising Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
     //   { id: 716, name: 'C800 Cruising Bike', price: 1800, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" }
     // ];
-    image : string[] = [];
 
     sorts: iMainCategory = { id: 1099, name: "Sorting Options", show: true,
               subcategories: [
@@ -119,7 +109,8 @@
           this.shopItems = response.data;
           // if(response.data[1].images[0].img)
           //   this.image1 = response.data[1].images[0].img;
-          console.log(this.shopItems[0].images[0].img);
+          console.log(this.shopItems);
+          // [0].images[0].img
           this.$emit("success");
           return axios.get(APIConfig.buildUrl("/maincategory"));
         })

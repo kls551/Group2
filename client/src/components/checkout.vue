@@ -123,7 +123,7 @@ export default class order extends Vue {
     this.checkout.user = this.$store.state.user;
     console.log('hello');
     axios
-      .post(APIConfig.buildUrl("/checkout"), {
+      .post(APIConfig.buildUrl("/orders"), {
         ...this.checkout
       }, {headers: {token: this.$store.state.userToken}})
       .then((response: AxiosResponse<iOrder>) => {

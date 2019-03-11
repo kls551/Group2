@@ -18,6 +18,7 @@ export class Server {
   protected buildServer(): Promise<express.Application> {
     return DBConnection.getConnection().then(() => {
       const app: express.Application = express();
+      module.exports = app;
 
       app.use(cors());
       app.use(express.json());

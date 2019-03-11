@@ -172,7 +172,7 @@ export default class subCategory extends Vue {
     saveMainCat() {
         this.getMainName(this.mainCategoryId);
         console.log(this.mainCategoryName);
-        debugger;
+        // debugger;
         this.getSubCategories(this.mainCategoryId);
     }
 
@@ -183,14 +183,14 @@ export default class subCategory extends Vue {
             mainCategoryId: mainCatId,
         })
         .then((response: AxiosResponse) => {
-            debugger; 
+            // debugger; 
             this.getSubCategories(this.mainCategoryId);
             this.subCategoryName = "";
             this.$emit("success");
             //this.getCategories();
         })
         .catch((errorResponse: any) => {
-            debugger;
+            // debugger;
             this.error = errorResponse.response.data.reason;
         });
     }

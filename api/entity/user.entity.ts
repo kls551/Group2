@@ -1,4 +1,4 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn, OneToMany } from "typeorm";
+import { Column, Entity, Index, PrimaryGeneratedColumn, OneToMany, OneToOne , JoinColumn} from "typeorm";
 import { Order, ShopItem } from "./";
 
 @Entity()
@@ -31,4 +31,7 @@ export class User {
   @OneToMany(type => ShopItem, (shopitem) => shopitem.id)
   public cart!: ShopItem[];
 
+  @OneToOne((type) => User, {cascade: true})
+  @JoinColumn()
+  public user!: User;
 }

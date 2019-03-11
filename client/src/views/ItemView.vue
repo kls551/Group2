@@ -1,23 +1,23 @@
 <template>
   <div class="itemView">
     <div class="columns" v-if="loaded">
-          <div class="card-content">
-            <div class="card-carousel">
-              <figure class="image is-48x48">
-                <img :src="currentImage" alt>
-              </figure>
-              <div class="thumbnails" v-if="!isOnlyOne">
-                <div
-                  v-for="(image, index) in  shopItem.images"
-                  :key="image.id"
-                  :class="['thumbnail-image image', (activeImage == index) ? 'active' : '']"
-                  v-on:click="activateImage(index)"
-                >
-                  <img :src="image.img">
-                </div>
-              </div>
+      <div class="card-content">
+        <div class="card-carousel">
+          <figure class="image is-48x48">
+            <img :src="currentImage" alt>
+          </figure>
+          <div class="thumbnails" v-if="!isOnlyOne">
+            <div
+              v-for="(image, index) in  shopItem.images"
+              :key="image.id"
+              :class="['thumbnail-image image', (activeImage == index) ? 'active' : '']"
+              v-on:click="activateImage(index)"
+            >
+              <img :src="image.img">
             </div>
           </div>
+        </div>
+      </div>
 
       <div class="leftMargin column">
         <h1>{{ shopItem.name }}</h1>
@@ -51,7 +51,7 @@
 
         <br>
         <div class="buttons has-addons">
-          <span class="button buttonStyle">Add To Cart</span>
+          <span class="button buttonStyle" v-on:click="addToCart(shopItem)">Add To Cart</span>
           <span class="button buttonStyle">Buy Now</span>
         </div>
 
@@ -106,6 +106,37 @@ export default class ItemView extends Vue {
       });
   }
 
+  addToCart(item: iShopItem) {
+    const itemId = item && item.id;
+    if (!this.$store.state.cart) {
+      axios
+        .post(APIConfig.buildUrl("/cart"), {
+          userId: this.$store.state.user.id,
+          itemId: itemId
+        })
+        .then((cart: AxiosResponse) => {
+          this.$store.state.cart = cart;
+        })
+        .catch((res: AxiosError) => {
+          this.error = res.response && res.response.data.error;
+        });
+    } else {
+      const cartId = this.$store.state.cart && this.$store.state.cart.id;
+      axios
+        .put(APIConfig.buildUrl("/cart/" + cartId), {
+          userId: this.$store.state.user.id,
+          itemId: itemId
+        })
+        .then((cart: AxiosResponse) => {
+          console.log(" add new item ", cart);
+          this.$store.state.cart = cart;
+        })
+        .catch((res: AxiosError) => {
+          this.error = res.response && res.response.data.error;
+        });
+    }
+  }
+
   activateImage(imageIndex) {
     this.activeImage = imageIndex;
     this.currentImage = this.shopItem.images[imageIndex].img
@@ -114,10 +145,8 @@ export default class ItemView extends Vue {
   }
 
   get isOnlyOne(): boolean {
-    if( this.shopItem && (this.shopItem.images.length === 1))
-      return true;
-    else
-      return false;
+    if (this.shopItem && this.shopItem.images.length === 1) return true;
+    else return false;
   }
 }
 </script>

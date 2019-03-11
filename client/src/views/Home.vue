@@ -59,7 +59,7 @@
 
         <div class="column">
             <div class="box">
-                <h2>Announcments</h2>
+                <h2>Announcements</h2>
                 <article class="message is-warning" v-for="(ann, index) in announcements" v-bind:key="index">
                     <div class="message-header">
                         <p>{{ann.title}}</p>

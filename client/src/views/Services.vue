@@ -69,7 +69,7 @@ import  { Service } from "../../../api/entity";
 })
 
 export default class Services extends Vue{
-    @Prop(Boolean) isShowing: boolean = true;
+    // @Prop(Boolean) isShowing: boolean = true;
     public services: Service[] = [];
     public display = true;
     mounted() {

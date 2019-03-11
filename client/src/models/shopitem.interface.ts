@@ -1,3 +1,5 @@
+
+
 export interface iShopItem {
   id: number;
   name: string;
@@ -8,6 +10,7 @@ export interface iShopItem {
   inStorePickup: boolean;
   postedDate: Date;
   images: iImg[];
+  quant: number;
 }
 
 export interface iImg {

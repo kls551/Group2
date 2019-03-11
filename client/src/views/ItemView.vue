@@ -39,7 +39,7 @@
 
         <br>
         <div class="buttons has-addons">
-          <span class="button buttonStyle">Add To Cart</span>
+          <span class="button buttonStyle" v-on:click="addToCart(shopItem)">Add To Cart</span>
           <span class="button buttonStyle">Buy Now</span>
         </div>
 
@@ -62,7 +62,7 @@
   import axios, { AxiosResponse, AxiosError } from "axios";
   import { APIConfig } from "@/utils/api.utils";
   import { iShopItem, iImg } from "@/models/shopitem.interface";
-  import { } from "@/models/shopItem.interface";
+  import { iCart } from "@/models/cart.interface";
 
   @Component
   export default class ItemView extends Vue {
@@ -72,24 +72,60 @@
     shopItem: iShopItem | undefined;
     //  { id: 0, name: "", price: 0, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), images: this.someImages };
 
-  mounted() {
-    this.display();
+    mounted() {
+      this.display();
+    }
+
+    display() {
+      axios
+        .get(APIConfig.buildUrl("/shopitems/" + this.$route.params.itemId))
+        .then((response: AxiosResponse) => {
+          this.shopItem = response.data;
+          this.$emit("success");
+          console.log(this.shopItem);
+          this.loaded = true;
+        })
+        .catch((res: AxiosError) => {
+            this.error = res.response && res.response.data.error;
+        });
+      }
+
+
+    addToCart(item: iShopItem) {
+      const itemId = item && item.id;
+      if (!this.$store.state.cart) {
+        axios
+          .post(APIConfig.buildUrl("/cart"), {
+            userId : this.$store.state.user.id,
+            itemId : itemId,
+          })
+          .then((cart : AxiosResponse) => {
+            this.$store.state.cart = cart;
+          })
+          .catch ((res : AxiosError) => {
+            this.error = res.response && res.response.data.error;
+          });
+      }
+      else {
+        const cartId = this.$store.state.cart && this.$store.state.cart.id;
+        axios
+          .put(APIConfig.buildUrl("/cart/" + cartId), {
+            userId : this.$store.state.user.id,
+            itemId : itemId,
+          })
+          .then((cart : AxiosResponse) => {
+            console.log(" add new item ", cart);
+            this.$store.state.cart = cart;
+          })
+          .catch ((res : AxiosError) => {
+            this.error = res.response && res.response.data.error;
+          });
+      }
+    }
+
   }
 
-  display() {
-    axios
-      .get(APIConfig.buildUrl("/shopitems/" + this.$route.params.itemId))
-      .then((response: AxiosResponse) => {
-        this.shopItem = response.data;
-        this.$emit("success");
-        console.log(this.shopItem);
-        this.loaded = true;
-      })
-      .catch((res: AxiosError) => {
-          this.error = res.response && res.response.data.error;
-      });
-    }
-  }
+  
 </script>
 
 <style scoped lang="scss">

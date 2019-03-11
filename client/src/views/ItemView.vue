@@ -137,9 +137,9 @@ export default class ItemView extends Vue {
     }
   }
 
-  activateImage(imageIndex) {
+  activateImage(imageIndex: number) {
     this.activeImage = imageIndex;
-    this.currentImage = this.shopItem.images[imageIndex].img
+    this.currentImage = this.shopItem
       ? this.shopItem.images[imageIndex].img
       : "";
   }

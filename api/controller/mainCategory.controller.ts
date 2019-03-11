@@ -14,15 +14,16 @@ export class MainCategoryController extends DefaultController {
     router.route("/maincategory")
     .get((req: Request, res: Response) => {
         const mainCatRepo = getRepository(MainCategory);
-        mainCatRepo.find().then((categories: MainCategory[]) => {
+        mainCatRepo.find({relations: ["subCategories"]}).then((categories: MainCategory[]) => {
           res.status(200).send(categories);
         });
       })
-    
+
     .post((req: Request, res: Response) => {
       const mainCatRepo = getRepository(MainCategory);
       const mainCat = new MainCategory();
       mainCat.name = req.body.name;
+      mainCat.show = false;
       mainCatRepo.save(mainCat).then((savedCategory: MainCategory) => {
           res.status(200).send({ mainCat });
         });
@@ -54,7 +55,7 @@ export class MainCategoryController extends DefaultController {
           });
         });
       });
-    
+
     return router;
   }
 }

@@ -26,6 +26,7 @@ describe("/users", () => {
     myApp = await new Server().getMyApp();
     connection = await DBConnection.getConnection();
     await connection.synchronize();
+    await DBUtils.clearDB();
   });
 
   beforeEach(async () => {
@@ -33,6 +34,7 @@ describe("/users", () => {
   });
 
   afterAll(async () => {
+    // await DBUtils.clearDB();
     DBConnection.closeConnection();
   });
 
@@ -52,15 +54,23 @@ describe("/users", () => {
           .get("/users")
           .expect(200)
           .then((response: request.Response) => {
+            console.log("user ", response.body);
             expect(
-              response.body && response.body.length
+
+              response.body.user && response.body.user.length
             ).toEqual(1);
-            expect(response.body[0].emailAddress).toEqual(email);
+            expect(response.body.user[0].emailAddress).toEqual(email);
+          
+            //  response.body && response.body.length
+            //).toEqual(1);
+            //expect(response.body[0].emailAddress).toEqual(email);
+
             done();
           });
       });
     });
   });
+
   describe("POST '/'", () => {
     test("should create a user", done => {
       const email = `test${new Date().getTime()}@test.com`;

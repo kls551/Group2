@@ -1,4 +1,5 @@
-  export interface iOrder {
+import  { ShopItem } from "../../../api/entity";
+export interface iOrder {
   id: number;
   userId: number;
   complete: boolean;
@@ -10,4 +11,5 @@
   city: string;
   pickup: boolean;
   trackingNum: string;
+  items: ShopItem[];
 }

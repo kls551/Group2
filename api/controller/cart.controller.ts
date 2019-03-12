@@ -6,6 +6,7 @@ import express from "express";
 import { Session, ShopItem, User, Cart } from "../entity";
 
 import { getRepository, Connection } from "typeorm";
+import { readSync } from "fs";
 
 export class CartController extends DefaultController {
   protected initializeRoutes(): express.Router {
@@ -27,15 +28,39 @@ export class CartController extends DefaultController {
             const newCart = new Cart();
             newCart.items = [item]; 
             newCart.user = user;
-            // newCart.items = null;
-            // Connection.manager.save(newCart);
-            console.log("new Cart ", newCart);
+  
             cartRepo
             .save(newCart)
             .then((savedcart : Cart | any) => {
                 console.log("saved Cart ", savedcart);
                 res.status(200).send({newCart : savedcart});
             });
+          });
+        }
+      });
+    });
+
+    router.route("/cart/:userId")
+    .delete((req: Request, res: Response) => {
+      const userId = req.params.userId;
+      const userRepo = getRepository(User);    
+      const cartRepo = getRepository(Cart);
+
+      userRepo.findOne(userId, {relations: ["cart"]}).then((user: User | any) => { 
+        if (user) {
+          const cartId = user.cartId;
+          
+          cartRepo
+          .findOne(cartId)
+          .then((foundCart : Cart | any) => {
+            if (foundCart) {
+              cartRepo.delete(foundCart)
+              .then((result) => res.status(200).send("cart deleted"))
+              .catch(err => res.status(400).send("cannot delete cart"))
+            }
+            else {
+              res.status(404).send("cart not found");
+            }
           });
         }
       });
@@ -51,30 +76,15 @@ export class CartController extends DefaultController {
       const cartId = req.params.cartId;
       const cartRepo = getRepository(Cart);
      
-      // check for the right user 
-      // cartRepo
-      //   .findOneOrFail(cartId, {relations: ["user"]})
-      //   .then((foundCart : Cart) => {
-      //     console.log("query id  ", userId);
-      //     console.log(" ----- user ", foundCart.user);
-      //     console.log(" ----- id ", foundCart.user.id);
-      //     if (foundCart.user.id === userId) {
-            cartRepo
-            .findOneOrFail(cartId, {relations: ["items"]})
-            .then((foundCart : Cart) => {
-              if (foundCart) {
-                console.log("found cart ", foundCart);
-                res.status(200).send(foundCart.items);
-              }
-              else 
-                res.status(404).send("Cart not found");
-            });
-          // }
-        //   else {
-        //     res.status(403).send("Permission denied");
-        //   }
-        // })
-
+      cartRepo
+      .findOneOrFail(cartId, {relations: ["items"]})
+      .then((foundCart : Cart) => {
+        if (foundCart) {
+          res.status(200).send(foundCart.items);
+        }
+        else 
+          res.status(404).send("Cart not found");
+      });
     })
     .put((req: Request, res: Response) => {
       // checking for the right user 
@@ -106,20 +116,20 @@ export class CartController extends DefaultController {
         else 
           res.status(404).send("Cart not found");
       }); 
-    })
-    .delete((req: Request, res: Response) => {
-      const cartRepo = getRepository(Cart);
-      const itemRepo = getRepository(ShopItem);
-      const cartId = req.params.cartId;
-
-      cartRepo
-      .findOneOrFail(cartId, {relations: ["items"]})
-      .then((foundCart : Cart) => {
-          cartRepo
-          .delete(foundCart)
-          .then((result) => { res.status(200).send("sucess deleted cart ") });
-      });
     });
+    // .delete((req: Request, res: Response) => {
+    //   const cartRepo = getRepository(Cart);
+    //   const itemRepo = getRepository(ShopItem);
+    //   const cartId = req.params.cartId;
+
+    //   cartRepo
+    //   .findOneOrFail(cartId, {relations: ["items"]})
+    //   .then((foundCart : Cart) => {
+    //       cartRepo
+    //       .delete(foundCart)
+    //       .then((result) => { res.status(200).send("sucess deleted cart ") });
+    //   });
+    // });
 
     return router;
     }

@@ -21,9 +21,6 @@
             <div class="tile box is-parent is-vertical">
               <div class="title is-4 tile is-children"> {{ service.serviceName }} </div>
               <div class="tile is-children">
-                <figure class="image is-128x128">
-                  <img src="https://bulma.io/images/placeholders/128x128.png">
-                </figure>
                 <div class="tile is-1"> <br> </div>
                 <div class = "tile columns is-10 ">
                   <div class="column  media-content"> 

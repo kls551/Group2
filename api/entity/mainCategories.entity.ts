@@ -11,10 +11,13 @@ export class MainCategory {
   @Column()
   public name!: string;
 
+  @Column()
+  public show!: boolean;
+
   @OneToMany(type => SubCategory, subCategory => subCategory.mainCategory)
   public subCategories!: SubCategory[];
 
   @OneToMany(type => ShopItem, item => item.id)
   public shop_item!: ShopItem;
-  
+
 }

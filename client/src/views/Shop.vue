@@ -18,7 +18,7 @@
               <a
                 class="panel-block menu-contents"
                 v-show="sorts.show"
-                v-for="option in sorts.subcategories"
+                v-for="option in sorts.subCategories"
                 :key="option.id"
                 v-on:change="sortby"
               >
@@ -30,18 +30,34 @@
               </a>
 
               <!-- Category options -->
+              <div class="panel-block" v-on:click="brandsShow = !brandsShow">
+                <span class="cat-name"> Brands </span>
+                <font-awesome-icon v-show="!brandsShow" icon="angle-down"/>
+                <font-awesome-icon v-show="brandsShow" icon="angle-up"/>
+              </div>
+
+              <a
+                class="panel-block menu-contents"
+                v-show="brandsShow"
+                v-for="brand in brands"
+                :key="brand.id"
+              >
+                <b-checkbox> {{ brand.name }} </b-checkbox>
+              </a>
+
               <div v-for="category in categories" :key="category.id">
                 <div class="panel-block" v-on:click="category.show = !category.show">
                   <span class="cat-name">
                     <b-checkbox>{{ category.name }}</b-checkbox>
                   </span>
-                  <font-awesome-icon icon="angle-down"/>
+                  <font-awesome-icon v-show="!category.show" icon="angle-down"/>
+                  <font-awesome-icon v-show="category.show" icon="angle-up"/>
                 </div>
 
                 <a
                   class="panel-block menu-contents"
                   v-show="category.show"
-                  v-for="sub in category.subcategories"
+                  v-for="sub in category.subCategories"
                   :key="sub.id"
                 >
                   <b-checkbox>{{ sub.name }}</b-checkbox>
@@ -84,13 +100,16 @@
   import { Component, Prop, Vue } from "vue-property-decorator";
   import { iShopItem, iImg } from "../models/shopitem.interface";
   import { iMainCategory, iSubCategory } from "../models/category.interface";
+  import { iBrand } from "../models/brand.interface";
 
   @Component
   export default class Shop extends Vue {
     error: string | boolean = false;
     shopItems: iShopItem[] = [];
+    brands: iBrand[] = [];
     categories: iMainCategory[] = [];
     whichSort: number = 0;
+    brandsShow = false;
 
     // items: iShopItem[] = [
     //   { id: 789, name: 'M480 Mountain Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
@@ -105,7 +124,7 @@
     // ];
 
     sorts: iMainCategory = { id: 1099, name: "Sorting Options", show: true,
-              subcategories: [
+              subCategories: [
                 { id: 1100, name: "Alphabetical" },
                 { id: 1101, name: "Price (Low to High)" },
                 { id: 1102, name: "Price (High to Low)" }]
@@ -120,10 +139,7 @@
         .get(APIConfig.buildUrl("/shopitems"))
         .then((response: AxiosResponse) => {
           this.shopItems = response.data;
-          // if(response.data[1].images[0].img)
-          //   this.image1 = response.data[1].images[0].img;
           console.log(this.shopItems);
-          // [0].images[0].img
           this.$emit("success");
           return axios.get(APIConfig.buildUrl("/maincategory"));
         })
@@ -131,6 +147,12 @@
           this.categories = response.data;
           this.$emit("success");
           console.log(this.categories);
+          return axios.get(APIConfig.buildUrl("/brands"));
+        })
+        .then((response: AxiosResponse) => {
+          this.brands = response.data;
+          this.$emit("success");
+          console.log(this.brands);
         })
         .catch((res: AxiosError) => {
             this.error = res.response && res.response.data.error;

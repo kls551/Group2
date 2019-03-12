@@ -34,6 +34,7 @@
             <label class="label">Price</label>
             <div class="control">
             <input class="input" placeholder="price" v-model="service.price">
+            <p v-if="isNaN(service.price)" class="help is-danger">Price must be a number</p>
             </div>
         </div>
 

@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
 import MyProfile from "./views/MyProfile.vue";
+// import OrderPlaced from "./views/OrderPlaced.vue";
 
 Vue.use(Router);
 
@@ -129,6 +130,12 @@ export default new Router({
       name: "cart",
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/Cart.vue")
+    },
+    {
+      path:"/order-placed",
+      name: "order-placed",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/OrderPlaced.vue")
     },
     {
       path: "/owner/manage-brands",

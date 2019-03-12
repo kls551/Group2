@@ -21,6 +21,7 @@
                 <div class="tile is-child box">
                     <span> <h3> Service Name </h3> </span>
                     <input type="text input" class="input is-warning is-small" placeholder="Service Name" v-model="service.serviceName">
+                    <p v-if="service.serviceName <= 0" class="help is-danger">Service name is required</p>
                 </div>
                 <div class="tile is-child box">
                     <span> <h3> Description </h3> </span>
@@ -29,43 +30,11 @@
                 <div class="tile is-child box">
                     <span> <h3> Price </h3> </span>
                     <input type="text input" class="input is-warning is-small" placeholder="Price" v-model="service.price">
+                    <p v-if="isNaN(service.price)" class="help is-danger">Price must be a number</p>
                 </div>
 
-                <!-- upload picture -->
-                <div class="tile is-child box">
-                    <form enctype="multipart/form-data" novalidate>
-                        <div class="servicePhoto">
-                        <img :src="serviceUrl"/>
-                        </div>
-                        <div class="file">
-                        <label class="file-label">
-                            <input
-                            type="file"
-                            name="servicePhoto"
-                            :disabled="isSaving"
-                            v-on:change="filesChanged"
-                            accept="image/*"
-                            class="input-file file-input"
-                            >
-                            <span class="file-cta">
-                            <span class="file-icon">
-                                <font-awesome-icon icon="upload"/> <!-- using icon -->
-                            </span>
-                            <span class="file-label">
-                                Choose an image…
-                            </span>
-                            </span>
-                        </label>
-                        <p v-if="isSaving">Uploading file...</p>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Submit, Preview, cancel buttons -->
+                <!-- Submit and Cshancel buttons -->
                 <div class="field is-grouped">
-                    <div class="control">
-                        <button class="button is-link">Preview</button>
-                    </div>
                     <div class="control">
                         <button class="button is-success" type="submit" v-on:click="success()">Submit</button>
                     </div>
@@ -101,6 +70,7 @@ const STATUS_FAILED = 3;
 
 export default class OwnerCreateServices extends Vue{
     @Prop(Boolean) isShowing: boolean = false;
+    @Prop(Boolean) isSaving: boolean = false;
     service: addServiceForm = {
         serviceName: "",
         description: "",

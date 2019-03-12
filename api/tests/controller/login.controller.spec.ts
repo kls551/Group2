@@ -20,6 +20,7 @@ describe("/login", () => {
   });
 
   afterAll(async () => {
+    await DBUtils.clearDB();
     await DBConnection.closeConnection();
   });
 

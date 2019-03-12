@@ -5,6 +5,7 @@
         <div class="profilePhoto">
           <img :src="profileUrl"/>
         </div>
+        
         <div class="file">
           <label class="file-label">
             <input

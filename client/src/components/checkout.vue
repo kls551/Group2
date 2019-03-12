@@ -92,11 +92,14 @@
 
 
 <script lang="ts">
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 import { APIConfig } from "../utils/api.utils";
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Provide } from "vue-property-decorator";
 import Modal from "./Modal.vue";
 import { iOrder } from "../models/order.interface";
+import { iCart } from "../models/cart.interface";
+import { iShopItem } from "../models/shopitem.interface";
+import { ShopItem } from '../../../api/entity';
 
 @Component({
   components: { Modal }
@@ -113,27 +116,65 @@ export default class order extends Vue {
     expr: "",
     orderedDate: new Date,
     Pickup: false,
-    user: 0
+    user: 0,
+    items: []
   };
+
   error: string | boolean = false;
+  cartList: ShopItem[] = [];
+  public cart: iCart | undefined;
+
+  mounted() {
+    this.getCart();
+  }
 
   success() {
-    debugger;
     this.error = false;
     this.checkout.user = this.$store.state.user;
     console.log('hello');
+    this.checkout.items = this.cartList;
     axios
       .post(APIConfig.buildUrl("/checkout"), {
         ...this.checkout
       }, {headers: {token: this.$store.state.userToken}})
-      .then((response: AxiosResponse<iOrder>) => {
+      .then((response) => {
+        console.log("id ", response.data.savedOrder.id);
+        this.$store.state.orderNum = response.data.savedOrder.id;
+        console.log("store ordernumber ", this.$store.state.orderNum);
+        console.log(" after saving order ", response);
         this.$emit("success");
       })
       .catch((errorResponse: any) => {
-        debugger;
         this.error = errorResponse.response.data.reason;
       });
   }
+
+  getCart() {
+        const cartId = this.$store.state.cart && this.$store.state.cart.id;
+        if (this.$store.state.user) {
+            console.log("store ", this.$store.state.cart );
+            const userId = this.$store.state.user && this.$store.state.user.id;
+            axios
+            .get(APIConfig.buildUrl("/cart/" + cartId))
+            .then((response: AxiosResponse) => {
+
+                // response.data.forEach((item : iShopItem) => {
+                //     if (!item.quant)
+                //         item.quant = 1;
+                // })
+                this.cartList = response.data;
+  
+
+                // console.log("items ", this.cartList);
+                // console.log("cart ", this.cart && this.cart.itemsId);
+            })
+            .catch((res: AxiosError) => {
+                this.error = res.response && res.response.data.error;
+            });
+        }   
+    }
+
+
 
   get formcheck(): boolean {
     if(this.checkout.firstName.length <= 0 ||
@@ -162,5 +203,6 @@ export interface orderForm {
   expr: string;
   zip: string;
   orderedDate: Date | null;
+  items: ShopItem[];
 }
 </script>

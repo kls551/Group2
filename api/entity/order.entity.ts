@@ -1,6 +1,7 @@
 
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, ManyToMany, JoinTable, PrimaryGeneratedColumn } from "typeorm";
 import { User } from "../entity";
+import { ShopItem } from "./shopitem.entity";
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn()
@@ -39,4 +40,8 @@ export class Order {
   @ManyToOne((type) => User, user => user.orders, { cascade: true })
   @JoinColumn()
   public user!: User;
+
+  @ManyToMany(type => ShopItem, item => item.id)
+  @JoinTable()
+  public items!: ShopItem[];
 }

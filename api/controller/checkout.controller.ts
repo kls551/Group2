@@ -49,8 +49,9 @@ export class OrderController extends DefaultController {
         order.orderedDate = req.body.orderedDate;
         order.address = req.body.address;
         order.city = req.body.city;
+        order.items = req.body.items;
         orderRepo.save(order).then((savedOrder: Order) => {
-          res.status(200).send({ order });
+            res.status(200).send({ savedOrder });
         });
       });
     });
@@ -76,26 +77,6 @@ export class OrderController extends DefaultController {
                 });
             });
         });
-    
-    // router.route("/todos/:id")
-    // .put((req: Request, res: Response) => {
-    //   const todoRepo = getRepository(ToDo);
-    //   todoRepo.findOneOrFail(req.params.id).then((foundToDo: ToDo) => {
-    //     // save updates here
-    //     foundToDo.complete = req.body.complete;
-    //     todoRepo.save(foundToDo).then((updatedTodo: ToDo) => {
-    //       res.send(200).send({todo: updatedTodo});
-    //     });
-    //   });
-    // })
-    // .delete((req: Request, res: Response) => {
-    //   const todoRepo = getRepository(ToDo);
-    //   todoRepo.findOneOrFail(req.params.id).then((foundToDo: ToDo) => {
-    //     todoRepo.delete(foundToDo).then(result => {
-    //       res.send(200);
-    //     });
-    //   });
-    // });
     return router;
   }
 }

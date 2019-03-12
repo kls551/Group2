@@ -31,6 +31,8 @@
                     <span> <h3> Price </h3> </span>
                     <input type="text input" class="input is-warning is-small" placeholder="Price" v-model="service.price">
                     <p v-if="isNaN(service.price)" class="help is-danger">Price must be a number</p>
+                    <input type="text input" class="input is-warning is-small" placeholder="Service Name" v-model="service.image">
+                    <p v-if="service.image.length <= 0" class="help is-danger">Service image is required</p>
                 </div>
 
                 <!-- Submit and Cshancel buttons -->
@@ -75,6 +77,7 @@ export default class OwnerCreateServices extends Vue{
         serviceName: "",
         description: "",
         price: undefined,
+        image: ""
     };
     selectedImage : any = "";
     uploadError: string | null = null;
@@ -122,7 +125,7 @@ export default class OwnerCreateServices extends Vue{
         return axios
         .post(url, fd)
         .then((res: AxiosResponse<{ serv: iService }>) => {
-            this.$store.dispatch("fechtService", { imgUrl: res.data.serv.imgUrl });
+            this.$store.dispatch("fechtService", { imgUrl: res.data.serv.imgURL });
         });
     }
 
@@ -133,7 +136,8 @@ export default class OwnerCreateServices extends Vue{
         .post(APIConfig.buildUrl("/owner/edit-services"), {
             ...{serviceName : this.service.serviceName,
                 description : this.service.description,
-                price : this.service.price}
+                price : this.service.price,
+                imgURL : this.service.image}
         } )
         .then ((response : AxiosResponse<iService> ) => {
             this.$emit("success");
@@ -157,6 +161,7 @@ export interface addServiceForm {
   serviceName: string;
   description: string;
   price: number | undefined;
+  image: string;
 }
 </script>
 

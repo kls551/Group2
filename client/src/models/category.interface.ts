@@ -2,7 +2,7 @@ export interface iMainCategory {
     id: number;
     name: string;
     show: boolean;
-    subcategories: iSubCategory[];
+    subCategories: iSubCategory[];
 }
 
 export interface iSubCategory {

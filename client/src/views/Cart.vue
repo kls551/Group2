@@ -11,8 +11,8 @@
                         <!-- item image -->
                         <div class="column">
                             <figure class="image is-1by1">
-                                <!-- <img alt="Map" :src="item.images[0].img"> -->
-                                <img src="https://bulma.io/images/placeholders/640x480.png">
+                                <img alt="" :src="item.images[0].img">
+                                <!-- <img src="https://bulma.io/images/placeholders/640x480.png"> -->
                             </figure>
                         </div>
                         <!-- item name and description -->

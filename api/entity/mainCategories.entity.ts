@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, JoinTable, OneToMany, OneToOne, ManyToMany  } from "typeorm";
+import { Column, Entity, JoinColumn, Index, ManyToOne, PrimaryGeneratedColumn, JoinTable, OneToMany, OneToOne, ManyToMany  } from "typeorm";
 import { SubCategory } from "../entity";
 import { ShopItem } from "./shopitem.entity";
 
@@ -9,6 +9,7 @@ export class MainCategory {
   public id!: number;
 
   @Column()
+  @Index({ unique: true })
   public name!: string;
 
   @Column()

@@ -172,8 +172,8 @@ export default class subCategory extends Vue {
     saveMainCat() {
         this.getMainName(this.mainCategoryId);
         console.log(this.mainCategoryName);
-        //debugger;
-        //this.getSubCategories(this.mainCategoryId);
+        // debugger;
+        this.getSubCategories(this.mainCategoryId);
     }
     addSubCategory(mainCatId:number) {
         axios

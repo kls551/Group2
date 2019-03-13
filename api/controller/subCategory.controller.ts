@@ -36,37 +36,51 @@ export class SubCategoryController extends DefaultController {
         const subCat = new SubCategory();
         subCat.name = req.body.name;
         subCat.mainCategory = req.body.mainCategoryId;
-        // subCat.shopitem = req.body.shopItemId;
-        subCatRepo.save(subCat).then((savedCategory: SubCategory) => {
+        subCatRepo.save(subCat).then(
+          (savedCategory: SubCategory) => {
             res.status(200).send({ subCat });
+          },
+          (reason: any) => {
+            res.status(500);
           });
-        })
+        });
 
         router.route("/subcategory/:id")
-        .get((req: Request, res: Response) => {
-          const subCatRepo = getRepository(SubCategory);
-          subCatRepo.find({where:{ mainCategoryId: req.params.id }}).then((categories: SubCategory[]) => {
-            console.log(categories);
-            res.status(200).send(categories);
-          });
-        })
+        // .get((req: Request, res: Response) => {
+        //   const subCatRepo = getRepository(SubCategory);
+        //   subCatRepo.find({where:{ mainCategoryId: req.params.id }}).then((categories: SubCategory[] | undefined) => {
+        //     if (categories){
+        //       res.status(200).send(categories);
+        //     } else {
+        //       res.status(404);
+        //     }    
+        //   });
+        // })
 
         .delete((req: Request, res: Response) => {
           const subCat = getRepository(SubCategory);
-          subCat.findOneOrFail(req.params.id).then((foundCategory: SubCategory) => {
-            subCat.delete(foundCategory).then(result => {
-              res.send(200);
-            });
+          subCat.findOneOrFail(req.params.id).then((foundCategory: SubCategory | undefined) => {
+            if (foundCategory){
+              subCat.delete(foundCategory).then(result => {
+                res.status(200).send({ deleted: true});
+              })
+            } else {
+              res.status(404).send({ deleted: false});
+            }
           });
         })
 
         .put((req: Request, res: Response) => {
           const subCat = getRepository(SubCategory);
-          subCat.findOneOrFail(req.params.id).then((foundCategory: SubCategory) => {
-            foundCategory.name = req.body.name;
-            subCat.save(foundCategory).then(result => {
+          subCat.findOneOrFail(req.params.id).then((foundCategory: SubCategory | undefined) => {
+            if (foundCategory){
+              foundCategory.name = req.body.name;
+              subCat.save(foundCategory).then(result => {
               res.send(200);
-            });
+            })
+            } else {
+              res.sendStatus(404).send("subcat not found");
+            }
           });
         });
 

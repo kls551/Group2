@@ -63,6 +63,8 @@
                 </div>
                 <div v-else></div>
 
+                {{selectedSubCategories}}
+
 
                 <div class="column">
                     <label class="label">Brand</label>
@@ -129,6 +131,7 @@ import {
 } from "../utils/api.utils";
 import {Component,Prop,Vue} from "vue-property-decorator";
 import { resolve } from "path";
+//import Toasted from 'vue-toasted';
 
 const STATUS_INITIAL = 0;
 const STATUS_SAVING = 1;

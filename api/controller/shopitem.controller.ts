@@ -5,7 +5,7 @@ import express from "express";
 import multer from "multer";
 import Path from "path";
 
-import { ShopItem,Imgs } from "../entity";
+import { ShopItem,Imgs, SubCategory } from "../entity";
 
 import { getRepository, getConnection, Connection } from "typeorm";
 
@@ -14,6 +14,7 @@ export class ShopItemController extends DefaultController {
     const router = express.Router();
     const shopItemRepo = getRepository(ShopItem);
     const itemImgRepo = getRepository(Imgs);
+    const subCatRepo = getRepository(SubCategory);
 
     router.route("/shopitems/:id")
       .delete((req: Request, res: Response) => {
@@ -52,7 +53,8 @@ export class ShopItemController extends DefaultController {
     });
 
     router.route("/shopitems")
-    .post((req: Request, res: Response) => {
+    .post(async (req: Request, res: Response) => {
+        
         const shopitem = new ShopItem();
         shopitem.name = req.body.name;
         shopitem.details = req.body.details;
@@ -60,7 +62,7 @@ export class ShopItemController extends DefaultController {
         shopitem.quantity = req.body.quantity;
         shopitem.category = req.body.category;
         shopitem.inStorePickup = req.body.inStorePickup;
-        shopitem.subcategories = req.body.subcategories;
+        shopitem.subcategories = await subCatRepo.findByIds(req.body.subcategories);
         shopitem.postedDate = req.body.postedDate;
         shopitem.brand = req.body.brand;
         shopItemRepo.save(shopitem).then((savedShopItem: ShopItem) => {

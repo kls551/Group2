@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Index, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Brands {
@@ -7,6 +7,7 @@ export class Brands {
   public id!: number;
 
   @Column()
+  @Index({ unique: true })
   public name!: string;
   
 }

@@ -134,7 +134,7 @@ export default class order extends Vue {
     console.log('hello');
     this.checkout.items = this.cartList;
     axios
-      .post(APIConfig.buildUrl("/checkout"), {
+      .post(APIConfig.buildUrl("/orders"), {
         ...this.checkout
       }, {headers: {token: this.$store.state.userToken}})
       .then((response) => {

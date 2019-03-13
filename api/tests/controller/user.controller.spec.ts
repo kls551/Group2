@@ -19,6 +19,7 @@ describe("/users", () => {
     user.firstName = "testUser";
     user.lastName = "testUser";
     user.password = "password";
+    user.isAdmin = 0;
     return conn.getRepository(User).save(user);
   };
 
@@ -73,19 +74,25 @@ describe("/users", () => {
 
   describe("POST '/'", () => {
     test("should create a user", done => {
-      const email = `test${new Date().getTime()}@test.com`;
       return request(myApp)
         .post("/users")
         .send({
-          emailAddress: email,
+          emailAddress: "email",
           firstName: "test",
           lastName: "test",
           password: "password",
+          isAdmin: 0,
         })
         .then((response: request.Response) => {
-          expect(response.body.emailAddress).toEqual(email);
+          expect(response.body.emailAddress).toEqual("email");
           done();
         });
+    });
+    test("should fail because user with this id does not exist", done => {
+      return request(myApp)
+        .post("/users/" + 85)
+        .expect(500);
+        done();
     });
   });
 });

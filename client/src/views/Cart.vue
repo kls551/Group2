@@ -73,6 +73,7 @@
         <router-view class="container"/>
             <checkout
             v-bind:is-showing="showcheckout"
+            v-bind:purchasedList="cartList"
             v-on:success="successCheckout()"
             v-on:cancel="cancelCheckout()"
             />
@@ -81,24 +82,11 @@
 </template>
 
 <script lang="ts">
-import axios, {
-    AxiosResponse,
-    AxiosError
-} from "axios";
-import {
-    APIConfig
-} from "../utils/api.utils";
-import {
-    Component,
-    Prop,
-    Vue
-} from "vue-property-decorator";
-import {
-    iShopItem
-} from "../models/shopitem.interface";
-import {
-    iCart
-} from "../models/cart.interface";
+import axios, { AxiosResponse, AxiosError } from "axios";
+import { APIConfig } from "../utils/api.utils";
+import { Component, Prop, Vue } from "vue-property-decorator";
+import { iShopItem } from "../models/shopitem.interface";
+import { iCart } from "../models/cart.interface";
 import checkout from "@/components/checkout.vue";
 import  { ShopItem } from "../../../api/entity";
 
@@ -127,6 +115,7 @@ export default class Cart extends Vue {
     getCart() {
         const cartId = this.$store.state.cart && this.$store.state.cart.id;
         if (this.$store.state.user) {
+            console.log("store ", this.$store.state.cart );
             const userId = this.$store.state.user && this.$store.state.user.id;
             axios
             .get(APIConfig.buildUrl("/cart/" + cartId))
@@ -173,9 +162,35 @@ export default class Cart extends Vue {
     showcheckoutModal() {
         this.showcheckout = true;
     }
+
+
     successCheckout() {
         this.showcheckout = false;
+
+        this.cartList.forEach(item => {
+            const updatedQuant = (item.quantity - item.quant);
+            axios
+            .put(APIConfig.buildUrl("/shopitems/" + item.id + "/" + updatedQuant))
+            .catch((res: AxiosError) => {
+                this.error = res.response && res.response.data.error;
+            });
+        })
+        this.deleteCart();
+        this.$router.push("/order-placed");
     }
+
+    deleteCart() {
+        if (this.$store.state.user) {
+            const userId = this.$store.state.user && this.$store.state.user.id;
+
+            axios
+            .delete(APIConfig.buildUrl("/cart/" + userId))
+            .catch((res: AxiosError) => {
+                this.error = res.response && res.response.data.error;
+            });
+        }
+    }
+
     cancelCheckout() {
         this.showcheckout = false;
     }

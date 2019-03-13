@@ -112,6 +112,7 @@ export default class OwnerEditServices extends Vue{
         description: "",
         price: 0
     };
+
     mounted() {
       this.getServices();
     }
@@ -126,9 +127,11 @@ export default class OwnerEditServices extends Vue{
 
     successUpdate() {
       this.showEdit = false;
+      this.getServices();
     }
     cancelUpdate() {
         this.showEdit = false;
+        this.getServices();
     }
 
     successDelete() {
@@ -163,6 +166,7 @@ export default class OwnerEditServices extends Vue{
     }
 
     showEditForm(srv : Service) {
+        this.showEdit = true;
         this.selectedService = srv;
     }
 

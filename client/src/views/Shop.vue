@@ -72,7 +72,7 @@
             </div>
 
             <!-- Show selection for testing -->
-            <div class="panel-block">
+            <!--<div class="panel-block">
               Active brands:
             </div>
             <div class="panel-block menu-contents" v-for="brand in activeBrandIds">
@@ -83,7 +83,7 @@
               Active main categories:
             </div>
             <div class="panel-block menu-contents" v-for="cat in activeMainCatIds">
-              {{ cat }}
+              {{ cat }} 
             </div>
 
             <div class="panel-block">
@@ -91,7 +91,7 @@
             </div>
             <div class="panel-block menu-contents" v-for="cat in activeSubCatIds">
               {{ cat }}
-            </div>
+            </div>-->
           </nav>
         </section>
       </div>
@@ -208,7 +208,9 @@
   }
 
   filter() {
+    console.log("hit filter");
     if (this.activeBrandIds.length != 0) {
+      console.log("hit if statement");
       axios
         .get(APIConfig.buildUrl("/shopitems/" + this.activeBrandIds[0]))
         .then((response: AxiosResponse) => {
@@ -216,6 +218,7 @@
           console.log(this.shopItems);
           this.$emit("success");
         });
+      console.log("finished axios statement");
     }
   }
 }

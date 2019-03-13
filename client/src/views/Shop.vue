@@ -150,7 +150,7 @@
                 { id: 1101, name: "Price (Low to High)" },
                 { id: 1102, name: "Price (High to Low)" }]
     };
-
+ 
     mounted() {
       this.display();
     }

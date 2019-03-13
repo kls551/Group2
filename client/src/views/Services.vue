@@ -27,12 +27,15 @@
                     <p class="subtitle">
                       {{ service.description }}
                     </p>
+                                          Price:
+                      $ {{service.price}}
                   </div>
                 
 
                   <div class="hours tile box is-3 media-content"> 
-                      Price:
-                      $ {{service.price}}
+                    <figure class="image is-128x128">
+                      <img :src="service.imgURL" alt="">
+                    </figure>
                   </div>
                   <div class="tile is-1"> <br> </div>
                 </div>
@@ -67,7 +70,7 @@ import  { Service } from "../../../api/entity";
 
 export default class Services extends Vue{
     // @Prop(Boolean) isShowing: boolean = true;
-    public services: Service[] = [];
+    public services: iService[] = [];
     public display = true;
     mounted() {
       this.getServices();

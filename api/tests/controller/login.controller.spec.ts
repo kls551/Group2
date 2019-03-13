@@ -20,6 +20,7 @@ describe("/login", () => {
   });
 
   afterAll(async () => {
+    
     await DBUtils.clearDB();
     await DBConnection.closeConnection();
   });
@@ -41,4 +42,14 @@ describe("/login", () => {
         });
     });
   });
+  test("should logout successfully", done => {
+    return request(app)
+        .post("/logout")
+        .expect(200)
+        .then((res: request.Response) => {
+          expect(res.body.loggedOut).toBeDefined();
+          done();
+        });
+    });
+
 });

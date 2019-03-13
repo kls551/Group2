@@ -1,121 +1,121 @@
 <template>
   <div class="shop">
-    <div class="tile is-ancestor top-bar">
+    <div class="columns top-bar">
       <!-- Categories menu -->
-      <div class="tile is-3 is-vertical is-parent menu">
-        <div class="tile is-child box">
-          <section>
-            <nav class="panel">
-              <p class="panel-heading">
-                <span>Categories</span>
-              </p>
+      <div class="column is-3 menu">
+        <section>
+          <nav class="panel">
+            <p class="panel-heading">
+              <span>Categories</span>
+            </p>
 
-              <!-- Menu for sorting options -->
-              <div class="panel-block">
-                <span class="cat-name">{{ sorts.name }}</span>
+            <!-- Menu for sorting options -->
+            <div class="panel-block">
+              <span class="cat-name">{{ sorts.name }}</span>
+            </div>
+
+            <a
+              class="panel-block menu-contents"
+              v-show="sorts.show"
+              v-for="option in sorts.subCategories"
+              :key="option.id"
+              v-on:change="sortby"
+            >
+              <b-radio
+                v-model="whichSort"
+                :name="sorts.name"
+                :native-value="option.id"
+              >{{ option.name }}</b-radio>
+            </a>
+
+            <!-- Brand filter options -->
+            <div class="panel-block" v-on:click="brandsShow = !brandsShow">
+              <span class="cat-name"> Brands </span>
+              <font-awesome-icon v-show="!brandsShow" icon="angle-down"/>
+              <font-awesome-icon v-show="brandsShow" icon="angle-up"/>
+            </div>
+
+            <a class="panel-block menu-contents" v-show="brandsShow" v-for="brand in brands" :key="brand.id">
+              <b-checkbox v-model="activeBrandIds" :native-value="brand.id">
+                {{ brand.name }}
+              </b-checkbox>
+            </a>
+
+            <!-- Category filter options -->
+            <div v-for="category in categories" :key="category.id">
+              <!-- Main category set -->
+              <div class="panel-block" v-on:click="category.show = !category.show">
+                <span class="cat-name">
+                    <b-checkbox v-model="activeMainCatIds" :native-value="category.id">
+                    {{ category.name }}
+                  </b-checkbox>
+                </span>
+                <div v-if="category.subCategories.length != 0">
+                  <font-awesome-icon v-show="!category.show" icon="angle-down"/>
+                  <font-awesome-icon v-show="category.show" icon="angle-up"/>
+                </div>
               </div>
 
-              <a
-                class="panel-block menu-contents"
-                v-show="sorts.show"
-                v-for="option in sorts.subCategories"
-                :key="option.id"
-                v-on:change="sortby"
-              >
-                <b-radio
-                  v-model="whichSort"
-                  :name="sorts.name"
-                  :native-value="option.id"
-                >{{ option.name }}</b-radio>
-              </a>
-
-              <!-- Brand filter options -->
-              <div class="panel-block" v-on:click="brandsShow = !brandsShow">
-                <span class="cat-name"> Brands </span>
-                <font-awesome-icon v-show="!brandsShow" icon="angle-down"/>
-                <font-awesome-icon v-show="brandsShow" icon="angle-up"/>
-              </div>
-
-              <a class="panel-block menu-contents" v-show="brandsShow" v-for="brand in brands" :key="brand.id">
-                <b-checkbox v-model="activeBrandIds" :native-value="brand.id">
-                  {{ brand.name }}
+              <!-- Subcategory set -->
+              <a class="panel-block menu-contents" v-show="category.show" v-for="sub in category.subCategories" :key="sub.id">
+                <b-checkbox v-model="activeSubCatIds" :native-value="sub.id">
+                  {{ sub.name }}
                 </b-checkbox>
               </a>
+            </div>
 
-              <!-- Category filter options -->
-              <div v-for="category in categories" :key="category.id">
-                <!-- Main category set -->
-                <div class="panel-block" v-on:click="category.show = !category.show">
-                  <span class="cat-name">
-                    <b-checkbox v-model="activeMainCatIds" :native-value="category.id">
-                      {{ category.name }}
-                    </b-checkbox>
-                  </span>
-                  <div v-if="category.subCategories.length != 0">
-                    <font-awesome-icon v-show="!category.show" icon="angle-down"/>
-                    <font-awesome-icon v-show="category.show" icon="angle-up"/>
-                  </div>
-                </div>
+            <!-- Filter button -->
+            <div class="panel-block">
+              <button class="button is-link is-outlined is-fullwidth" v-on:click="filter">
+                Filter
+              </button>
+            </div>
 
-                <!-- Subcategory set -->
-                <a class="panel-block menu-contents" v-show="category.show" v-for="sub in category.subCategories" :key="sub.id">
-                  <b-checkbox v-model="activeSubCatIds" :native-value="sub.id">
-                    {{ sub.name }}
-                  </b-checkbox>
-                </a>
-              </div>
+            <!-- Show selection for testing -->
+            <div class="panel-block">
+              Active brands:
+            </div>
+            <div class="panel-block menu-contents" v-for="brand in activeBrandIds">
+              {{ brand }}
+            </div>
 
-              <!-- Filter button -->
-              <div class="panel-block">
-                <button class="button is-link is-outlined is-fullwidth" v-on:click="filter">
-                  Filter
-                </button>
-              </div>
+            <div class="panel-block">
+              Active main categories:
+            </div>
+            <div class="panel-block menu-contents" v-for="cat in activeMainCatIds">
+              {{ cat }}
+            </div>
 
-              <!-- Show selection for testing -->
-              <div class="panel-block">
-                Active brands:
-              </div>
-              <div class="panel-block menu-contents" v-for="brand in activeBrandIds">
-                {{ brand }}
-              </div>
-
-              <div class="panel-block">
-                Active main categories:
-              </div>
-              <div class="panel-block menu-contents" v-for="cat in activeMainCatIds">
-                {{ cat }}
-              </div>
-
-              <div class="panel-block">
-                Active subcategories:
-              </div>
-              <div class="panel-block menu-contents" v-for="cat in activeSubCatIds">
-                {{ cat }}
-              </div>
-            </nav>
-          </section>
-        </div>
+            <div class="panel-block">
+              Active subcategories:
+            </div>
+            <div class="panel-block menu-contents" v-for="cat in activeSubCatIds">
+              {{ cat }}
+            </div>
+          </nav>
+        </section>
       </div>
 
       <!-- Shop items layout -->
-      <div class="tile is-child columns is-multiline shop-layout">
-        <div v-for="item in shopItems" :key="item.id" class="column is-narrow">
-          <div v-if="true">
-            <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
-              <div class="card">
-                <figure class="image is-128x128 center">
-                  <img :src="item.images[0].img">
-                </figure>
-                <ul class="product">
-                  <li class="item-name is-size-5">{{ item.name }}</li>
-                  <li class="item-price">${{ item.price }}</li>
-                </ul>
-              </div>
-            </router-link>
-          </div>
-          <div v-else>
-            {{ item.show }}
+      <div class="column">
+        <div class="columns is-multiline shop-layout">
+          <div v-for="item in shopItems" :key="item.id" class="column is-narrow">
+            <div v-if="true">
+              <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
+                <div class="card">
+                  <figure class="image is-128x128 center">
+                    <img :src="item.images[0].img">
+                  </figure>
+                  <ul class="product">
+                    <li class="item-name is-size-5">{{ item.name }}</li>
+                    <li class="item-price">${{ item.price }}</li>
+                  </ul>
+                </div>
+              </router-link>
+            </div>
+            <div v-else>
+              {{ item.show }}
+            </div>
           </div>
         </div>
       </div>

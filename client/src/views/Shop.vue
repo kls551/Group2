@@ -51,8 +51,8 @@
                     <b-checkbox>{{ category.name }}</b-checkbox>
                   </span>
                   <div v-if="category.subCategories.length != 0">
-                  <font-awesome-icon v-show="!category.show" icon="angle-down"/>
-                  <font-awesome-icon v-show="category.show" icon="angle-up"/>
+                    <font-awesome-icon v-show="!category.show" icon="angle-down"/>
+                    <font-awesome-icon v-show="category.show" icon="angle-up"/>
                   </div>
                 </div>
 

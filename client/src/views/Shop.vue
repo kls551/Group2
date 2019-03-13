@@ -42,7 +42,7 @@
             </a>
 
             <!-- Category filter options -->
-            <div v-for="category in categories" :key="category.id">
+            <div v-for="category in categories" :key="category.id + 50">
               <!-- Main category set -->
               <div class="panel-block" v-on:click="category.show = !category.show">
                 <span class="cat-name">
@@ -57,7 +57,7 @@
               </div>
 
               <!-- Subcategory set -->
-              <a class="panel-block menu-contents" v-show="category.show" v-for="sub in category.subCategories" :key="sub.id">
+              <a class="panel-block menu-contents" v-show="category.show" v-for="sub in category.subCategories" :key="sub.id + 100">
                 <b-checkbox v-model="activeSubCatIds" :native-value="sub.id">
                   {{ sub.name }}
                 </b-checkbox>
@@ -150,7 +150,7 @@
                 { id: 1101, name: "Price (Low to High)" },
                 { id: 1102, name: "Price (High to Low)" }]
     };
- 
+
     mounted() {
       this.display();
     }

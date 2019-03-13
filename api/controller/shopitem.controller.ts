@@ -81,6 +81,16 @@ export class ShopItemController extends DefaultController {
           });
       });
 
+    //router.route("/shopitems/:brand")
+    //  .get((req: Request, res: Response) => {
+    //    shopItemRepo
+    //      .createQueryBuilder("shopitem")
+    //      .where("brand = :abrand", { abrand: req.params.brand })
+    //      .getMany().then((shopitems: ShopItem) => {
+    //        res.status(200).send(shopitems);
+    //      });
+    //  });
+
     return router;
   }
 }

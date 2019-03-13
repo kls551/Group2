@@ -15,7 +15,6 @@ export interface iShopItem
   postedDate: Date;
   images: iImg[];
   quant: number;
-  show: boolean;
 }
 
 export interface iImg {

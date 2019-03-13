@@ -20,6 +20,7 @@ export class Server {
       const app: express.Application = express();
       module.exports = app;
 
+      module.exports.app = app;
       app.use(cors());
       app.use(express.json());
       app.use(express.static("public"));

@@ -23,28 +23,40 @@ export class BrandsController extends DefaultController {
         const brandstRepo = getRepository(Brands);
         const brand = new Brands();
         brand.name = req.body.name;
-        brandstRepo.save(brand).then((savedBrand: Brands) => {
-          res.status(200).send({ brand });
+        brandstRepo.save(brand).then((savedBrand: Brands | undefined) => {
+          if (savedBrand) {
+            res.status(200).send({ brand });
+          } else {
+            res.status(400).send({ message: "duplicate brand"})
+          }
         });
       });
 
       router.route("/brands/:id")
       .delete((req: Request, res: Response) => {
         const brandsRepo = getRepository(Brands);
-        brandsRepo.findOneOrFail(req.params.id).then((foundBrand: Brands) => {
-          brandsRepo.delete(foundBrand).then(result => {
-            res.send(200);
-          });
+        brandsRepo.findOneOrFail(req.params.id).then((foundBrand: Brands | undefined) => {
+          if (foundBrand) {
+            brandsRepo.delete(foundBrand).then(result => {
+              res.status(200).send({ deleted: true });
+            });
+          } else {
+            res.status(404).send({ deleted: false});
+          }
         });
       })
 
       .put((req: Request, res: Response) => {
         const brandsRepo = getRepository(Brands);
-        brandsRepo.findOneOrFail(req.params.id).then((foundBrand: Brands) => {
-          foundBrand.name = req.body.name;
-          brandsRepo.save(foundBrand).then(result => {
-            res.send(200);
-          });
+        brandsRepo.findOneOrFail(req.params.id).then((foundBrand: Brands | undefined) => {
+          if (foundBrand) {
+            foundBrand.name = req.body.name;
+            brandsRepo.save(foundBrand).then(result => {
+              res.status(200).send({ updated: true });
+            });
+          } else {
+            res.status(404).send({ updated: false });
+          }
         });
       });
     

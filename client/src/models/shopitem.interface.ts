@@ -1,3 +1,5 @@
+
+
 export interface iShopItem {
   id: number;
   name: string;
@@ -7,5 +9,11 @@ export interface iShopItem {
   category: string;
   inStorePickup: boolean;
   postedDate: Date;
-  images: String[];
+  images: iImg[];
+  quant: number;
+}
+
+export interface iImg {
+  id: number;
+  img: string;
 }

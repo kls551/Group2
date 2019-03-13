@@ -96,12 +96,7 @@ export default class OwnerEditServices extends Vue{
     public editDescription = "";
     public editPrice = 0;
     public editImage = "";
-    public editSrv : Service = {
-        id: 0,
-        serviceName: "",
-        description: "",
-        price: 0
-    };
+
     service: ServiceForm = {
         serviceName: "",
         description: "",
@@ -111,7 +106,12 @@ export default class OwnerEditServices extends Vue{
 
     public services: Service[] = [];
     public display = true;
-    public selectedService: Service| undefined;
+    public selectedService: Service  = {
+        id: 0,
+        serviceName: "",
+        description: "",
+        price: 0
+    };
     mounted() {
       this.getServices();
     }
@@ -163,15 +163,7 @@ export default class OwnerEditServices extends Vue{
     }
 
     showEditForm(srv : Service) {
-        this.editSrv = srv;
-        this.editServiceName = srv.serviceName;
-        this.editDescription = srv.description;
-        this.editPrice = srv.price;
-        this.showUpdate();
         this.selectedService = srv;
-    }
-    showUpdate() {
-        this.showEdit = true;
     }
 
     showDeleteConfirm(srv : Service) {
@@ -185,20 +177,6 @@ export default class OwnerEditServices extends Vue{
             this.getServices();
         }) 
     }
-
-    updateService() {
-        axios
-        .put(APIConfig.buildUrl("/owner/edit-services/" + this.editSrv.id ), 
-            {serviceName: this.editServiceName,
-            description: this.editDescription,
-            price : this.editPrice }
-        )
-        .then( () => {
-            this.getServices();
-        })
-    }
-
-
 }
 
 export interface ServiceForm {

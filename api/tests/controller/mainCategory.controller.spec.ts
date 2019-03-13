@@ -5,7 +5,6 @@ import { DBConnection } from "../../connection";
 import { MainCategory } from "../../entity";
 import { Server } from "../../server";
 import DBUtils from "../util/database";
-
 import { getConnection } from "typeorm";
 
 describe("/maincategory", () => {

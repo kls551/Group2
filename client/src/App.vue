@@ -159,6 +159,7 @@ export default class App extends Vue {
     return this.$store.state.user && (this.$store.state.user.isAdmin === 1);
   }
   logout() {
+    console.log("logout   ",this.$store.state.userToken);
     axios
       .post(APIConfig.buildUrl("/logout"), null, {
         headers: { token: this.$store.state.userToken }

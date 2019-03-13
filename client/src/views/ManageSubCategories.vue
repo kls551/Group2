@@ -173,9 +173,8 @@ export default class subCategory extends Vue {
         this.getMainName(this.mainCategoryId);
         console.log(this.mainCategoryName);
         //debugger;
-        this.getSubCategories(this.mainCategoryId);
+        //this.getSubCategories(this.mainCategoryId);
     }
-
     addSubCategory(mainCatId:number) {
         axios
         .post(APIConfig.buildUrl("/subcategory"), {

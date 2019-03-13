@@ -49,9 +49,6 @@
                 </div>
               
       <form enctype="multipart/form-data" novalidate>
-        <div class="aboutMap">
-          <img :src="profileUrl"/>
-        </div>
         <div class="file">
           <label class="file-label">
             <input

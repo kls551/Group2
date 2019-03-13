@@ -68,8 +68,9 @@ describe("/maincategory", () => {
           .send({
             name: mainCatName,
           })
+          .expect(200)
           .then((response: request.Response) => {
-            expect(response.body.mainCat.name).toEqual(mainCatName);
+            expect(response.body.name).toEqual(mainCatName);
             done();
           });
       });

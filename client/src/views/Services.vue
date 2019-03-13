@@ -1,53 +1,38 @@
 <template>
   <div class="services">
-    <br> 
-     <div class="tile is-ancestor is-vertical"> 
-        <!-- <div class="tile is-veritical"> -->
-        <div class="tile"> 
-          <div class="tile is-1"> <br> </div>
-          <div class="service tile title is-11"> Services </div>
-        </div>
+    
+    <div class="container" style="margin-top: 40px; margin-bottom: 25px;">
 
+      <h2 style="border-bottom: 1.5px solid orange; margin-bottom: 15px;">Services</h2>
     <div v-if="display">
       <!-- <button class="button" v-on:click="getServices()" >  add service </button> -->
       <div v-for="(service, index) in services" v-bind:key="index">
-        <div class="tile"> <br> </div>
 
-          <!-- 1st services -->
-          <div class="tile is-vertical">
 
-            <div class="tile"> 
-              <div class="tile is-1"> <br> </div> 
-            <div class="tile box is-parent is-vertical">
-              <div class="title is-4 tile is-children"> {{ service.serviceName }} </div>
-              <div class="tile is-children">
-                <div class="tile is-1"> <br> </div>
-                <div class = "tile columns is-10 ">
-                  <div class="column  media-content"> 
-                    <p class="subtitle">
-                      {{ service.description }}
-                    </p>
-                  </div>
-                
-
-                  <div class="hours tile box is-3 media-content"> 
-                      Price:
-                      $ {{service.price}}
-                  </div>
-                  <div class="tile is-1"> <br> </div>
+        <div class="tile is-ancestor">
+          <div class="tile is-3"></div>
+            <div class="tile is-parent is-vertical">
+            <div class="tile is-child box">
+              <div class="columns">
+                <div class="column">
+                  <h2>{{ service.serviceName }}</h2>
                 </div>
-
+                <div class="column">
+                  <p>{{ service.description }}</p>
+                </div>
+                <div class="column">
+                  <h2>${{ service.price }}</h2>
+                </div>
               </div>
             </div>
-            <div class="tile is-1"> <br> </div> 
             </div>
-          </div>
-      </div>
+            <div class="tile is-3"></div>
+        </div>
 
       </div>
-
+    </div>
+    </div>
   </div>
-</div>
 
 </template>
 
@@ -99,6 +84,17 @@ export default class Services extends Vue{
 
 .subtitle {
   font-size: 16px;
+}
+
+h2 {
+    font-family: 'Questrial';
+    color: orange;
+    font-size: 28px;
+}
+
+h3 {
+    font-family: 'Questrial';
+    font-size: 16px;
 }
 /* .column {
   -webkit-column-gap: 3; 

@@ -50,8 +50,10 @@
                   <span class="cat-name">
                     <b-checkbox>{{ category.name }}</b-checkbox>
                   </span>
+                  <div v-if="category.subCategories.length != 0">
                   <font-awesome-icon v-show="!category.show" icon="angle-down"/>
                   <font-awesome-icon v-show="category.show" icon="angle-up"/>
+                  </div>
                 </div>
 
                 <a
@@ -76,17 +78,22 @@
       <!-- Shop layout -->
       <div class="tile is-child columns is-multiline shop-layout">
         <div v-for="item in shopItems" :key="item.id" class="column is-narrow">
-          <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
-            <div class="card">
-              <figure class="image is-128x128 center">
-                <img :src="item.images[0].img">
-              </figure>
-              <ul class="product">
-                <li class="item-name is-size-5">{{ item.name }}</li>
-                <li class="item-price">${{ item.price }}</li>
-              </ul>
-            </div>
-          </router-link>
+          <div v-if="true">
+            <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
+              <div class="card">
+                <figure class="image is-128x128 center">
+                  <img :src="item.images[0].img">
+                </figure>
+                <ul class="product">
+                  <li class="item-name is-size-5">{{ item.name }}</li>
+                  <li class="item-price">${{ item.price }}</li>
+                </ul>
+              </div>
+            </router-link>
+          </div>
+          <div v-else>
+            {{ item.show }}
+          </div>
         </div>
       </div>
     </div>
@@ -110,18 +117,6 @@
     categories: iMainCategory[] = [];
     whichSort: number = 0;
     brandsShow = false;
-
-    // items: iShopItem[] = [
-    //   { id: 789, name: 'M480 Mountain Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 903, name: 'M680 Mountain Bike', price: 2000, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 234, name: 'M1080 Mountain Bike', price: 3100, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 678, name: 'R480 Road Bike', price: 1000, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 239, name: 'R680 Road Bike', price: 1500, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 112, name: 'R1080 Road Bike', price: 2100, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 914, name: 'C400 Cruising Bike', price: 800, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 503, name: 'C600 Cruising Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 716, name: 'C800 Cruising Bike', price: 1800, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" }
-    // ];
 
     sorts: iMainCategory = { id: 1099, name: "Sorting Options", show: true,
               subCategories: [
@@ -185,6 +180,8 @@
       });
     }
   }
+
+  //updateShown()
 }
 </script>
 
@@ -205,7 +202,6 @@
 .card {
   border-radius: 7px;
   padding: 12px 5px 12px 5px;
-  margin-bottom: 15px;
   height: 250px;
   width: 160px;
 }

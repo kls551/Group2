@@ -42,45 +42,45 @@ export class ShopItemController extends DefaultController {
             });
         });
     router.route("/itemimages/:id")
-    .post((req: Request, res: Response) => {
-        shopItemRepo.findOneOrFail(req.params.id).then((savedShopItem: ShopItem) => {
-            const img = new Imgs();
-            img.img = req.body.img;
-            img.ShopItem = savedShopItem;
-            itemImgRepo.save(img);
-            res.status(200).send({ id : savedShopItem.id })});
-    });
+      .post((req: Request, res: Response) => {
+          shopItemRepo.findOneOrFail(req.params.id).then((savedShopItem: ShopItem) => {
+              const img = new Imgs();
+              img.img = req.body.img;
+              img.ShopItem = savedShopItem;
+              itemImgRepo.save(img);
+              res.status(200).send({ id : savedShopItem.id })});
+      });
 
     router.route("/shopitems")
-    .post((req: Request, res: Response) => {
-        const shopitem = new ShopItem();
-        shopitem.name = req.body.name;
-        shopitem.details = req.body.details;
-        shopitem.price = req.body.price;
-        shopitem.quantity = req.body.quantity;
-        shopitem.category = req.body.category;
-        shopitem.inStorePickup = req.body.inStorePickup;
-        shopitem.subcategories = req.body.subcategories;
-        shopitem.postedDate = req.body.postedDate;
-        shopitem.brand = req.body.brand;
-        shopItemRepo.save(shopitem).then((savedShopItem: ShopItem) => {
-            const img = new Imgs();
-            img.img = req.body.imageUrl;
-            img.ShopItem = savedShopItem;
-            itemImgRepo.save(img);
-            res.status(200).send({ id : savedShopItem.id});
-        });
-    })
-    .get((req: Request, res: Response) => {
-        const users =  getConnection()
-        .getRepository(ShopItem)
-        .createQueryBuilder("shopitem")
-        .leftJoinAndSelect("shopitem.images", "imgs")
-        .getMany().then(obj => {console.log(obj)
-            res.status(200).send(obj);
-        });
-    });
+      .post((req: Request, res: Response) => {
+          const shopitem = new ShopItem();
+          shopitem.name = req.body.name;
+          shopitem.details = req.body.details;
+          shopitem.price = req.body.price;
+          shopitem.quantity = req.body.quantity;
+          shopitem.category = req.body.category;
+          shopitem.inStorePickup = req.body.inStorePickup;
+          shopitem.subcategories = req.body.subcategories;
+          shopitem.postedDate = req.body.postedDate;
+          shopitem.brand = req.body.brand;
+          shopItemRepo.save(shopitem).then((savedShopItem: ShopItem) => {
+              const img = new Imgs();
+              img.img = req.body.imageUrl;
+              img.ShopItem = savedShopItem;
+              itemImgRepo.save(img);
+              res.status(200).send({ id : savedShopItem.id});
+          });
+      })
+      .get((req: Request, res: Response) => {
+          const users =  getConnection()
+          .getRepository(ShopItem)
+          .createQueryBuilder("shopitem")
+          .leftJoinAndSelect("shopitem.images", "imgs")
+          .getMany().then(obj => {console.log(obj)
+              res.status(200).send(obj);
+          });
+      });
 
     return router;
-}
+  }
 }

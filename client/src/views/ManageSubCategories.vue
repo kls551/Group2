@@ -172,11 +172,7 @@ export default class subCategory extends Vue {
     saveMainCat() {
         this.getMainName(this.mainCategoryId);
         console.log(this.mainCategoryName);
-<<<<<<< HEAD
         //debugger;
-=======
-        // debugger;
->>>>>>> f8df1f4e82a8ccc42edb3dea79f8af4719ad3317
         this.getSubCategories(this.mainCategoryId);
     }
 
@@ -187,22 +183,14 @@ export default class subCategory extends Vue {
             mainCategoryId: mainCatId,
         })
         .then((response: AxiosResponse) => {
-<<<<<<< HEAD
             //debugger;
-=======
-            // debugger; 
->>>>>>> f8df1f4e82a8ccc42edb3dea79f8af4719ad3317
             this.getSubCategories(this.mainCategoryId);
             this.subCategoryName = "";
             this.$emit("success");
             //this.getCategories();
         })
         .catch((errorResponse: any) => {
-<<<<<<< HEAD
             //debugger;
-=======
-            // debugger;
->>>>>>> f8df1f4e82a8ccc42edb3dea79f8af4719ad3317
             this.error = errorResponse.response.data.reason;
         });
     }

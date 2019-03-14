@@ -1,12 +1,19 @@
 <template>
   <div class="services">
+<<<<<<< HEAD
 
     <div class="container" style="margin-top: 40px; margin-bottom: 25px;">
 
+=======
+    
+    <div class="container" style="margin-top: 40px; margin-bottom: 25px;">
+
+>>>>>>> df19c5fc2e50c289f04d07a6b3d63fbf12b348d7
       <h2 style="border-bottom: 1.5px solid orange; margin-bottom: 15px;">Services</h2>
     <div v-if="display">
       <!-- <button class="button" v-on:click="getServices()" >  add service </button> -->
       <div v-for="(service, index) in services" v-bind:key="index">
+<<<<<<< HEAD
 <!-- This was only on master, not most recent pull request
         <div class="tile"> <br> </div>
 
@@ -36,6 +43,8 @@
                   <div class="tile is-1"> <br> </div>
                 </div>
  -->
+=======
+>>>>>>> df19c5fc2e50c289f04d07a6b3d63fbf12b348d7
 
         <div class="tile is-ancestor">
           <div class="tile is-3"></div>

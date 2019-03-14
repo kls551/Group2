@@ -2,7 +2,14 @@
   <div class="about">
 
     <div class="container" style="margin-top: 25px; margin-bottom: 25px">
-      <h2>Add New Item </h2>
+        <!-- check to see if we are editing an item from the shop -->
+        {{ editItem() }}
+        <div v-if="isEditing == true">
+            <h2 style="color: red">Editing {{ this.itemName }}</h2>
+        </div>
+        <div v-else>
+            <h2>Add New Item </h2>
+        </div>
     <div class="columns">
       
       <div class="rightMargin column">
@@ -109,9 +116,13 @@
         </div>
         
           </div>
-                <span><button v-if="addMoreimg" class="button is-warning" type="submit" v-on:click="addMore">Add More Image</button></span>
-                <span><button v-if="!addMoreimg" class="button is-success" type="submit" v-on:click="addItem">Add Item</button></span>
-
+                <div v-if="isEditing == true">
+                    <span><button v-if="!addMoreimg" class="button is-warning" type="submit" v-on:click="updateItem">Update Item</button></span>
+                    <span><button v-if="addMoreimg" class="button is-warning" type="submit" v-on:click="addMore">Add More Image</button></span>
+                </div>
+                <div v-else>
+                    <span><button v-if="!addMoreimg" class="button is-success" type="submit" v-on:click="addItem">Add Item</button></span>
+                </div>
                 <span><button v-if="addMoreimg" class="button is-danger" type="submit" v-on:click="cancel">Cancel</button></span>
         </div>
 
@@ -131,6 +142,8 @@ import {
 } from "../utils/api.utils";
 import {Component,Prop,Vue} from "vue-property-decorator";
 import { resolve } from "path";
+import { iShopItem } from "@/models/shopitem.interface";
+import { ShopItem } from '../../../api/entity';
 //import Toasted from 'vue-toasted';
 
 const STATUS_INITIAL = 0;
@@ -163,12 +176,73 @@ export default class NewItem extends Vue {
     mainselected: Boolean = false;
     brandList: Brand[] = [];
 
+    shopItem: iShopItem | undefined;
+
+    isEditing: Boolean = false;
+
     mounted() {
         this.getMainCategories();
         this.getSubCategories(this.mainCategoryId);
         this.getBrands();
         this.imageCount;
     }
+    
+
+    editItem() {
+        if(this.$route.params.editing) {
+            axios
+            .get(APIConfig.buildUrl("/shopitems/" + this.$route.params.itemId))
+            .then((response: AxiosResponse) => {
+                this.shopItem = response.data;
+                if (this.shopItem) {
+                    this.itemName = this.shopItem.name;
+                    this.itemPrice = this.shopItem.price;
+                    this.itemDetail = this.shopItem.details;
+                    this.itemQuantity = this.shopItem.quantity;
+                    this.iteminStorePickup = this.shopItem.inStorePickup;
+                }
+                this.$emit("success");  
+            })
+            .catch((res: AxiosError) => {
+                this.error = res.response && res.response.data.error;
+            });
+            this.isEditing = true;
+            this.itemid = parseInt(this.$route.params.itemId);
+        }
+    }
+
+    updateItem() {
+        axios
+        .put(APIConfig.buildUrl("/shopitems/" + this.itemid), {
+                name: this.itemName,
+                details: this.itemDetail,
+                price: this.itemPrice,
+                quantity: this.itemQuantity,
+                category: this.selected,
+                subcategories: this.selectedSubCategories,
+                inStorePickup: this.iteminStorePickup,
+                postedDate: this.itemPostedDate,
+                imageUrl: this.itemImageURL,
+                brand: this.selectedBrand
+        })
+        .then((response: AxiosResponse<{ id: number }>) => { 
+                if(!this.addwithmoreimg) {
+                    this.itemid = response.data.id;
+                    this.$emit("success");
+                    this.clear();
+                }
+                else
+                {
+                    this.itemid = response.data.id;
+                    this.addMoreimg = true;
+                    this.itemImageURL = "";
+                }
+            })
+            .catch((errorResponse: any) => {
+                this.error = errorResponse.response.data.reason;
+            });
+    }
+
 
     getMainCategories() {
         axios

@@ -5,11 +5,7 @@ import express from "express";
 import multer from "multer";
 import Path from "path";
 
-<<<<<<< HEAD
 import { ShopItem, Brands, Imgs, SubCategory } from "../entity";
-=======
-import { ShopItem,Imgs, SubCategory } from "../entity";
->>>>>>> df19c5fc2e50c289f04d07a6b3d63fbf12b348d7
 
 import { getRepository, getConnection, Connection } from "typeorm";
 
@@ -85,10 +81,6 @@ export class ShopItemController extends DefaultController {
 
     router.route("/shopitems")
     .post(async (req: Request, res: Response) => {
-<<<<<<< HEAD
-=======
-        
->>>>>>> df19c5fc2e50c289f04d07a6b3d63fbf12b348d7
         const shopitem = new ShopItem();
         shopitem.name = req.body.name;
         shopitem.details = req.body.details;
@@ -117,7 +109,6 @@ export class ShopItemController extends DefaultController {
         });
     });
 
-    debugger;
     router.route("/shopitems/:brandid")
       .get((req: Request, res: Response) => {
         shopItemRepo

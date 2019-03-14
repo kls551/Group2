@@ -182,22 +182,14 @@ export default class subCategory extends Vue {
             mainCategoryId: mainCatId,
         })
         .then((response: AxiosResponse) => {
-<<<<<<< HEAD
-            //debugger;
-=======
             // debugger; 
->>>>>>> df19c5fc2e50c289f04d07a6b3d63fbf12b348d7
             this.getSubCategories(this.mainCategoryId);
             this.subCategoryName = "";
             this.$emit("success");
             //this.getCategories();
         })
         .catch((errorResponse: any) => {
-<<<<<<< HEAD
-            //debugger;
-=======
             // debugger;
->>>>>>> df19c5fc2e50c289f04d07a6b3d63fbf12b348d7
             this.error = errorResponse.response.data.reason;
         });
     }

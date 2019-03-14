@@ -1,50 +1,12 @@
 <template>
   <div class="services">
-<<<<<<< HEAD
 
     <div class="container" style="margin-top: 40px; margin-bottom: 25px;">
 
-=======
-    
-    <div class="container" style="margin-top: 40px; margin-bottom: 25px;">
-
->>>>>>> df19c5fc2e50c289f04d07a6b3d63fbf12b348d7
       <h2 style="border-bottom: 1.5px solid orange; margin-bottom: 15px;">Services</h2>
     <div v-if="display">
       <!-- <button class="button" v-on:click="getServices()" >  add service </button> -->
       <div v-for="(service, index) in services" v-bind:key="index">
-<<<<<<< HEAD
-<!-- This was only on master, not most recent pull request
-        <div class="tile"> <br> </div>
-
-          <div class="tile is-vertical">
-
-            <div class="tile">
-              <div class="tile is-1"> <br> </div>
-            <div class="tile box is-parent is-vertical">
-              <div class="title is-4 tile is-children"> {{ service.serviceName }} </div>
-              <div class="tile is-children">
-                <div class="tile is-1"> <br> </div>
-                <div class = "tile columns is-10 ">
-                  <div class="column  media-content">
-                    <p class="subtitle">
-                      {{ service.description }}
-                    </p>
-                                          Price:
-                      $ {{service.price}}
-                  </div>
-
-
-                  <div class="hours tile box is-3 media-content">
-                    <figure class="image is-128x128">
-                      <img :src="service.imgURL" alt="">
-                    </figure>
-                  </div>
-                  <div class="tile is-1"> <br> </div>
-                </div>
- -->
-=======
->>>>>>> df19c5fc2e50c289f04d07a6b3d63fbf12b348d7
 
         <div class="tile is-ancestor">
           <div class="tile is-3"></div>

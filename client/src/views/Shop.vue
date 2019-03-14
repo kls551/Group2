@@ -2,27 +2,12 @@
   <div class="shop">
     <div class="columns top-bar">
       <!-- Categories menu -->
-<<<<<<< HEAD
       <div class="column is-3 menu">
-        <section>
-          <nav class="panel">
-            <p class="panel-heading">
-              <span>Categories</span>
-            </p>
-=======
-      <div class="tile is-3 is-vertical is-parent menu">
-        <div class="tile is-child">
           <section>
             <nav class="panel">
               <p class="panel-heading">
                 <span>Categories</span>
               </p>
-
-              <!-- Dropdown menu for sorting options -->
-              <div class="panel-block">
-                <span class="cat-name">{{ sorts.name }}</span>
-              </div>
->>>>>>> df19c5fc2e50c289f04d07a6b3d63fbf12b348d7
 
             <!-- Menu for sorting options -->
             <div class="panel-block">
@@ -36,11 +21,9 @@
               :key="option.id"
               v-on:change="sortby"
             >
-              <b-radio
-                v-model="whichSort"
-                :name="sorts.name"
-                :native-value="option.id"
-              >{{ option.name }}</b-radio>
+              <b-radio v-model="whichSort" :name="sorts.name" :native-value="option.id">
+                {{ option.name }}
+              </b-radio>
             </a>
 
             <!-- Brand filter options -->
@@ -111,29 +94,8 @@
         </section>
       </div>
 
-<<<<<<< HEAD
-      <!-- Shop items layout -->
-      <div class="column">
-        <div class="columns is-multiline shop-layout">
-          <div v-for="item in shopItems" :key="item.id" class="column is-narrow">
-            <div v-if="true">
-              <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
-                <div class="card">
-                  <figure class="image is-128x128 center">
-                    <img :src="item.images[0].img">
-                  </figure>
-                  <ul class="product">
-                    <li class="item-name is-size-5">{{ item.name }}</li>
-                    <li class="item-price">${{ item.price }}</li>
-                  </ul>
-                </div>
-              </router-link>
-            </div>
-            <div v-else>
-              {{ item.show }}
-=======
       <!-- Shop layout -->
-      <div class="tile is-child columns is-multiline shop-layout">
+      <div class="columns is-multiline shop-layout">
         <div v-for="item in shopItems" :key="item.id" class="column is-narrow">
           <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
             <div class="card">
@@ -150,22 +112,29 @@
                         <p class="title is-4">{{ item.name }}</p>
                       </div>
                       <div class="column">
-                        <p class="title" style="color: orange; font-size: 18px;"> ${{ item.price }} </p>
+                        <p class="title" style="color: orange; font-size: 18px;">
+                          ${{ item.price }}
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="content">
-                  <p>{{ item.brand }}   |   IN STOCK </p>
+                  <p> {{ item.brand }}   |   IN STOCK </p>
                     <div v-if="isLoggedIn">
                       <router-link :to="{ name: 'ownerAddItem', params: { itemId: item.id, editing: true }}">
-                        <button class="button is-info is-fullwidth" type="submit" style="margin-top: 15px;">Edit</button></router-link>
-                      <button class="button is-danger is-fullwidth" type="submit" style="margin-top: 15px;">Delete</button>
+                        <button class="button is-info is-fullwidth" type="submit" style="margin-top: 15px;">
+                          Edit
+                        </button>
+                      </router-link>
+                      <button class="button is-danger is-fullwidth" type="submit" style="margin-top: 15px;">
+                        Delete
+                      </button>
                     </div>
+                  </div>
                 </div>
               </div>
->>>>>>> df19c5fc2e50c289f04d07a6b3d63fbf12b348d7
-            </div>
+            </router-link>
           </div>
         </div>
       </div>
@@ -257,7 +226,6 @@
     }
   }
 
-<<<<<<< HEAD
   filter() {
     console.log("hit filter");
     if (this.activeBrandIds.length != 0) {
@@ -272,7 +240,7 @@
       console.log("finished axios statement");
     }
   }
-=======
+
   get isOwner(): boolean {
     return this.$store.state.user && (this.$store.state.user.isAdmin === 1);
   }
@@ -280,8 +248,6 @@
   get isLoggedIn(): boolean {
     return this.$store.state.user;
   }
-
->>>>>>> df19c5fc2e50c289f04d07a6b3d63fbf12b348d7
 }
 </script>
 
@@ -300,18 +266,11 @@
   margin-right: auto;
 }
 .card {
-<<<<<<< HEAD
-  border-radius: 7px;
-  padding: 12px 5px 12px 5px;
-  height: 250px;
-  width: 160px;
-=======
   border-radius: 5px;
   padding: 3px 3px 3px 3px;
   margin-bottom: 10px;
   height: auto;
   width: 300px;
->>>>>>> df19c5fc2e50c289f04d07a6b3d63fbf12b348d7
 }
 .item-price {
   position: absolute;

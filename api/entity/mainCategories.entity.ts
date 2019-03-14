@@ -11,7 +11,7 @@ export class MainCategory {
   @Column()
   public name!: string;
 
-  @Column()
+  @Column({default : false})
   public show!: boolean;
 
   @OneToMany(type => SubCategory, subCategory => subCategory.mainCategory)

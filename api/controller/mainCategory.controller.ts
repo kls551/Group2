@@ -25,7 +25,7 @@ export class MainCategoryController extends DefaultController {
       mainCat.name = req.body.name;
       mainCat.show = false;
       mainCatRepo.save(mainCat).then((savedCategory: MainCategory) => {
-          res.status(200).send({ mainCat });
+          res.status(200).send( savedCategory );
         });
       });
 

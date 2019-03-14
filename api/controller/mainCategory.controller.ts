@@ -33,26 +33,39 @@ export class MainCategoryController extends DefaultController {
       .delete((req: Request, res: Response) => {
         const mainCat = getRepository(MainCategory);
         mainCat.findOneOrFail(req.params.id).then((foundCategory: MainCategory) => {
-          mainCat.delete(foundCategory).then(result => {
-            res.send(200);
-          });
+          if (foundCategory){
+            mainCat.delete(foundCategory).then(result => {
+              res.status(200).send({ deleted: true});
+            })
+          } else {
+            res.status(404).send({ deleted: false });
+          }
+          
         });
       })
 
       .get((req: Request, res: Response) => {
         const mainCat = getRepository(MainCategory);
-        mainCat.findOneOrFail(req.params.id).then((foundCategory: MainCategory) => {
+        mainCat.findOneOrFail(req.params.id).then((foundCategory: MainCategory | undefined) => {
+          if (foundCategory){
             res.status(200).send(foundCategory);
+          } else {
+            res.status(404).send({ message: "category not found"});
+          } 
           })
         })
 
       .put((req: Request, res: Response) => {
         const mainCat = getRepository(MainCategory);
         mainCat.findOneOrFail(req.params.id).then((foundCategory: MainCategory) => {
-          foundCategory.name = req.body.name;
-          mainCat.save(foundCategory).then(result => {
+          if (foundCategory) {
+            foundCategory.name = req.body.name;
+            mainCat.save(foundCategory).then(result => {
             res.send(200);
-          });
+          })
+          } else {
+            res.status(404).send({ message: "category not found"});
+          }
         });
       });
 

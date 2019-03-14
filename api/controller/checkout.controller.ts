@@ -35,8 +35,16 @@ export class OrderController extends DefaultController {
         });
       });
     });
+  
 
-    router.route("/checkout")
+    router.route("/orders")
+    .get((req: Request, res: Response) => {
+      const orderRepo = getRepository(Order);
+      orderRepo.find().then((orders: Order[]) => {
+        res.status(200).send(orders);
+      });
+    })
+
     .post((req: Request, res: Response) => {
       const token = req.get("token");
       const sessionRepo = getRepository(Session);
@@ -53,14 +61,6 @@ export class OrderController extends DefaultController {
         orderRepo.save(order).then((savedOrder: Order) => {
             res.status(200).send({ savedOrder });
         });
-      });
-    });
-
-    router.route("/orders")
-    .get((req: Request, res: Response) => {
-      const orderRepo = getRepository(Order);
-      orderRepo.find().then((orders: Order[]) => {
-        res.status(200).send(orders);
       });
     });
 

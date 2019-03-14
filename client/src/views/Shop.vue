@@ -3,7 +3,7 @@
     <div class="tile is-ancestor top-bar">
       <!-- Categories menu -->
       <div class="tile is-3 is-vertical is-parent menu">
-        <div class="tile is-child box">
+        <div class="tile is-child">
           <section>
             <nav class="panel">
               <p class="panel-heading">
@@ -78,13 +78,33 @@
         <div v-for="item in shopItems" :key="item.id" class="column is-narrow">
           <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
             <div class="card">
-              <figure class="image is-128x128 center">
-                <img :src="item.images[0].img">
-              </figure>
-              <ul class="product">
-                <li class="item-name is-size-5">{{ item.name }}</li>
-                <li class="item-price">${{ item.price }}</li>
-              </ul>
+              <div class="card-image">
+                <figure class="image is-4by3">
+                  <img :src="item.images[0].img">
+                </figure>
+              </div>
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-content">
+                    <div class="columns">
+                      <div class="column is-8">
+                        <p class="title is-4">{{ item.name }}</p>
+                      </div>
+                      <div class="column">
+                        <p class="title" style="color: orange; font-size: 18px;"> ${{ item.price }} </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="content">
+                  <p>{{ item.brand }}   |   IN STOCK </p>
+                    <div v-if="isLoggedIn">
+                      <router-link :to="{ name: 'ownerAddItem', params: { itemId: item.id, editing: true }}">
+                        <button class="button is-info is-fullwidth" type="submit" style="margin-top: 15px;">Edit</button></router-link>
+                      <button class="button is-danger is-fullwidth" type="submit" style="margin-top: 15px;">Delete</button>
+                    </div>
+                </div>
+              </div>
             </div>
           </router-link>
         </div>
@@ -185,6 +205,15 @@
       });
     }
   }
+
+  get isOwner(): boolean {
+    return this.$store.state.user && (this.$store.state.user.isAdmin === 1);
+  }
+
+  get isLoggedIn(): boolean {
+    return this.$store.state.user;
+  }
+
 }
 </script>
 
@@ -203,11 +232,11 @@
   margin-right: auto;
 }
 .card {
-  border-radius: 7px;
-  padding: 12px 5px 12px 5px;
-  margin-bottom: 15px;
-  height: 250px;
-  width: 160px;
+  border-radius: 5px;
+  padding: 3px 3px 3px 3px;
+  margin-bottom: 10px;
+  height: auto;
+  width: 300px;
 }
 .item-price {
   position: absolute;
@@ -230,5 +259,20 @@
 }
 .menu {
   margin-top: 5px;
+}
+
+.title {
+  font-family: 'Questrial';
+  font-size: 16px;
+}
+
+h2 {
+    font-family: 'Questrial';
+    font-size: 28px;
+}
+
+h3 {
+    font-family: 'Questrial';
+    font-size: 16px;
 }
 </style>

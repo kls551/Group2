@@ -5,7 +5,7 @@ import express from "express";
 import multer from "multer";
 import Path from "path";
 
-import { ShopItem,Imgs } from "../entity";
+import { ShopItem,Imgs, SubCategory } from "../entity";
 
 import { getRepository, getConnection, Connection } from "typeorm";
 
@@ -14,6 +14,7 @@ export class ShopItemController extends DefaultController {
     const router = express.Router();
     const shopItemRepo = getRepository(ShopItem);
     const itemImgRepo = getRepository(Imgs);
+    const subCatRepo = getRepository(SubCategory);
 
     router.route("/shopitems/:id")
       .delete((req: Request, res: Response) => {
@@ -26,6 +27,32 @@ export class ShopItemController extends DefaultController {
       .get((req: Request, res: Response) => {
         shopItemRepo.findOneOrFail(req.params.id, {relations: ["images"]}).then((foundItem: ShopItem) => {
           res.status(200).send(foundItem);
+        });
+      })
+
+      .put(async (req: Request, res: Response) => {
+        const item = getRepository(ShopItem);
+        item.findOneOrFail(req.params.id).then((foundItem: ShopItem) => {
+          if (foundItem) {
+            foundItem.name = req.body.name;
+            foundItem.details = req.body.details;
+            foundItem.price = req.body.price;
+            foundItem.quantity = req.body.quantity;
+            foundItem.category = req.body.category;
+            foundItem.inStorePickup = req.body.inStorePickup;
+            //foundItem.subcategories = await subCatRepo.findByIds(req.body.subcategories);
+            foundItem.postedDate = req.body.postedDate;
+            foundItem.brand = req.body.brand;
+            item.save(foundItem).then((savedShopItem: ShopItem) => {
+                const img = new Imgs();
+                img.img = req.body.imageUrl;
+                img.ShopItem = savedShopItem;
+                itemImgRepo.save(img);
+                res.status(200).send({ id : savedShopItem.id});
+          })
+          } else {
+            res.status(404).send({ message: "item not found"});
+          }
         });
       });
 
@@ -52,7 +79,8 @@ export class ShopItemController extends DefaultController {
     });
 
     router.route("/shopitems")
-    .post((req: Request, res: Response) => {
+    .post(async (req: Request, res: Response) => {
+        
         const shopitem = new ShopItem();
         shopitem.name = req.body.name;
         shopitem.details = req.body.details;
@@ -60,7 +88,7 @@ export class ShopItemController extends DefaultController {
         shopitem.quantity = req.body.quantity;
         shopitem.category = req.body.category;
         shopitem.inStorePickup = req.body.inStorePickup;
-        shopitem.subcategories = req.body.subcategories;
+        shopitem.subcategories = await subCatRepo.findByIds(req.body.subcategories);
         shopitem.postedDate = req.body.postedDate;
         shopitem.brand = req.body.brand;
         shopItemRepo.save(shopitem).then((savedShopItem: ShopItem) => {

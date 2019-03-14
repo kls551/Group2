@@ -6,8 +6,9 @@ export interface iShopItem {
   details: string;
   price: number;
   quantity: number;
-  category: string;
+  category: string ;
   inStorePickup: boolean;
+  brand: string;
   postedDate: Date;
   images: iImg[];
   quant: number;

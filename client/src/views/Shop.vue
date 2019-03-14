@@ -98,7 +98,7 @@
                 </div>
                 <div class="content">
                   <p>{{ item.brand }}   |   IN STOCK </p>
-                    <div v-if="isLoggedIn">
+                    <div v-if="isLoggedIn && isOwner">
                       <router-link :to="{ name: 'ownerAddItem', params: { itemId: item.id, editing: true }}">
                         <button class="button is-info is-fullwidth" type="submit" style="margin-top: 15px;">Edit</button></router-link>
                       <button class="button is-danger is-fullwidth" type="submit" style="margin-top: 15px;">Delete</button>

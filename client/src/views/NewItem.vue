@@ -3,7 +3,6 @@
 
     <div class="container" style="margin-top: 25px; margin-bottom: 25px">
         <!-- check to see if we are editing an item from the shop -->
-        {{ editItem() }}
         <div v-if="isEditing == true">
             <h2 style="color: red">Editing {{ this.itemName }}</h2>
         </div>
@@ -181,8 +180,9 @@ export default class NewItem extends Vue {
     isEditing: Boolean = false;
 
     mounted() {
+        this.editItem();
         this.getMainCategories();
-        this.getSubCategories(this.mainCategoryId);
+        //this.getSubCategories(this.mainCategoryId);
         this.getBrands();
         this.imageCount;
     }
@@ -199,7 +199,12 @@ export default class NewItem extends Vue {
                     this.itemPrice = this.shopItem.price;
                     this.itemDetail = this.shopItem.details;
                     this.itemQuantity = this.shopItem.quantity;
-                    this.iteminStorePickup = this.shopItem.inStorePickup;
+                    this.iteminStorePickup = this.shopItem.inStorePickup; 
+                    this.selected = response.data.category && response.data.category.id;
+                    this.selectedBrand = response.data.brand && response.data.brand.id;
+                    this.selectedSubCategories = response.data.subcategories.id;
+                    this.itemImageURL = this.shopItem.images[0].img;
+                    this.saveMainCat(this.selected);
                 }
                 this.$emit("success");  
             })
@@ -282,7 +287,7 @@ export default class NewItem extends Vue {
             });
     }
 
-    saveMainCat(mainCatId:number) {
+    saveMainCat(mainCatId:Number) {
         this.mainCategoryId = mainCatId;
         this.mainselected = true;
         this.getSubCategories(mainCatId);

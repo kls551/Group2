@@ -156,6 +156,7 @@ export default class App extends Vue {
   }
   get isOwner(): boolean {
     return this.$store.state.user && (this.$store.state.user.isAdmin === 1);
+<<<<<<< HEAD
   }
 <<<<<<< HEAD
 
@@ -164,6 +165,9 @@ export default class App extends Vue {
   }
   
 =======
+>>>>>>> master
+=======
+  }
 >>>>>>> master
   logout() {
     console.log("logout   ",this.$store.state.userToken);

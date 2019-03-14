@@ -28,6 +28,32 @@ export class ShopItemController extends DefaultController {
         shopItemRepo.findOneOrFail(req.params.id, {relations: ["images"]}).then((foundItem: ShopItem) => {
           res.status(200).send(foundItem);
         });
+      })
+
+      .put(async (req: Request, res: Response) => {
+        const item = getRepository(ShopItem);
+        item.findOneOrFail(req.params.id).then((foundItem: ShopItem) => {
+          if (foundItem) {
+            foundItem.name = req.body.name;
+            foundItem.details = req.body.details;
+            foundItem.price = req.body.price;
+            foundItem.quantity = req.body.quantity;
+            foundItem.category = req.body.category;
+            foundItem.inStorePickup = req.body.inStorePickup;
+            //foundItem.subcategories = await subCatRepo.findByIds(req.body.subcategories);
+            foundItem.postedDate = req.body.postedDate;
+            foundItem.brand = req.body.brand;
+            item.save(foundItem).then((savedShopItem: ShopItem) => {
+                const img = new Imgs();
+                img.img = req.body.imageUrl;
+                img.ShopItem = savedShopItem;
+                itemImgRepo.save(img);
+                res.status(200).send({ id : savedShopItem.id});
+          })
+          } else {
+            res.status(404).send({ message: "item not found"});
+          }
+        });
       });
 
     router.route("/shopitems/:id/:qty")

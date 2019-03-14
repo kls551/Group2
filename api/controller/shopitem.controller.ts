@@ -5,7 +5,7 @@ import express from "express";
 import multer from "multer";
 import Path from "path";
 
-import { ShopItem, Brands, Imgs, SubCategory } from "../entity";
+import { ShopItem, MainCategory, Brands, Imgs, SubCategory } from "../entity";
 
 import { getRepository, getConnection, Connection } from "typeorm";
 
@@ -100,25 +100,37 @@ export class ShopItemController extends DefaultController {
         });
     })
     .get((req: Request, res: Response) => {
-        const users =  getConnection()
-        .getRepository(ShopItem)
-        .createQueryBuilder("shopitem")
-        .leftJoinAndSelect("shopitem.images", "imgs")
-        .getMany().then(obj => {console.log(obj)
-            res.status(200).send(obj);
-        });
-    });
-
-    router.route("/shopitems/:brandid")
-      .get((req: Request, res: Response) => {
+      const shopItemRepo = getRepository(ShopItem);
+      // let query = shopItemRepo;
+      if (req.query.cat_id) {
         shopItemRepo
           .createQueryBuilder("shopitem")
-          .leftJoinAndSelect("shopitem.brand", "brands")
-          .where("shopitem.brand.id = :bid", { bid: req.params.brandid })
+          .innerJoinAndSelect("shopitem.category", "category")
+          .where("category.id in (:cid)", { cid: req.params.cat_id })
           .getMany().then((shopitems: ShopItem[]) => {
             res.status(200).send(shopitems);
           });
-      });
+      } else {
+        const users = getConnection()
+          .getRepository(ShopItem)
+          .createQueryBuilder("shopitem")
+          .leftJoinAndSelect("shopitem.images", "imgs")
+          .getMany().then(obj => {console.log(obj)
+              res.status(200).send(obj);
+          });
+      }
+    });
+
+    // router.route("/shopitems/:brandid")
+    //   .get((req: Request, res: Response) => {
+    //     shopItemRepo
+    //       .createQueryBuilder("shopitem")
+    //       .leftJoinAndSelect("shopitem.brand", "brands")
+    //       .where("shopitem.brand.id = :bid", { bid: req.params.brandid })
+    //       .getMany().then((shopitems: ShopItem[]) => {
+    //         res.status(200).send(shopitems);
+    //       });
+    //   });
 
     return router;
   }

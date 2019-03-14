@@ -44,7 +44,7 @@
               <!-- Main category set -->
               <div class="panel-block" v-on:click="category.show = !category.show">
                 <span class="cat-name">
-                    <b-checkbox v-model="activeMainCatIds" :native-value="category.id">
+                    <b-checkbox v-model="activeCatIds" :native-value="category.id">
                     {{ category.name }}
                   </b-checkbox>
                 </span>
@@ -70,7 +70,7 @@
             </div>
 
             <!-- Show selection for testing -->
-            <!--<div class="panel-block">
+            <div class="panel-block">
               Active brands:
             </div>
             <div class="panel-block menu-contents" v-for="brand in activeBrandIds">
@@ -80,7 +80,7 @@
             <div class="panel-block">
               Active main categories:
             </div>
-            <div class="panel-block menu-contents" v-for="cat in activeMainCatIds">
+            <div class="panel-block menu-contents" v-for="cat in activeCatIds">
               {{ cat }}
             </div>
 
@@ -89,7 +89,7 @@
             </div>
             <div class="panel-block menu-contents" v-for="cat in activeSubCatIds">
               {{ cat }}
-            </div>-->
+            </div>
           </nav>
         </section>
       </div>
@@ -160,7 +160,7 @@
     whichSort: number = 0;
     brandsShow = false;
     activeBrandIds: number[] = [];
-    activeMainCatIds: number[] = [];
+    activeCatIds: number[] = [];
     activeSubCatIds: number[] = [];
 
     sorts: iMainCategory = { id: 1099, name: "Sorting Options", show: true,
@@ -227,17 +227,32 @@
   }
 
   filter() {
-    console.log("hit filter");
-    if (this.activeBrandIds.length != 0) {
-      console.log("hit if statement");
+    // if (this.activeBrandIds.length != 0) {
+    //   axios
+    //     .get(APIConfig.buildUrl("/shopitems/"), { params: { brand_id: this.activeBrandIds }})
+    //     .then((response: AxiosResponse) => {
+    //       this.shopItems = response.data;
+    //       console.log(this.shopItems);
+    //       this.$emit("success");
+    //     });
+    // }
+    if (this.activeCatIds.length != 0) {
       axios
-        .get(APIConfig.buildUrl("/shopitems/" + this.activeBrandIds[0]))
+        .get(APIConfig.buildUrl("/shopitems/"), { params: { cat_id: this.activeCatIds }})
         .then((response: AxiosResponse) => {
           this.shopItems = response.data;
           console.log(this.shopItems);
           this.$emit("success");
         });
-      console.log("finished axios statement");
+    }
+    if (this.activeBrandIds.length == 0 && this.activeCatIds.length == 0 && this.activeSubCatIds.length == 0) {
+      axios
+        .get(APIConfig.buildUrl("/shopitems"))
+        .then((response: AxiosResponse) => {
+          this.shopItems = response.data;
+          console.log(this.shopItems);
+          this.$emit("success");
+        });
     }
   }
 

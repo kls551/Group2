@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex, { MutationTree, ActionTree } from "vuex";
+import createPersistedState from 'vuex-persistedstate'
 
 import { APIConfig } from "./utils/api.utils";
 import axios, { AxiosResponse } from "axios";
@@ -59,6 +60,7 @@ const actions: ActionTree<iRootState, iRootState> = {
 };
 
 export default new Vuex.Store({
+  plugins: [createPersistedState()],
   state,
   mutations,
   actions

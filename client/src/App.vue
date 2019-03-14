@@ -62,6 +62,7 @@
         </div>
       </div>
       
+      
     <router-view class="container"/>
     <Signup
       v-bind:is-showing="showSignup"
@@ -161,6 +162,10 @@ export default class App extends Vue {
 
   get isStaff(): boolean {
     return this.$store.state.user && (this.$store.state.user.isAdmin === 0 || this.$store.state.user.isAdmin === 1);
+  }
+
+  get isUser(): boolean {
+    return this.$store.state.user && !(this.$store.state.user.isAdmin === 0 || this.$store.state.user.isAdmin === 1);
   }
   
   logout() {

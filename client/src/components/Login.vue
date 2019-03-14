@@ -16,8 +16,7 @@
             class="input"
             type="text"
             placeholder="email address"
-            v-model="signup.emailAddress"
-          >
+            v-model="signup.emailAddress">
         </div>
           <p v-if="signup.emailAddress.length <= 0" class="help is-danger">Email is required</p>
       </div>

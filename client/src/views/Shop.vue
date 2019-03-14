@@ -83,7 +83,7 @@
               Active main categories:
             </div>
             <div class="panel-block menu-contents" v-for="cat in activeMainCatIds">
-              {{ cat }} 
+              {{ cat }}
             </div>
 
             <div class="panel-block">

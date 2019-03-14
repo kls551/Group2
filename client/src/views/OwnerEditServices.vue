@@ -100,7 +100,8 @@ export default class OwnerEditServices extends Vue{
     service: ServiceForm = {
         serviceName: "",
         description: "",
-        price: 0
+        price: 0,
+        image: ""
     };
     error: string | boolean = false;
 
@@ -110,7 +111,8 @@ export default class OwnerEditServices extends Vue{
         id: 0,
         serviceName: "",
         description: "",
-        price: 0
+        price: 0,
+        imgURL: ""
     };
 
     mounted() {
@@ -187,6 +189,7 @@ export interface ServiceForm {
   serviceName: string;
   description: string;
   price: number;
+  image: string;
 }
 </script>
 

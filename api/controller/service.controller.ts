@@ -11,7 +11,8 @@ export class ServiceController extends DefaultController {
         const router = express.Router();
 
         router.route("/owner/edit-services").post((req: Request, res: Response) => {
-            const {serviceName, description, price } = req.body;
+            console.log(req.body);
+            const {serviceName, description, price, imgURL } = req.body;
             const serviceRepo = getRepository(Service);
             serviceRepo
                 .findOne({ where : { serviceName } })
@@ -21,10 +22,12 @@ export class ServiceController extends DefaultController {
                         newService.serviceName = serviceName;
                         newService.description = description;
                         newService.price = price;
+                        newService.imgURL = imgURL;
                         serviceRepo.
                         save(newService)
                         .then(
                             (createdService : Service) => {
+                                console.log(createdService);
                                 res.status(200).send({createdService});
                             },
                             (reson: any)  => {
@@ -44,6 +47,7 @@ export class ServiceController extends DefaultController {
                 .find()
                 .then((service: Service[] | undefined) => {
                     if (service) {
+                        console.log(service);
                         res.status(200).send(service);
                     }
                     else {

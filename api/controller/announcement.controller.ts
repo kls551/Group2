@@ -17,7 +17,7 @@ export class AnnouncementController extends DefaultController {
         announcement.title = req.body.title;
         announcement.body = req.body.body;
         announcementRepo.save(announcement).then((savedAnnouncement: Announcement) => {
-            res.status(200).send({ announcement });
+            res.sendStatus(200);
         });
     })
     .get((req: Request, res: Response) => {
@@ -46,7 +46,7 @@ export class AnnouncementController extends DefaultController {
     .delete((req: Request, res: Response) => {
       announcementRepo.findOneOrFail(req.params.id).then((foundAnn: Announcement) => {
         announcementRepo.delete(foundAnn).then(result => {
-          res.send(200);
+          res.status(200).send({deleted: result});
         });
       });
     });

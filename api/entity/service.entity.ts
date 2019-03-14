@@ -1,5 +1,4 @@
 import { Column, Entity, Index, PrimaryGeneratedColumn, OneToMany, OneToOne } from "typeorm";
-import { Order } from "./order.entity";
 
 @Entity()
 export class Service {
@@ -14,4 +13,7 @@ export class Service {
 
   @Column()
   public price!: number;
+
+  @Column({default:null})
+  public imgURL!: string;
 }

@@ -14,17 +14,22 @@ export class MainCategoryController extends DefaultController {
     router.route("/maincategory")
     .get((req: Request, res: Response) => {
         const mainCatRepo = getRepository(MainCategory);
-        mainCatRepo.find().then((categories: MainCategory[]) => {
+        mainCatRepo.find({relations: ["subCategories"]}).then((categories: MainCategory[]) => {
           res.status(200).send(categories);
         });
       })
-    
+
     .post((req: Request, res: Response) => {
       const mainCatRepo = getRepository(MainCategory);
       const mainCat = new MainCategory();
       mainCat.name = req.body.name;
-      mainCatRepo.save(mainCat).then((savedCategory: MainCategory) => {
+      mainCat.show = false;
+      mainCatRepo.save(mainCat).then(
+        (savedCategory: MainCategory) => {
           res.status(200).send({ mainCat });
+        },
+        (reason: any) => {
+          res.status(400).send( {reason: "the category was not unique"})
         });
       });
 
@@ -32,29 +37,42 @@ export class MainCategoryController extends DefaultController {
       .delete((req: Request, res: Response) => {
         const mainCat = getRepository(MainCategory);
         mainCat.findOneOrFail(req.params.id).then((foundCategory: MainCategory) => {
-          mainCat.delete(foundCategory).then(result => {
-            res.send(200);
-          });
+          if (foundCategory){
+            mainCat.delete(foundCategory).then(result => {
+              res.status(200).send({ deleted: true});
+            })
+          } else {
+            res.status(404).send({ deleted: false });
+          }
+          
         });
       })
 
       .get((req: Request, res: Response) => {
         const mainCat = getRepository(MainCategory);
-        mainCat.findOneOrFail(req.params.id).then((foundCategory: MainCategory) => {
+        mainCat.findOneOrFail(req.params.id).then((foundCategory: MainCategory | undefined) => {
+          if (foundCategory){
             res.status(200).send(foundCategory);
+          } else {
+            res.status(404).send({ message: "category not found"});
+          } 
           })
         })
 
       .put((req: Request, res: Response) => {
         const mainCat = getRepository(MainCategory);
         mainCat.findOneOrFail(req.params.id).then((foundCategory: MainCategory) => {
-          foundCategory.name = req.body.name;
-          mainCat.save(foundCategory).then(result => {
+          if (foundCategory) {
+            foundCategory.name = req.body.name;
+            mainCat.save(foundCategory).then(result => {
             res.send(200);
-          });
+          })
+          } else {
+            res.status(404).send({ message: "category not found"});
+          }
         });
       });
-    
+
     return router;
   }
 }

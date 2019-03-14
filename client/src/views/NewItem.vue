@@ -1,40 +1,11 @@
 <template>
   <div class="about">
 
-    <div class="container" style="margin-top: 15px">
+    <div class="container" style="margin-top: 25px; margin-bottom: 25px">
       <h2>Add New Item </h2>
     <div class="columns">
-
-      <div class="rightMargin column" style="margin-right: 0px">
-        <figure class="image is-3by2">
-            <img alt="Map" src="../assets/beach-cruiser.jpg" style="margin-top: 20px;">
-        </figure>
-
-        <div class="tile box" style="margin-top: 20px">
-          <div class="field" style="margin-top 20px;">
-            <div class="file" style="margin-left: 150px">
-              <label class="file-label">
-                <input 
-                type="file"
-                accept="image/*"
-                class="input-file file-input" 
-                name="resume">
-                <span class="file-cta">
-                  <span class="file-icon">
-                    <i class="fas fa-upload"></i>
-                  </span>
-                  <span class="file-label">
-                    Choose Image file…
-                  </span>
-                </span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-      </div>
       
-      <div class="leftMargin column">
+      <div class="rightMargin column">
       <br>
 
       <div class="box">
@@ -61,7 +32,7 @@
                 <input class="input" type="text" placeholder="0" v-model="itemQuantity">
             </div>
           </div>
-        
+
             </div>
         </div>
 
@@ -72,7 +43,8 @@
                 <div class="column">
                     <label class="label">Main Category</label>
                     <div class="field" v-for="main in mainCategoryList" :key="main.id">
-                        <b-radio name="options" v-model="selectedMainCategory" v-on:input="saveMainCat(main.id)">
+                        <b-radio name="options" v-model="selected" :native-value="main.id"
+                                 v-on:input="saveMainCat(main.id)">
                             {{ main.name }}
                         </b-radio>
                     </div>
@@ -81,20 +53,23 @@
 
                 <!-- Subcategory select multiple -->
                 <div v-if="mainselected === true" class="column">
-                    <label class="label">Sub Category</label>
+                    <label class="label">Sub Categories</label>
                     <b-select
                         multiple
-                        native-size="8"
+                        native-size="4"
                         v-model="selectedSubCategories">
-                        <option v-for="(main, index) in subCategoryList" v-bind:key="index">{{ main.name }}</option>
+                        <option v-for="(sub, index) in subCategoryList" v-bind:key="index" :value="sub.id">{{ sub.name }}</option>
                     </b-select>
                 </div>
                 <div v-else></div>
 
+                {{selectedSubCategories}}
+
+
                 <div class="column">
                     <label class="label">Brand</label>
                     <div class="field" v-for="(brand, index) in brandList" v-bind:key="index">
-                        <b-radio name="options" v-model="selectedBrand">
+                        <b-radio name="brands" v-model="selectedBrand" :native-value="brand.id">
                             {{ brand.name }}
                         </b-radio>
                     </div>
@@ -117,19 +92,32 @@
                     <textarea class="textarea" placeholder="Add Details" v-model="itemDetail"></textarea>
                 </div>
             </div>
+            <div class="field">
+                <label class="label">ImageUrl</label>
+                <div class="control">
+                    <input class="input" type="text" placeholder="URL" v-model="itemImageURL">
+                </div>
+            </div>
 
+        <div class="field">
             <div class="control">
-                  <button class="button is-success" type="submit" v-on:click="addItem">Add Item</button>
-             </div>
-        <br>
-
+                <label class="checkbox">
+                    <input type="checkbox" v-model="addwithmoreimg">
+                    Add With More Imgs
+                </label>
+            </div>  
+        </div>
         
+          </div>
+                <span><button v-if="addMoreimg" class="button is-warning" type="submit" v-on:click="addMore">Add More Image</button></span>
+                <span><button v-if="!addMoreimg" class="button is-success" type="submit" v-on:click="addItem">Add Item</button></span>
+
+                <span><button v-if="addMoreimg" class="button is-danger" type="submit" v-on:click="cancel">Cancel</button></span>
         </div>
 
       </div>
     </div>
     </div>
-  </div>
 
 </template>
 
@@ -142,11 +130,18 @@ import {
     APIConfig
 } from "../utils/api.utils";
 import {Component,Prop,Vue} from "vue-property-decorator";
+import { resolve } from "path";
+//import Toasted from 'vue-toasted';
 
+const STATUS_INITIAL = 0;
+const STATUS_SAVING = 1;
+const STATUS_SUCCESS = 2;
+const STATUS_FAILED = 3;
 
 @Component
 export default class NewItem extends Vue {
     error: string | boolean = false;
+    imageCount: Number = 0;
     itemName: String = "";
     itemDetail: String = "";
     itemPrice: Number = 0;
@@ -154,10 +149,14 @@ export default class NewItem extends Vue {
     iteminStorePickup: Boolean = false;
     itemPostedDate: Date = new Date();
     itemImageURL: String = "";
-    selectedMainCategory: MainCategory = {'mainId': 0, 'categoryname': "", 'subCategories': []};
-    selectedBrand: Brand = {'brandname': ""};
+    
+    selected: Number = 0;
+    selectedBrand: Number = 0;
+    selectedSubCategories: Number[] = [];
+    itemid: number | null = null;
+    addMoreimg: Boolean = false;
+    addwithmoreimg: Boolean = false;
 
-    fileCount: number = 0;
     mainCategoryList: MainCategory[] = [];
     mainCategoryId: Number = 0;
     subCategoryList: SubCategory[] = [];
@@ -168,6 +167,7 @@ export default class NewItem extends Vue {
         this.getMainCategories();
         this.getSubCategories(this.mainCategoryId);
         this.getBrands();
+        this.imageCount;
     }
 
     getMainCategories() {
@@ -214,9 +214,37 @@ export default class NewItem extends Vue {
         this.getSubCategories(mainCatId);
     }
 
+    addMore() {
+        console.log(this.itemid);
+        axios.post(APIConfig.buildUrl("/itemimages/" + this.itemid), {
+            img : this.itemImageURL
+        })
+        .then((response: AxiosResponse) => {
+            console.log(response.data);
+            this.itemImageURL = "";
+        })
+        .catch((errorResponse: any) => {
+            this.error = errorResponse.response.data.reason;
+        });
+    }
+    
+    clear() {
+        this.itemName = "";
+        this.itemDetail = "";
+        this.itemPrice = 0;
+        this.itemQuantity = 0;
+        this.itemImageURL = "";
+        this.iteminStorePickup = false;
+    }
+
+    cancel() {
+        this.clear();
+        this.itemid = 0;
+        this.addMoreimg = false;
+        this.itemImageURL = "";
+    }
 
     addItem() {
-        console.log(this.selectedMainCategory);
         if (this.itemName == "" || this.itemPrice == 0) {
             return;
         }
@@ -226,25 +254,30 @@ export default class NewItem extends Vue {
                 details: this.itemDetail,
                 price: this.itemPrice,
                 quantity: this.itemQuantity,
-                category: this.selectedMainCategory.mainId,
+                category: this.selected,
+                subcategories: this.selectedSubCategories,
                 inStorePickup: this.iteminStorePickup,
                 postedDate: this.itemPostedDate,
                 imageUrl: this.itemImageURL,
-                brand: this.selectedBrand.brandname
+                brand: this.selectedBrand
             })
-            .then((response: AxiosResponse) => {
-                this.$emit("success");
-                this.itemName = "";
-                this.itemDetail = "";
-                this.itemPrice = 0;
-                this.itemQuantity = 0;
-                this.iteminStorePickup = false;
+            .then((response: AxiosResponse<{ id: number }>) => { 
+                if(!this.addwithmoreimg) {
+                    this.itemid = response.data.id;
+                    this.$emit("success");
+                    this.clear();
+                }
+                else
+                {
+                    this.itemid = response.data.id;
+                    this.addMoreimg = true;
+                    this.itemImageURL = "";
+                }
             })
             .catch((errorResponse: any) => {
                 this.error = errorResponse.response.data.reason;
             });
     }
-
 }
 
 interface MainCategory {

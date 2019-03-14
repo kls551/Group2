@@ -96,22 +96,25 @@ export default class OwnerEditServices extends Vue{
     public editDescription = "";
     public editPrice = 0;
     public editImage = "";
-    public editSrv : Service = {
-        id: 0,
-        serviceName: "",
-        description: "",
-        price: 0
-    };
+
     service: ServiceForm = {
         serviceName: "",
         description: "",
-        price: 0
+        price: 0,
+        image: ""
     };
     error: string | boolean = false;
 
     public services: Service[] = [];
     public display = true;
-    public selectedService: Service| undefined;
+    public selectedService: Service  = {
+        id: 0,
+        serviceName: "",
+        description: "",
+        price: 0,
+        imgURL: ""
+    };
+
     mounted() {
       this.getServices();
     }
@@ -126,9 +129,11 @@ export default class OwnerEditServices extends Vue{
 
     successUpdate() {
       this.showEdit = false;
+      this.getServices();
     }
     cancelUpdate() {
         this.showEdit = false;
+        this.getServices();
     }
 
     successDelete() {
@@ -163,15 +168,8 @@ export default class OwnerEditServices extends Vue{
     }
 
     showEditForm(srv : Service) {
-        this.editSrv = srv;
-        this.editServiceName = srv.serviceName;
-        this.editDescription = srv.description;
-        this.editPrice = srv.price;
-        this.showUpdate();
-        this.selectedService = srv;
-    }
-    showUpdate() {
         this.showEdit = true;
+        this.selectedService = srv;
     }
 
     showDeleteConfirm(srv : Service) {
@@ -185,26 +183,13 @@ export default class OwnerEditServices extends Vue{
             this.getServices();
         }) 
     }
-
-    updateService() {
-        axios
-        .put(APIConfig.buildUrl("/owner/edit-services/" + this.editSrv.id ), 
-            {serviceName: this.editServiceName,
-            description: this.editDescription,
-            price : this.editPrice }
-        )
-        .then( () => {
-            this.getServices();
-        })
-    }
-
-
 }
 
 export interface ServiceForm {
   serviceName: string;
   description: string;
   price: number;
+  image: string;
 }
 </script>
 

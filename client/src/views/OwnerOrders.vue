@@ -140,7 +140,8 @@ export default class Orders extends Vue {
         for(i = 0; i < this.orders.length; i++){
             axios
             .get(APIConfig.buildUrl("/users/" + this.orders[i].userId))
-            .then((response: AxiosResponse < {user: iUser} >) => {
+            .then((response: AxiosResponse < iUser >) => {
+                console.log(response.data);
                 this.users.push(response.data.user);
             })
             .catch((res: AxiosError) => {

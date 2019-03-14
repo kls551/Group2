@@ -3,5 +3,5 @@ export interface iService {
     serviceName: string;
     description: string;
     price: number;
-    serviceImage: string;
+    imgURL: string;
 }

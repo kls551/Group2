@@ -3,7 +3,7 @@
     <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title">Signup</p>
+          <p class="modal-card-title">Login</p>
           <button class="delete" aria-label="close" v-on:click="cancel"></button>
         </header>
         <section class="modal-card-body">
@@ -30,7 +30,7 @@
     </form>
             </section>
       <footer class="modal-card-foot">
-      <a v-if="!formcheck" class="button is-success" v-on:click="success" disabled>LoginForm</a>
+      <a v-if="!formcheck" class="button is-success" v-on:click="success" disabled>Login</a>
       <a v-if="formcheck" class="button is-success" v-on:click="success">Login</a>
       <a class="button" v-on:click="cancel">Cancel</a>
     </footer>
@@ -42,7 +42,6 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { APIConfig } from "../utils/api.utils";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import Modal from "./Modal.vue";
-
 @Component({
   components: {
     Modal
@@ -55,7 +54,6 @@ export default class Signup extends Vue {
   };
   error: string | boolean = false;
   @Prop(Boolean) isShowing: boolean = false;
-
   @Watch("isShowing")
   handleShowing(isShowingStart: boolean, isShowingEnd: boolean) {
     if (!isShowingStart && isShowingEnd) {
@@ -65,7 +63,6 @@ export default class Signup extends Vue {
       };
     }
   }
-
   success() {
     this.error = false;
     axios
@@ -84,7 +81,6 @@ export default class Signup extends Vue {
         this.error = res.response && res.response.data.error;
       });
   }
-
   get formcheck(): boolean {
     if(
     this.signup.emailAddress.length <= 0 ||
@@ -93,17 +89,14 @@ export default class Signup extends Vue {
     else
       return true;
   }
-
   cancel() {
     this.$emit("cancel");
   }
 }
-
 interface LoginResponse {
   token: string;
   userId: number;
 }
-
 export interface LoginForm {
   emailAddress: string;
   password: string;

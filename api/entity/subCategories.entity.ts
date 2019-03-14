@@ -1,5 +1,5 @@
-import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
-import { MainCategory } from "../entity";
+import { Column, Entity, Index, JoinColumn, OneToMany, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import { MainCategory, ShopItem } from "./";
 
 @Entity()
 export class SubCategory {

@@ -1,7 +1,7 @@
 <template>
 
 <div class="container" style="margin-top: 25px; margin-bottom: 25px;">
-        
+
         <div class="tile is-ancestor">
 
             <!-- Side bar menu -->
@@ -26,16 +26,14 @@
                     <!-- Main category drop down -->
                     <h3 style="padding-bottom: 10px">Select Main Category</h3>
                     <div class="select is-rounded">
-                    <select v-on:input="saveMainCat" v-model="mainCategoryId">
-                        <option 
+                    <select v-on:change="saveMainCat" v-model="mainCategoryId">
+                        <option
                         v-for="(main, index) in mainCategoryList" v-bind:key="index"
                         :value="main.id">
                         {{ main.name }}
                         </option>
                     </select>
                     </div>
-
-                    {{mainCategoryId}}
 
 
                 <!-- <div class="dropdown is-hoverable">
@@ -57,7 +55,7 @@
                     </div>
                 </div> -->
                     <!-- <b-field>
-                        <b-select placeholder="Select a Main Category" 
+                        <b-select placeholder="Select a Main Category"
                                   v-model="selected"
                                   v-on:input="saveMainCat(main.id, main.name)">
                                 <option disabled value="">Please select one</option>
@@ -73,12 +71,13 @@
                             <button class="button is-success" type="submit" style="margin-top: 15px;" v-on:click="editCategory">Update</button>
                         </div>
                         <div v-else>
-                            <button class="button is-success" type="submit" style="margin-top: 15px;" 
+                            <button class="button is-success" type="submit" style="margin-top: 15px;"
                             v-on:click="addSubCategory(mainCategoryId)">Add</button>
                         </div>
                     </div>
                 </div>
 
+                {{ getMainName(mainCategoryId) }}
                 <!-- Table -->
                 <div class="tile is-child box">
                     <h2><b>Main Category :</b> {{ mainCategoryName }} </h2>
@@ -103,7 +102,7 @@
         <div class="tile is-2"></div>
         </div>
     </div>
-    
+
 </template>
 
 <script lang="ts">
@@ -159,7 +158,7 @@ export default class subCategory extends Vue {
 
     getMainName(mainCatId:Number) {
         axios
-        .get(APIConfig.buildUrl("/maincategory/" + mainCatId), {           
+        .get(APIConfig.buildUrl("/maincategory/" + mainCatId), {
         })
         .then((response: AxiosResponse<MainCategory>) => {
             console.log(this.mainCategoryName);
@@ -173,32 +172,31 @@ export default class subCategory extends Vue {
     saveMainCat() {
         this.getMainName(this.mainCategoryId);
         console.log(this.mainCategoryName);
-        debugger;
+        // debugger;
         this.getSubCategories(this.mainCategoryId);
     }
-
     addSubCategory(mainCatId:number) {
         axios
-        .post(APIConfig.buildUrl("/subcategory"), {               
+        .post(APIConfig.buildUrl("/subcategory"), {
             name: this.subCategoryName,
             mainCategoryId: mainCatId,
         })
         .then((response: AxiosResponse) => {
-            debugger; 
+            // debugger; 
             this.getSubCategories(this.mainCategoryId);
             this.subCategoryName = "";
             this.$emit("success");
             //this.getCategories();
         })
         .catch((errorResponse: any) => {
-            debugger;
+            // debugger;
             this.error = errorResponse.response.data.reason;
         });
     }
 
     deleteSubCategory(index:number, mainCatId:number) {
         axios
-        .delete(APIConfig.buildUrl("/subcategory/" + index), {           
+        .delete(APIConfig.buildUrl("/subcategory/" + index), {
         })
         .then(() => {
             this.getSubCategories(mainCatId);
@@ -227,7 +225,7 @@ export default class subCategory extends Vue {
 
     cancel() {
         this.$emit("cancel");
-    }  
+    }
 }
 
 interface MainCategory {

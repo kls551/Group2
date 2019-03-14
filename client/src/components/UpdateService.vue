@@ -15,7 +15,7 @@
             <input
                 class="input"
                 type="text"
-                placeholder=editingSrv.serviceName
+                placeholder=service.serviceName
                 v-model="service.serviceName"
             >
             </div>
@@ -34,6 +34,7 @@
             <label class="label">Price</label>
             <div class="control">
             <input class="input" placeholder="price" v-model="service.price">
+            <p v-if="isNaN(service.price)" class="help is-danger">Price must be a number</p>
             </div>
         </div>
 
@@ -61,18 +62,10 @@ export default class UpdateService extends Vue {
 //   @Prop(String) title!: string;
     error: string | boolean = false;
     @Prop(Boolean) isShowing: boolean = false;
+    @Prop ({default : null}) 
+    service : Service | undefined;
 
-    // @Prop() editingSrv : Service = {
-    //     id: 0,
-    //     serviceName: "",
-    //     description: "",
-    //     price: 0
-    // }
-    // @Prop({ type: String, default: "Save" })
-    // @Prop() srvId : number | undefined = 0;
-    // successButton: string | undefined;
-    @Prop ()
-    service: EditServiceForm = {
+    editingService: EditServiceForm = {
         serviceName: "",
         description: "",
         price: undefined
@@ -81,7 +74,7 @@ export default class UpdateService extends Vue {
     @Watch("isShowing")
     handleShowing(isShowingStart: boolean, isShowingEnd: boolean) {
         if (!isShowingStart && isShowingEnd) {
-            this.service = {
+            this.editingService = {
                 serviceName: "",
                 description: "",
                 price: undefined
@@ -90,7 +83,16 @@ export default class UpdateService extends Vue {
     } 
 
     success() {
-        this.$emit("success");
+         axios
+        .put(APIConfig.buildUrl("/owner/edit-services/" + this.$props.service.id ), 
+            {serviceName: this.$props.service.serviceName,
+            description: this.$props.service.description,
+            price : this.$props.service.price }
+        )
+        .then( () => {
+            this.$emit("success");
+        })
+       
     }
 
     cancel() {

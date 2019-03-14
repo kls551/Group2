@@ -5,30 +5,36 @@ export class About {
   @PrimaryGeneratedColumn()
   public id!: number;
 
-  @Column({default:null})
+  @Column()
   public address!: string;
 
-  @Column({default:null})
+  @Column()
   public email!: string;
 
-  @Column({default:null})
+  @Column()
   public phone!: string;
 
-  @Column({default: null})
+  @Column()
   public profileUrl!: string;
 
-  @Column({default:null})
+  @Column()
   public monday!: string;
-  @Column({default:null})
+
+  @Column()
   public tuesday!: string;
-  @Column({default:null})
+
+  @Column()
   public wednesday!: string;
-  @Column({default:null})
+
+  @Column()
   public thursday!: string;
-  @Column({default:null})
+
+  @Column()
   public friday!: string;
-  @Column({default:null})
+
+  @Column()
   public saturday!: string;
-  @Column({default:null})
+  
+  @Column()
   public sunday!: string;
 }

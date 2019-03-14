@@ -19,6 +19,7 @@ describe("/users", () => {
     user.firstName = "testUser";
     user.lastName = "testUser";
     user.password = "password";
+    user.isAdmin = 0;
     return conn.getRepository(User).save(user);
   };
 
@@ -26,6 +27,7 @@ describe("/users", () => {
     myApp = await new Server().getMyApp();
     connection = await DBConnection.getConnection();
     await connection.synchronize();
+    await DBUtils.clearDB();
   });
 
   beforeEach(async () => {
@@ -33,6 +35,7 @@ describe("/users", () => {
   });
 
   afterAll(async () => {
+    // await DBUtils.clearDB();
     DBConnection.closeConnection();
   });
 
@@ -41,7 +44,7 @@ describe("/users", () => {
       request(myApp)
         .get("/users")
         .then((response: request.Response) => {
-          expect(response.body).toEqual({ users: [] });
+          expect(response.body).toEqual([]);
           done();
         });
     });
@@ -52,30 +55,44 @@ describe("/users", () => {
           .get("/users")
           .expect(200)
           .then((response: request.Response) => {
+            console.log("user ", response.body);
             expect(
-              response.body.users && response.body.users.length
+
+              response.body.user && response.body.user.length
             ).toEqual(1);
-            expect(response.body.users[0].emailAddress).toEqual(email);
+            expect(response.body.user[0].emailAddress).toEqual(email);
+          
+            //  response.body && response.body.length
+            //).toEqual(1);
+            //expect(response.body[0].emailAddress).toEqual(email);
+
             done();
           });
       });
     });
   });
+
   describe("POST '/'", () => {
     test("should create a user", done => {
-      const email = `test${new Date().getTime()}@test.com`;
       return request(myApp)
         .post("/users")
         .send({
-          emailAddress: email,
+          emailAddress: "email",
           firstName: "test",
           lastName: "test",
           password: "password",
+          isAdmin: 0,
         })
         .then((response: request.Response) => {
-          expect(response.body.user.emailAddress).toEqual(email);
+          expect(response.body.emailAddress).toEqual("email");
           done();
         });
+    });
+    test("should fail because user with this id does not exist", done => {
+      return request(myApp)
+        .post("/users/" + 85)
+        .expect(500);
+        done();
     });
   });
 });

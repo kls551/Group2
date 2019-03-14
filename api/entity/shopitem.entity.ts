@@ -1,5 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, OneToOne, ManyToMany } from "typeorm";
-import { User, MainCategory } from "./";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, OneToMany, JoinTable, JoinColumn, OneToOne, ManyToMany} from "typeorm";
+import { User, MainCategory, SubCategory, Imgs  } from "./";
 
 @Entity()
 export class ShopItem {
@@ -21,6 +21,10 @@ export class ShopItem {
   @ManyToOne(type => MainCategory, cat => cat.id)
   public category!: MainCategory;
 
+  @ManyToMany((type) => SubCategory, subcat => subcat.id)
+  @JoinTable()
+  public subcategories!: SubCategory[];
+
   @Column({default: null})
   public brand!: string;
 
@@ -30,8 +34,8 @@ export class ShopItem {
   @Column()
   public postedDate!: Date;
 
-  @Column({default: null})
-  public imageUrl!: string;
+  @OneToMany(type => Imgs, Imgs => Imgs.ShopItem)
+  public images!: Imgs[];
 
   @ManyToOne(type => User, user => user.cart, {
     onDelete: 'CASCADE'

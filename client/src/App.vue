@@ -6,22 +6,20 @@
       <div class="navbar-brand">
         <router-link class="navbar-item" to="/">
           <img src="./assets/Foxcycle.png" width="150">
-        </router-link> 
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        </router-link>
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="true">
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
         </a>
       </div>
-      
+
       <div class="navbar-menu">
-        <div class="navbar-start">  
+        <div class="navbar-start">
           <router-link class="navbar-item is-tab" to="/" exact-active-class="is-active">Home</router-link>
           <router-link class="navbar-item is-tab" to="/shop" exact-active-class="is-active">Shop</router-link>
           <router-link class="navbar-item is-tab" to="/services" exact-active-class="is-active">Services</router-link>
           <router-link class="navbar-item is-tab" to="/about" exact-active-class="is-active">About</router-link>
-          <!-- <router-link class="navbar-item is-tab" to="/trackorder" exact-active-class="is-active">Track Order</router-link>    -->
-          <!-- <router-link class="navbar-item is-tab" to="/todos" exact-active-class="is-active">my Todos</router-link>     -->
         </div>
 
         <!-- Log in, Checkout, Sign Up Tabs -->
@@ -43,26 +41,24 @@
 
     <!-- Owner and Staff Login Tabs Only -->
       <div class="container" style="margin-top: 15px; margin-bottom: 15px" v-if="isLoggedIn">
-        <div class="tabs is-boxed is-centered" v-show="isStaff">
+        <div class="tabs is-boxed is-centered">
           <ul>
-              <router-link to="/owner/manage-main-categories" tag="li" exact-active-class="is-active"><a>Manage Categories</a></router-link>
+              <router-link to="/owner/manage-main-categories" v-show="isOwner" tag="li" exact-active-class="is-active"><a>Manage Categories</a></router-link>
 
-              <router-link to="/owner/manage-orders" tag="li" exact-active-class="is-active"><a>Orders</a></router-link>
+              <router-link to="/owner/manage-orders" v-show="isStaff || isOwner" tag="li" exact-active-class="is-active"><a>Orders</a></router-link>
 
-              <router-link to="/owner/manage-inventory" tag="li" exact-active-class="is-active"><a>Inventory</a></router-link>
+              <router-link to="/owner/manage-inventory" v-show="isStaff || isOwner" tag="li" exact-active-class="is-active"><a>Inventory</a></router-link>
 
-              <router-link to="/owner/announcment" tag="li" exact-active-class="is-active"><a>Announcement</a></router-link>
-              <router-link to="/owner/about" tag="li" exact-active-class="is-active"><a>About</a></router-link>
-              <router-link to="/owner/accounts" tag="li" exact-active-class="is-active"><a>Accounts</a></router-link>
+              <router-link to="/owner/announcment" v-show="isOwner" tag="li" exact-active-class="is-active"><a>Announcement</a></router-link>
+              <router-link to="/owner/about" v-show="isOwner" tag="li" exact-active-class="is-active"><a>About</a></router-link>
+              <router-link to="/owner/accounts" v-show="isOwner" tag="li" exact-active-class="is-active"><a>Accounts</a></router-link>
 
-              <router-link to="/owner/add-item" tag="li" exact-active-class="is-active"><a>New Item</a></router-link>
+              <router-link to="/owner/add-item" v-show="isOwner" tag="li" exact-active-class="is-active"><a>New Item</a></router-link>
 
-              <router-link to="/owner/edit-services" tag="li" exact-active-class="is-active"><a>Services</a></router-link>           
+              <router-link to="/owner/edit-services" v-show="isOwner" tag="li" exact-active-class="is-active"><a>Services</a></router-link>           
           </ul>
         </div>
       </div>
-      
-      
     <router-view class="container"/>
     <Signup
       v-bind:is-showing="showSignup"
@@ -74,11 +70,13 @@
       v-on:success="successCheckout()"
       v-on:cancel="cancelCheckout()"
     />
+    <!-- This doesn't seem to be doing anything, just sending a warning in console
     <trackorder
       v-bind:is-showing="showTrackOrder"
       v-on:success="successtrack()"
       v-on:cancel="canceltrack()"
     />
+    -->
     <Login v-bind:is-showing="showLogin" v-on:success="successLogin()" v-on:cancel="cancelLogin()"/>
   </div>
 </template>
@@ -93,9 +91,7 @@ import checkout from "@/components/checkout.vue";
 import { APIConfig } from "@/utils/api.utils";
 import Buefy from 'buefy';
 import 'buefy/dist/buefy.css';
-
 Vue.use(Buefy);
-
 @Component({
   components: {
     Signup,
@@ -108,7 +104,6 @@ export default class App extends Vue {
   public showLogin: boolean = false;
   public showcheckout: boolean = false;
   public showtrack: boolean = false;
-
   showSignupModal() {
     this.showSignup = true;
   }
@@ -118,7 +113,6 @@ export default class App extends Vue {
   cancelSignup() {
     this.showSignup = false;
   }
-
   showcheckoutModal() {
     this.showcheckout = true;
   }
@@ -128,7 +122,6 @@ export default class App extends Vue {
   cancelCheckout() {
     this.showcheckout = false;
   }
-
   showTrackOrder() {
     this.showtrack = true;
   }
@@ -138,37 +131,42 @@ export default class App extends Vue {
   canceltrack() {
     this.showtrack = false;
   }
-
-
   showLoginModal() {
     this.showLogin = true;
   }
 
   successLogin() {
     this.showLogin = false;
-    
-    if (this.$store.state.user && (this.$store.state.user.isAdmin === 0 || this.$store.state.user.isAdmin === 1)) {
-      this.$router.push({ name: "ownerManageCategories" });
+    // direct owner to management page 
+    if (this.$store.state.user && (this.$store.state.user.isAdmin === 1)) {
+      this.$router.push("/owner/manage-main-categories");
+    }
+    else if (this.$store.state.user && (this.$store.state.user.isAdmin === 0)) {
+      this.$router.push("/owner/manage-orders");
     }
   }
-
   cancelLogin() {
     this.showLogin = false;
   }
-
   get isLoggedIn(): boolean {
-    return !!this.$store.state.user;
+    return this.$store.state.user;
   }
-
   get isStaff(): boolean {
-    return this.$store.state.user && (this.$store.state.user.isAdmin === 0 || this.$store.state.user.isAdmin === 1);
+    return this.$store.state.user && (this.$store.state.user.isAdmin === 0);
   }
+  get isOwner(): boolean {
+    return this.$store.state.user && (this.$store.state.user.isAdmin === 1);
+  }
+<<<<<<< HEAD
 
   get isUser(): boolean {
     return this.$store.state.user && !(this.$store.state.user.isAdmin === 0 || this.$store.state.user.isAdmin === 1);
   }
   
+=======
+>>>>>>> master
   logout() {
+    console.log("logout   ",this.$store.state.userToken);
     axios
       .post(APIConfig.buildUrl("/logout"), null, {
         headers: { token: this.$store.state.userToken }
@@ -183,7 +181,6 @@ export default class App extends Vue {
 
 
 <style lang="scss">
-
 #app {
   font-family: 'Questrial', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -191,6 +188,9 @@ export default class App extends Vue {
   color: #2c3e50;
 }
 
-
+h2 {
+    font-family: 'Questrial';
+    font-size: 28px;
+}
 
 </style>

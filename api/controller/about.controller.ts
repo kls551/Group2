@@ -14,8 +14,6 @@ export class AboutController extends DefaultController {
     const router = express.Router();
     const aboutRepo = getRepository(About);
 
-
-
     router.route("/about")
 
     .post(

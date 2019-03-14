@@ -1,5 +1,5 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn, OneToMany } from "typeorm";
-import { Order, ShopItem } from "./";
+import { Column, Entity, Index, PrimaryGeneratedColumn, OneToMany, OneToOne , JoinColumn} from "typeorm";
+import { Order, ShopItem, Cart } from "./";
 
 @Entity()
 export class User {
@@ -29,6 +29,9 @@ export class User {
   public orders!: Order[];
 
   @OneToMany(type => ShopItem, (shopitem) => shopitem.id)
-  public cart!: ShopItem[];
+  public cartList!: ShopItem[];
 
+  @OneToOne((type) => Cart, cart => cart.id ,{cascade: true})
+  @JoinColumn()
+  public cart!: Cart;
 }

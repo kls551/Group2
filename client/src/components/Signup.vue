@@ -1,52 +1,60 @@
 <template>
   <div class="modal" v-bind:class="{'is-active': isShowing}">
     <div class="modal-background"></div>
-  <div class="modal-card">
-      <header class="modal-card-head">
-        <p class="modal-card-title">Signup</p>
-        <button class="delete" aria-label="close" v-on:click="cancel"></button>
-      </header>
-  <section class="modal-card-body">
-    <form v-on:submit.prevent="onSubmit">
-      <!-- <p class="is-danger" v-if="error">
-        {{ error }}
-      </p> -->
-      <div class="field">
-        <label class="label">First Name</label>
-        <div class="control">
-          <input class="input" type="text" placeholder="first name" v-model="signup.firstName"/>
-        </div>
-        <p v-if="signup.firstName.length <= 0" class="help is-danger">First name is required</p>
-      </div>
-      <div class="field">
-        <label class="label">Last Name</label>
-        <div class="control">
-          <input class="input" type="text" placeholder="last name" v-model="signup.lastName"/>
-        </div>
-        <p v-if="signup.lastName.length <= 0" class="help is-danger">Last name is required</p>
-      </div>
-      <div class="field">
-        <label class="label">Email Address</label>
-        <div class="control">
-          <input class="input" type="text" placeholder="email address" v-model="signup.emailAddress"/>
-        </div>
-        <p v-if="signup.emailAddress.length <= 0" class="help is-danger">Email is required</p>
-      </div>
-      <div class="field">
-        <label class="label">Password</label>
-        <div class="control">
-          <input class="input" type="password" placeholder="password" v-model="signup.password"/>
-        </div>
-        <p v-if="signup.password.length <= 0" class="help is-danger">Password is required</p>
-      </div>
-      <div class="field" v-if="isAd">
-        <label class="label">Type</label>
-        <div class="control">
-          <input class="input" type="text" placeholder="Type" v-model="signup.isAdmin"/>
-        </div>
-      </div>
-    </form>
-  </section>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title">Signup</p>
+          <button class="delete" aria-label="close" v-on:click="cancel"></button>
+        </header>
+        <section class="modal-card-body">
+          <form v-on:submit.prevent="onSubmit">
+            <p class="is-danger" v-if="error">
+              {{ error }}
+            </p>
+            <div class="field">
+              <label class="label">First Name</label>
+              <div class="control">
+                <input class="input" type="text" placeholder="first name" v-model="signup.firstName"/>
+              </div>
+              <p v-if="signup.firstName.length <= 0" class="help is-danger">First name is required</p>
+            </div>
+            <div class="field">
+              <label class="label">Last Name</label>
+              <div class="control">
+                <input class="input" type="text" placeholder="last name" v-model="signup.lastName"/>
+              </div>
+              <p v-if="signup.lastName.length <= 0" class="help is-danger">Last name is required</p>
+            </div>
+            <div class="field">
+              <label class="label">Email Address</label>
+              <div class="control">
+                <input class="input" type="text" placeholder="email address" v-model="signup.emailAddress"/>
+              </div>
+              <p v-if="signup.emailAddress.length <= 0" class="help is-danger">Email is required</p>
+            </div>
+            <div class="field">
+              <label class="label">Password</label>
+              <div class="control">
+                <input class="input" type="password" placeholder="password" v-model="signup.password"/>
+              </div>
+              <p v-if="signup.password.length <= 0" class="help is-danger">Password is required</p>
+            </div>
+            <div class="field" v-if="isAd">
+              <label class="label">Type</label>
+              <!-- <div class="control">
+                <input class="input" type="text" placeholder="Type" v-model="signup.isAdmin"/>
+              </div> -->
+              <div class="select is-small">
+              <select v-model="signup.isAdmin">
+                  <option disabled value="">select account type</option>
+                  <option value=1>Admin</option>
+                  <option value=0>Staff</option>
+                  <option value=-1>User</option>
+              </select>
+              </div>
+            </div>
+          </form>
+        </section>
     <footer class="modal-card-foot">
       <a v-if="!formcheck" class="button is-success" v-on:click="success" disabled>Signup</a>
       <a v-if="formcheck" class="button is-success" v-on:click="success">Signup</a>

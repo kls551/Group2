@@ -5,6 +5,7 @@
         <div class="profilePhoto">
           <img :src="profileUrl"/>
         </div>
+        
         <div class="file">
           <label class="file-label">
             <input
@@ -28,6 +29,9 @@
         </div>
       </form>
     </div>
+
+
+    <!-- profile info on the left  -->
     <div class="profileInfo column">
       <div class="field">
         <label class="label">First Name</label>
@@ -41,13 +45,31 @@
           <input class="input" type="text" placeholder="last name" v-model="user.lastName">
         </div>
       </div>
-      <div class="field">
+      <!-- <div class="field">
         <label class="label">Email Address</label>
         <div class="control">
           <input class="input" type="text" placeholder="email address" v-model="user.emailAddress">
         </div>
+      </div> -->
+      <div class="field">
+        <label class="label">Password</label>
+        <div class="control">
+          <input class="input" type="text" placeholder="password" v-model="user.password">
+        </div>
+      </div>
+
+      <!-- save changes button  -->
+      <div class="control">
+          <button class="button is-success" v-on:click="saveProfile()">Save Changes</button>
       </div>
     </div>
+
+
+    <!-- pop up modal for editing  -->
+    <UpdateService 
+      v-bind:is-showing="showEdit"
+      v-on:success="successUpdate()" 
+      v-on:cancel="cancelUpdate()"> </UpdateService>
   </div>
 </template>
 
@@ -57,6 +79,7 @@ import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
 import { APIConfig } from "@/utils/api.utils";
 import { iUser } from "@/models/user.interface";
+import { EditServiceForm } from '@/components/UpdateService.vue';
 
 const STATUS_INITIAL = 0;
 const STATUS_SAVING = 1;
@@ -69,19 +92,11 @@ export default class Profile extends Vue {
   currentStatus: number | null = null;
   uploadError: string | null = null;
   uploadedFile: any = null;
+  showEdit: boolean = false;
 
   @Prop({ default: null })
   user!: iUser | null;
 
-  // editPassword(new_password: string) {
-  //       if (this.user) {
-  //           axios.put(APIConfig.buildUrl("/users/" + this.user.id), {
-  //                   password: new_password
-  //               })
-  //               .then(() => {
-  //               })
-  //       }
-  //   }
 
   upload(formData: FormData) {
     if (this.user) {
@@ -128,6 +143,21 @@ export default class Profile extends Vue {
     this.save(formData);
   }
 
+  saveProfile() {
+    this.showEdit = true;
+    if (this.user) {
+      axios
+      .put(APIConfig.buildUrl("/users/" + this.user.id ),
+      {
+      lastName: this.user.lastName,
+      firstName: this.user.firstName,
+      password:  this.user.password,
+      })
+      .then( () => 
+          { console.log("updated person ")})
+    }
+  }
+
   reset() {
     // reset form to initial state
     this.currentStatus = STATUS_INITIAL;
@@ -161,6 +191,13 @@ export default class Profile extends Vue {
     }
     return "";
   }
+}
+
+export interface EditForm {
+  lastName: string;
+  firstName: string;
+  emailAddress: string;
+  password: string;
 }
 </script>
 <style scoped>

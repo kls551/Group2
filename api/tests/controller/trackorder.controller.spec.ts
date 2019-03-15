@@ -51,7 +51,7 @@ describe("/orders", () => {
     // should fail to get an order
     test("should fail because announcement with this id does not exist", done => {
         return request(app)
-          .get("/announcement/" + 50)
+          .get("/trackorder/" + 50)
           .expect(404)
     });
 

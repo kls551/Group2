@@ -8,7 +8,7 @@ import DBUtils from "../util/database";
 import { getConnection } from "typeorm";
 
 describe("/maincategory", () => {
-    let myApp: express.Application;
+    let app: express.Application;
     let connection: Connection;
   
     const createMainCat = (
@@ -21,23 +21,20 @@ describe("/maincategory", () => {
     };
   
     beforeAll(async () => {
-      myApp = await new Server().getMyApp();
-      connection = await DBConnection.getConnection();
+      app = await new Server().getMyApp();
+      connection = getConnection();
       await connection.synchronize();
       await DBUtils.clearDB();
     });
   
-    beforeEach(async () => {
-      await DBUtils.clearDB();
-    });
-  
     afterAll(async () => {
-      DBConnection.closeConnection();
+      await DBUtils.clearDB();
+      await DBConnection.closeConnection();
     });
   
     describe("GET '/'", () => {
       test("should return an empty list because there isn't anything in the database", done => {
-        request(myApp)
+        request(app)
           .get("/maincategory")
           .then((response: request.Response) => {
             expect(response.body).toEqual([]);
@@ -47,7 +44,7 @@ describe("/maincategory", () => {
       test("should return one category", done => {
         const name = "Bikes";
         return createMainCat(name, connection).then((createdMainCat: MainCategory) => {
-          return request(myApp)
+          return request(app)
             .get("/maincategory")
             .expect(200)
             .then((response: request.Response) => {
@@ -63,7 +60,7 @@ describe("/maincategory", () => {
     describe("POST '/'", () => {
       test("should create a category", done => {
         const mainCatName = "Clothes";
-        return request(myApp)
+        return request(app)
           .post("/maincategory")
           .send({
             name: mainCatName,
@@ -75,5 +72,37 @@ describe("/maincategory", () => {
           });
       });
     });
+
+    test("should update category successfully", done => {
+      connection.manager.insert(MainCategory, {
+        id: 30,
+        name: "Sale items",
+        show: false
+      }).then(() => {
+        request(app)
+          .put("/maincategory/30")
+          .send({ name: "Sale"})
+          .expect(200)
+          .then((response: request.Response) => {
+            // expect(response.body.name).toEqual("Sale");
+            done();
+          });
+      });
+    });
+
+    test("should delete category successfully", done => {
+      connection.manager.insert(MainCategory, {
+        id: 31,
+        name: "Sale items",
+        show: false
+      }).then(() => {
+        request(app)
+          .delete("/maincategory/31")
+          .expect(200)
+          .then(() => {
+            // expect(response.body.name).toEqual("Sale");
+            done();
+          });
+      });
+    });
   });
-  

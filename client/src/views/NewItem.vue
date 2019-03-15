@@ -119,11 +119,13 @@
                 <div v-if="isEditing == true">
                     <span><button v-if="!addMoreimg" class="button is-warning" type="submit" v-on:click="updateItem">Update Item</button></span>
                     <span><button v-if="addMoreimg" class="button is-warning" type="submit" v-on:click="addMore">Add More Image</button></span>
+                    <button v-if="addMoreimg" class="button is-danger" type="submit" v-on:click="cancel">Cancel</button>
                 </div>
                 <div v-else>
                     <span><button v-if="!addMoreimg" class="button is-success" type="submit" v-on:click="addItem">Add Item</button></span>
+                    <span><button v-if="addMoreimg" class="button is-warning" type="submit" v-on:click="addMore">Add More Image</button></span>
+                    <button v-if="addMoreimg" class="button is-danger" type="submit" v-on:click="cancel">Cancel</button>
                 </div>
-                <span><button v-if="addMoreimg" class="button is-danger" type="submit" v-on:click="cancel">Cancel</button></span>
         </div>
 
       </div>

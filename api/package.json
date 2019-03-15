@@ -8,7 +8,7 @@
     "tsc": "tsc",
     "start": "node --inspect=5858 -r ts-node/register bin/app.ts",
     "dev": "nodemon",
-    "coverage": "jest --coverage --runInBand",
+    "coverage": "jest --coverage --runInBand --detectOpenHandles",
     "typeorm": "typeorm"
   },
   "author": "",

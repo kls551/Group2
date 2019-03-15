@@ -1,5 +1,3 @@
-
-
 export interface iShopItem {
   id: number;
   name: string;

@@ -104,7 +104,7 @@ export class ShopItemController extends DefaultController {
         .getRepository(ShopItem)
         .createQueryBuilder("shopitem")
         .leftJoinAndSelect("shopitem.images", "imgs")
-        .getMany().then(obj => {console.log(obj)
+        .getMany().then(obj => {
             res.status(200).send(obj);
         });
     });

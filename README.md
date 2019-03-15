@@ -11,7 +11,7 @@ Group2: Enter Team Name Here:_
 
 # Project Documents
 * [Wireframe](https://github.com/CSC307Winter2019/Group2/blob/master/Documents/Flow_Chart_and_Wireframe.pdf)
-* [Requirement document](https://docs.google.com/document/d/1Jpo7Zb7tmBjNclNY4RTOuzHTpVCeZuOCzqPQIugO4pM/edit?usp=sharing)
+* [Requirement document](https://docs.google.com/document/d/1S1_Ed3_8V1CKbl6DgIsHrXw_iAHTTp-VIkBs_Eb8o3Y/edit?usp=sharing)
 * [Acceptance document](https://docs.google.com/spreadsheets/d/1F6GsC59ohIOi7bILhus72_ViUraa0Stw86vjsejLJFM/edit?usp=sharing)
 * [Database schema](https://app.sqldbm.com/MySQL/Share/xvRP5NF28w0S85sWkNUghkGFrngIE8md_DYjF4jNYw0)
 * [API document](https://docs.google.com/document/d/11vsN7vSGXqhrBo1z6LZIPY8Uv73Pml7CJhFJCh8KZnU/edit?usp=sharing)

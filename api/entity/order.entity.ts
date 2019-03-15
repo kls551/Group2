@@ -11,22 +11,10 @@ export class Order {
   public userId!: number;
 
   @Column({default:null})
-  public complete!: boolean;
-
-  @Column({default:null})
   public status!: number;
 
   @Column({default:null})
   public pickup!: boolean;
-
-  @Column({default:null})
-  public processing!: boolean;
-
-  @Column({default:null})
-  public shipped!: Date;
-
-  @Column({default:null})
-  public trackingNum!: string;
 
   @Column({default: null})
   public address!: string;

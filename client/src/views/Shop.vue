@@ -95,7 +95,7 @@
       </div>
 
       <!-- Shop layout -->
-      <div class="columns is-multiline shop-layout">
+      <!-- <div class="columns is-multiline shop-layout">
         <div v-for="item in shopItems" :key="item.id" class="column is-narrow">
           <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
             <div class="card">
@@ -136,7 +136,7 @@
               </div>
             </router-link>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -227,18 +227,18 @@
   }
 
   filter() {
-    // if (this.activeBrandIds.length != 0) {
-    //   axios
-    //     .get(APIConfig.buildUrl("/shopitems/"), { params: { brand_id: this.activeBrandIds }})
-    //     .then((response: AxiosResponse) => {
-    //       this.shopItems = response.data;
-    //       console.log(this.shopItems);
-    //       this.$emit("success");
-    //     });
-    // }
+    if (this.activeBrandIds.length != 0) {
+      axios
+        .get(APIConfig.buildUrl("/shopitems/"), { params: { brand_id: this.activeBrandIds }})
+        .then((response: AxiosResponse) => {
+          this.shopItems = response.data;
+          console.log(this.shopItems);
+          this.$emit("success");
+        });
+    }
     if (this.activeCatIds.length != 0) {
       axios
-        .get(APIConfig.buildUrl("/shopitems/"), { params: { cat_id: this.activeCatIds }})
+        .get(APIConfig.buildUrl("/shopitems/"), { params: { cat_ids: this.activeCatIds }})
         .then((response: AxiosResponse) => {
           this.shopItems = response.data;
           console.log(this.shopItems);
@@ -254,6 +254,8 @@
           this.$emit("success");
         });
     }
+
+    console.log("length at end of filter(): " + this.shopItems.length);
   }
 
   get isOwner(): boolean {

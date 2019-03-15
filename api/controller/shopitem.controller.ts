@@ -102,11 +102,11 @@ export class ShopItemController extends DefaultController {
     .get((req: Request, res: Response) => {
       const shopItemRepo = getRepository(ShopItem);
       // let query = shopItemRepo;
-      if (req.query.cat_id) {
+      if (req.query.cat_ids) {
         shopItemRepo
           .createQueryBuilder("shopitem")
           .innerJoinAndSelect("shopitem.category", "category")
-          .where("category.id in (:cid)", { cid: req.params.cat_id })
+          .where("category.id IN (:...cid)", { cid: req.query.cat_ids }) // req.params.cat_ids
           .getMany().then((shopitems: ShopItem[]) => {
             res.status(200).send(shopitems);
           });

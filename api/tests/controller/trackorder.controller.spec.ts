@@ -29,6 +29,7 @@ describe("/orders", () => {
     // should get an order 
     test("gets order at specific index", done => {
         connection.manager.insert(Order, {
+            id: 1,
             complete: true,
             status: 0,
             pickup: true,
@@ -39,7 +40,7 @@ describe("/orders", () => {
         })
         .then(() => {
             return request(app)
-                .get("/trackorder/1")
+                .get("/trackorder/0")
                 .expect(200)
                 .then((response: request.Response) => {
                     expect(response.body.address).toEqual("address");
@@ -52,12 +53,13 @@ describe("/orders", () => {
     test("should fail because announcement with this id does not exist", done => {
         return request(app)
           .get("/trackorder/" + 50)
-          .expect(404)
+          .expect(404, done)
     });
 
     // should delete an order
     test("should delete an order", done =>{
         connection.manager.insert(Order, {
+            id: 1,
             complete: true,
             status: 0,
             pickup: true,

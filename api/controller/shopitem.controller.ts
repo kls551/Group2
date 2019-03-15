@@ -25,7 +25,7 @@ export class ShopItemController extends DefaultController {
           });
       })
       .get((req: Request, res: Response) => {
-        shopItemRepo.findOneOrFail(req.params.id, {relations: ["images", "category", "subcategories"]}).then((foundItem: ShopItem) => {
+        shopItemRepo.findOneOrFail(req.params.id, {relations: ["images", "category", "subcategories", "brand"]}).then((foundItem: ShopItem) => {
           res.status(200).send(foundItem);
         });
       })    

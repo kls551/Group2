@@ -97,11 +97,21 @@
                   </div>
                 </div>
                 <div class="content">
-                  <p>{{ item.brand }}   |   IN STOCK </p>
+                  <div class="columns">
+                    <div class="column">
+                      <p v-if="item.brand != null">{{ item.brand }}</p>
+                      <p v-else>Brand</p>
+                    </div>
+                    <div class="column" style="text-align: right">
+                      <p v-if="inStock(item.quantity) === true" style="color: green">IN STOCK</p>
+                      <p v-else style="color: red">SOLD OUT</p>
+                    </div>
+                  </div>
+
                     <div v-if="isLoggedIn && isOwner">
                       <router-link :to="{ name: 'ownerAddItem', params: { itemId: item.id, editing: true }}">
                         <button class="button is-info is-fullwidth" type="submit" style="margin-top: 15px;">Edit</button></router-link>
-                      <button class="button is-danger is-fullwidth" type="submit" style="margin-top: 15px;">Delete</button>
+                        <button class="button is-danger is-fullwidth" style="margin-top: 15px;" v-on:click="showDeleteConfirm(item)">Delete</button>
                     </div>
                 </div>
               </div>
@@ -110,6 +120,12 @@
         </div>
       </div>
     </div>
+
+    <DeleteConfirm 
+            v-bind:is-showing="showDelConfirm"
+            v-bind:del="confirmDel"
+            v-on:success="successDelete()" 
+            v-on:cancel="cancelDelete()"> </DeleteConfirm>
   </div>
 </template>
 
@@ -121,8 +137,12 @@
   import { iShopItem, iImg } from "../models/shopitem.interface";
   import { iMainCategory, iSubCategory } from "../models/category.interface";
   import { iBrand } from "../models/brand.interface";
+  import Modal  from "../components/Modal.vue";
+  import DeleteConfirm  from "@/components/DeleteConfirm.vue";
 
-  @Component
+@Component({
+  components: { Modal, DeleteConfirm}
+})
   export default class Shop extends Vue {
     error: string | boolean = false;
     shopItems: iShopItem[] = [];
@@ -131,17 +151,10 @@
     whichSort: number = 0;
     brandsShow = false;
 
-    // items: iShopItem[] = [
-    //   { id: 789, name: 'M480 Mountain Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 903, name: 'M680 Mountain Bike', price: 2000, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 234, name: 'M1080 Mountain Bike', price: 3100, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 678, name: 'R480 Road Bike', price: 1000, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 239, name: 'R680 Road Bike', price: 1500, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 112, name: 'R1080 Road Bike', price: 2100, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 914, name: 'C400 Cruising Bike', price: 800, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 503, name: 'C600 Cruising Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 716, name: 'C800 Cruising Bike', price: 1800, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" }
-    // ];
+    public showDelConfirm: boolean = false;
+    public confirmDel: boolean = false;
+    public delId: number = -1;
+
 
     sorts: iMainCategory = { id: 1099, name: "Sorting Options", show: true,
               subCategories: [
@@ -152,6 +165,28 @@
 
     mounted() {
       this.display();
+    }
+
+    successDelete() {
+        this.showDelConfirm = false;
+        this.removeItem(this.delId);
+    }
+
+    cancelDelete() {
+        this.showDelConfirm = false;
+    }
+
+    showDeleteConfirm(item:iShopItem) {
+        this.delId = item.id;
+        this.showDelConfirm = true;
+    }
+
+    removeItem( itemid : number | undefined ) {
+        axios
+        .delete(APIConfig.buildUrl("/shopitems/" + itemid ))
+        .then( () => {
+            this.display();
+        }) 
     }
 
     display() {
@@ -177,6 +212,14 @@
         .catch((res: AxiosError) => {
             this.error = res.response && res.response.data.error;
         });
+    }
+
+    inStock(quant:number) {
+      if(quant > 0) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
   sortby(): void {

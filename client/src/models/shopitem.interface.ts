@@ -11,7 +11,11 @@ export interface iShopItem {
   brand: string;
   postedDate: Date;
   images: iImg[];
-  quant: number;
+}
+
+export interface iBrand {
+  id: number;
+  name: string;
 }
 
 export interface iImg {

@@ -69,8 +69,6 @@
                 </div>
                 <div v-else></div>
 
-                {{selectedSubCategories}}
-
 
                 <div class="column">
                     <label class="label">Brand</label>
@@ -118,11 +116,14 @@
                 <div v-if="isEditing == true">
                     <span><button v-if="!addMoreimg" class="button is-warning" type="submit" v-on:click="updateItem">Update Item</button></span>
                     <span><button v-if="addMoreimg" class="button is-warning" type="submit" v-on:click="addMore">Add More Image</button></span>
+                    <span><button v-if="addMoreimg" class="button is-danger" type="submit" v-on:click="cancel">Cancel</button></span>
+
                 </div>
                 <div v-else>
                     <span><button v-if="!addMoreimg" class="button is-success" type="submit" v-on:click="addItem">Add Item</button></span>
+                    <span><button v-if="addMoreimg" class="button is-warning" type="submit" v-on:click="addMore">Add More Image</button></span>
+                    <span><button v-if="addMoreimg" class="button is-danger" type="submit" v-on:click="cancel">Cancel</button></span>
                 </div>
-                <span><button v-if="addMoreimg" class="button is-danger" type="submit" v-on:click="cancel">Cancel</button></span>
         </div>
 
       </div>
@@ -201,8 +202,8 @@ export default class NewItem extends Vue {
                     this.itemQuantity = this.shopItem.quantity;
                     this.iteminStorePickup = this.shopItem.inStorePickup; 
                     this.selected = response.data.category && response.data.category.id;
-                    this.selectedBrand = response.data.brand && response.data.brand.id;
-                    this.selectedSubCategories = response.data.subcategories.id;
+                    this.selectedBrand = response.data.brand.id;
+                    this.selectedSubCategories = response.data.subcategories;
                     this.itemImageURL = this.shopItem.images[0].img;
                     this.saveMainCat(this.selected);
                 }

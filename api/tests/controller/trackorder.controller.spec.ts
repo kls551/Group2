@@ -27,9 +27,8 @@ describe("/orders", () => {
     });
 
     // should get an order 
-    test("gets order at specific index", done => {
+    test("gets order of specific tracking number", done => {
         connection.manager.insert(Order, {
-            id: 1,
             complete: true,
             status: 0,
             pickup: true,
@@ -37,10 +36,9 @@ describe("/orders", () => {
             trackingNum: "456",
             address: "address",
             city: "city"
-        })
-        .then(() => {
-            return request(app)
-                .get("/trackorder/0")
+        }).then(() => {
+            request(app)
+                .get("/trackorder/456")
                 .expect(200)
                 .then((response: request.Response) => {
                     expect(response.body.address).toEqual("address");
@@ -59,7 +57,6 @@ describe("/orders", () => {
     // should delete an order
     test("should delete an order", done =>{
         connection.manager.insert(Order, {
-            id: 1,
             complete: true,
             status: 0,
             pickup: true,

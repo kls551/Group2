@@ -1,80 +1,101 @@
 <template>
   <div class="shop">
-    <div class="tile is-ancestor top-bar">
+    <div class="columns top-bar">
       <!-- Categories menu -->
-      <div class="tile is-3 is-vertical is-parent menu">
-        <div class="tile is-child">
+      <div class="column is-3 menu">
           <section>
             <nav class="panel">
               <p class="panel-heading">
                 <span>Categories</span>
               </p>
 
-              <!-- Dropdown menu for sorting options -->
-              <div class="panel-block">
-                <span class="cat-name">{{ sorts.name }}</span>
-              </div>
+            <!-- Menu for sorting options -->
+            <div class="panel-block">
+              <span class="cat-name">{{ sorts.name }}</span>
+            </div>
 
-              <a
-                class="panel-block menu-contents"
-                v-show="sorts.show"
-                v-for="option in sorts.subCategories"
-                :key="option.id"
-                v-on:change="sortby"
-              >
-                <b-radio
-                  v-model="whichSort"
-                  :name="sorts.name"
-                  :native-value="option.id"
-                >{{ option.name }}</b-radio>
-              </a>
+            <a
+              class="panel-block menu-contents"
+              v-show="sorts.show"
+              v-for="option in sorts.subCategories"
+              :key="option.id"
+              v-on:change="sortby"
+            >
+              <b-radio v-model="whichSort" :name="sorts.name" :native-value="option.id">
+                {{ option.name }}
+              </b-radio>
+            </a>
 
-              <!-- Category options -->
-              <div class="panel-block" v-on:click="brandsShow = !brandsShow">
-                <span class="cat-name"> Brands </span>
-                <font-awesome-icon v-show="!brandsShow" icon="angle-down"/>
-                <font-awesome-icon v-show="brandsShow" icon="angle-up"/>
-              </div>
+            <!-- Brand filter options -->
+            <div class="panel-block" v-on:click="brandsShow = !brandsShow">
+              <span class="cat-name"> Brands </span>
+              <font-awesome-icon v-show="!brandsShow" icon="angle-down"/>
+              <font-awesome-icon v-show="brandsShow" icon="angle-up"/>
+            </div>
 
-              <a
-                class="panel-block menu-contents"
-                v-show="brandsShow"
-                v-for="brand in brands"
-                :key="brand.id"
-              >
-                <b-checkbox> {{ brand.name }} </b-checkbox>
-              </a>
+            <a class="panel-block menu-contents" v-show="brandsShow" v-for="brand in brands" :key="brand.id">
+              <b-checkbox v-model="activeBrandIds" :native-value="brand.id">
+                {{ brand.name }}
+              </b-checkbox>
+            </a>
 
-              <div v-for="category in categories" :key="category.id">
-                <div class="panel-block" v-on:click="category.show = !category.show">
-                  <span class="cat-name">
-                    <b-checkbox>{{ category.name }}</b-checkbox>
-                  </span>
+            <!-- Category filter options -->
+            <div v-for="category in categories" :key="category.id + 50">
+              <!-- Main category set -->
+              <div class="panel-block" v-on:click="category.show = !category.show">
+                <span class="cat-name">
+                    <b-checkbox v-model="activeCatIds" :native-value="category.id">
+                    {{ category.name }}
+                  </b-checkbox>
+                </span>
+                <div v-if="category.subCategories.length != 0">
                   <font-awesome-icon v-show="!category.show" icon="angle-down"/>
                   <font-awesome-icon v-show="category.show" icon="angle-up"/>
                 </div>
-
-                <a
-                  class="panel-block menu-contents"
-                  v-show="category.show"
-                  v-for="sub in category.subCategories"
-                  :key="sub.id"
-                >
-                  <b-checkbox>{{ sub.name }}</b-checkbox>
-                </a>
               </div>
 
-              <!-- Filter button -->
-              <div class="panel-block">
-                <button class="button is-link is-outlined is-fullwidth">Filter</button>
-              </div>
-            </nav>
-          </section>
-        </div>
+              <!-- Subcategory set -->
+              <a class="panel-block menu-contents" v-show="category.show" v-for="sub in category.subCategories" :key="sub.id + 100">
+                <b-checkbox v-model="activeSubCatIds" :native-value="sub.id">
+                  {{ sub.name }}
+                </b-checkbox>
+              </a>
+            </div>
+
+            <!-- Filter button -->
+            <div class="panel-block">
+              <button class="button is-link is-outlined is-fullwidth" v-on:click="filter">
+                Filter
+              </button>
+            </div>
+
+            <!-- Show selection for testing -->
+            <div class="panel-block">
+              Active brands:
+            </div>
+            <div class="panel-block menu-contents" v-for="brand in activeBrandIds">
+              {{ brand }}
+            </div>
+
+            <div class="panel-block">
+              Active main categories:
+            </div>
+            <div class="panel-block menu-contents" v-for="cat in activeCatIds">
+              {{ cat }}
+            </div>
+
+            <div class="panel-block">
+              Active subcategories:
+            </div>
+            <div class="panel-block menu-contents" v-for="cat in activeSubCatIds">
+              {{ cat }}
+            </div>
+          </nav>
+        </section>
       </div>
 
       <!-- Shop layout -->
-      <div class="tile is-child columns is-multiline shop-layout">
+      <div class="columns is-multiline shop-layout">
         <div v-for="item in shopItems" :key="item.id" class="column is-narrow">
           <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
             <div class="card">
@@ -91,22 +112,30 @@
                         <p class="title is-4">{{ item.name }}</p>
                       </div>
                       <div class="column">
-                        <p class="title" style="color: orange; font-size: 18px;"> ${{ item.price }} </p>
+                        <p class="title" style="color: orange; font-size: 18px;">
+                          ${{ item.price }}
+                        </p>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="content">
-                  <p>{{ item.brand }}   |   IN STOCK </p>
+                  <p> {{ item.brand }}   |   IN STOCK </p>
                     <div v-if="isLoggedIn">
                       <router-link :to="{ name: 'ownerAddItem', params: { itemId: item.id, editing: true }}">
-                        <button class="button is-info is-fullwidth" type="submit" style="margin-top: 15px;">Edit</button></router-link>
-                      <button class="button is-danger is-fullwidth" type="submit" style="margin-top: 15px;">Delete</button>
+                        <button class="button is-info is-fullwidth" type="submit" style="margin-top: 15px;">
+                          Edit
+                        </button>
+                      </router-link>
+                      <button class="button is-danger is-fullwidth" type="submit" style="margin-top: 15px;">
+                        Delete
+                      </button>
                     </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </router-link>
+            </router-link>
+          </div>
         </div>
       </div>
     </div>
@@ -130,18 +159,9 @@
     categories: iMainCategory[] = [];
     whichSort: number = 0;
     brandsShow = false;
-
-    // items: iShopItem[] = [
-    //   { id: 789, name: 'M480 Mountain Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 903, name: 'M680 Mountain Bike', price: 2000, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 234, name: 'M1080 Mountain Bike', price: 3100, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 678, name: 'R480 Road Bike', price: 1000, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 239, name: 'R680 Road Bike', price: 1500, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 112, name: 'R1080 Road Bike', price: 2100, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 914, name: 'C400 Cruising Bike', price: 800, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 503, name: 'C600 Cruising Bike', price: 1200, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" },
-    //   { id: 716, name: 'C800 Cruising Bike', price: 1800, details: "", quantity: 0, category: "", inStorePickup: false, postedDate: new Date("2019-02-27"), imageUrl: "" }
-    // ];
+    activeBrandIds: number[] = [];
+    activeCatIds: number[] = [];
+    activeSubCatIds: number[] = [];
 
     sorts: iMainCategory = { id: 1099, name: "Sorting Options", show: true,
               subCategories: [
@@ -206,6 +226,36 @@
     }
   }
 
+  filter() {
+    if (this.activeBrandIds.length != 0) {
+      axios
+        .get(APIConfig.buildUrl("/shopitems/"), { params: { brand_ids: this.activeBrandIds }})
+        .then((response: AxiosResponse) => {
+          this.shopItems = response.data;
+          console.log(this.shopItems);
+          this.$emit("success");
+        });
+    }
+    if (this.activeCatIds.length != 0) {
+      axios
+        .get(APIConfig.buildUrl("/shopitems/"), { params: { cat_ids: this.activeCatIds }})
+        .then((response: AxiosResponse) => {
+          this.shopItems = response.data;
+          console.log(this.shopItems);
+          this.$emit("success");
+        });
+    }
+    if (this.activeBrandIds.length == 0 && this.activeCatIds.length == 0 && this.activeSubCatIds.length == 0) {
+      axios
+        .get(APIConfig.buildUrl("/shopitems"))
+        .then((response: AxiosResponse) => {
+          this.shopItems = response.data;
+          console.log(this.shopItems);
+          this.$emit("success");
+        });
+    }
+  }
+
   get isOwner(): boolean {
     return this.$store.state.user && (this.$store.state.user.isAdmin === 1);
   }
@@ -213,7 +263,6 @@
   get isLoggedIn(): boolean {
     return this.$store.state.user;
   }
-
 }
 </script>
 

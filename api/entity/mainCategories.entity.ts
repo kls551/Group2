@@ -12,7 +12,7 @@ export class MainCategory {
   @Index({ unique: true })
   public name!: string;
 
-  @Column()
+  @Column({default : false})
   public show!: boolean;
 
   @OneToMany(type => SubCategory, subCategory => subCategory.mainCategory)

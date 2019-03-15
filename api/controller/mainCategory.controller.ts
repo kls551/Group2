@@ -24,12 +24,8 @@ export class MainCategoryController extends DefaultController {
       const mainCat = new MainCategory();
       mainCat.name = req.body.name;
       mainCat.show = false;
-      mainCatRepo.save(mainCat).then(
-        (savedCategory: MainCategory) => {
-          res.status(200).send({ mainCat });
-        },
-        (reason: any) => {
-          res.status(400).send( {reason: "the category was not unique"})
+      mainCatRepo.save(mainCat).then((savedCategory: MainCategory) => {
+          res.status(200).send( savedCategory );
         });
       });
 

@@ -57,11 +57,8 @@ describe("/users", () => {
           .then((response: request.Response) => {
             console.log("user ", response.body);
             expect(
-
-              response.body.user && response.body.user.length
+              response.body.length
             ).toEqual(1);
-            expect(response.body.user[0].emailAddress).toEqual(email);
-          
             //  response.body && response.body.length
             //).toEqual(1);
             //expect(response.body[0].emailAddress).toEqual(email);

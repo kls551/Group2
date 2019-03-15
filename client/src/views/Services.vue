@@ -1,6 +1,6 @@
 <template>
   <div class="services">
-    
+
     <div class="container" style="margin-top: 40px; margin-bottom: 25px;">
 
       <h2 style="border-bottom: 1.5px solid orange; margin-bottom: 15px;">Services</h2>
@@ -96,7 +96,7 @@ h3 {
     font-size: 16px;
 }
 /* .column {
-  -webkit-column-gap: 3; 
+  -webkit-column-gap: 3;
   column-gap: 3;
   background-color: 	#FFA500	;
 } */
@@ -108,5 +108,3 @@ h3 {
 } */
 
 </style>
-
-

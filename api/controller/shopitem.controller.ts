@@ -122,6 +122,9 @@ export class ShopItemController extends DefaultController {
       }
     });
 
+// .innerJoinAndSelect("shopitem.brand", "brand")
+// .where("brand.id IN (:...bid)", { bid: req.query.brand_ids })
+
     // router.route("/shopitems/:brandid")
     //   .get((req: Request, res: Response) => {
     //     shopItemRepo

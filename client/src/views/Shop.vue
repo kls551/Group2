@@ -68,28 +68,6 @@
                 Filter
               </button>
             </div>
-
-            <!-- Show selection for testing -->
-            <div class="panel-block">
-              Active brands:
-            </div>
-            <div class="panel-block menu-contents" v-for="brand in activeBrandIds">
-              {{ brand }}
-            </div>
-
-            <div class="panel-block">
-              Active main categories:
-            </div>
-            <div class="panel-block menu-contents" v-for="cat in activeCatIds">
-              {{ cat }}
-            </div>
-
-            <div class="panel-block">
-              Active subcategories:
-            </div>
-            <div class="panel-block menu-contents" v-for="cat in activeSubCatIds">
-              {{ cat }}
-            </div>
           </nav>
         </section>
       </div>
@@ -101,7 +79,7 @@
             <div class="card">
               <div class="card-image">
                 <figure class="image is-4by3">
-                  <img :src="item.images[0].img">
+                  <img v-if="item.images[0].img" :src="item.images[0].img">
                 </figure>
               </div>
               <div class="card-content">
@@ -227,25 +205,25 @@
   }
 
   filter() {
-    if (this.activeBrandIds.length != 0) {
+    if (this.activeBrandIds.length != 0 || this.activeCatIds.length != 0) {
       axios
-        .get(APIConfig.buildUrl("/shopitems/"), { params: { brand_ids: this.activeBrandIds }})
+        .get(APIConfig.buildUrl("/shopitems/"), { params: { brand_ids: this.activeBrandIds, cat_ids: this.activeCatIds }})
         .then((response: AxiosResponse) => {
           this.shopItems = response.data;
           console.log(this.shopItems);
           this.$emit("success");
         });
     }
-    if (this.activeCatIds.length != 0) {
-      axios
-        .get(APIConfig.buildUrl("/shopitems/"), { params: { cat_ids: this.activeCatIds }})
-        .then((response: AxiosResponse) => {
-          this.shopItems = response.data;
-          console.log(this.shopItems);
-          this.$emit("success");
-        });
-    }
-    if (this.activeBrandIds.length == 0 && this.activeCatIds.length == 0 && this.activeSubCatIds.length == 0) {
+    // if (this.activeCatIds.length != 0) {
+    //   axios
+    //     .get(APIConfig.buildUrl("/shopitems/"), { params: { cat_ids: this.activeCatIds }})
+    //     .then((response: AxiosResponse) => {
+    //       this.shopItems = response.data;
+    //       console.log(this.shopItems);
+    //       this.$emit("success");
+    //     });
+    // }
+    else if (this.activeBrandIds.length == 0 && this.activeCatIds.length == 0 && this.activeSubCatIds.length == 0) {
       axios
         .get(APIConfig.buildUrl("/shopitems"))
         .then((response: AxiosResponse) => {

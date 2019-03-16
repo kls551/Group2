@@ -26,14 +26,14 @@ export class ShopItemController extends DefaultController {
           });
       })
       .get((req: Request, res: Response) => {
-        shopItemRepo.findOneOrFail(req.params.id, {relations: ["images"]}).then((foundItem: ShopItem) => {
+        shopItemRepo.findOneOrFail(req.params.id, {relations: ["images", "category", "subcategories", "brand"]}).then((foundItem: ShopItem) => {
           res.status(200).send(foundItem);
         });
-      })
+      })    
 
-      .put(async (req: Request, res: Response) => {
+      .put((req: Request, res: Response) => {
         const item = getRepository(ShopItem);
-        item.findOneOrFail(req.params.id).then((foundItem: ShopItem) => {
+        item.findOneOrFail(req.params.id).then(async (foundItem: ShopItem) => {
           if (foundItem) {
             foundItem.name = req.body.name;
             foundItem.details = req.body.details;
@@ -41,7 +41,7 @@ export class ShopItemController extends DefaultController {
             foundItem.quantity = req.body.quantity;
             foundItem.category = req.body.category;
             foundItem.inStorePickup = req.body.inStorePickup;
-            //foundItem.subcategories = await subCatRepo.findByIds(req.body.subcategories);
+            foundItem.subcategories = await subCatRepo.findByIds(req.body.subcategories);
             foundItem.postedDate = req.body.postedDate;
             foundItem.brand = req.body.brand;
             item.save(foundItem).then((savedShopItem: ShopItem) => {
@@ -106,6 +106,7 @@ export class ShopItemController extends DefaultController {
         query
           .createQueryBuilder("shopitem")
           .leftJoinAndSelect("shopitem.images", "imgs")
+          .leftJoinAndSelect("shopitem.brand", "brand")
           .innerJoinAndSelect("shopitem.category", "category")
           .where("category.id IN (:...cid)", { cid: req.query.cat_ids })
           .getMany().then((shopitems: ShopItem[]) => {
@@ -116,6 +117,7 @@ export class ShopItemController extends DefaultController {
           .getRepository(ShopItem)
           .createQueryBuilder("shopitem")
           .leftJoinAndSelect("shopitem.images", "imgs")
+          .leftJoinAndSelect("shopitem.brand", "brand")
           .getMany().then(obj => {console.log(obj)
               res.status(200).send(obj);
           });

@@ -38,6 +38,13 @@
             </div>
         </div>
 
+        <div class="field">
+            <label class="label">Image</label>
+            <div class="control">
+            <input class="input" type="text" placeholder="URL" v-model="service.imgURL">
+            </div>
+        </div>
+
         </form>
 
     </modal>
@@ -49,6 +56,7 @@ import { APIConfig } from "../utils/api.utils";
 import { Component, Vue, Prop, Watch } from "vue-property-decorator";
 import Modal from "./Modal.vue";
 import  { Service } from "../../../api/entity";
+import { constants, connect } from "http2";
 // import ServiceForm from "../views/OwnerEditServices.vue";
 
 
@@ -68,6 +76,7 @@ export default class UpdateService extends Vue {
     editingService: EditServiceForm = {
         serviceName: "",
         description: "",
+        imgURL: "",
         price: undefined
     };
 
@@ -77,17 +86,20 @@ export default class UpdateService extends Vue {
             this.editingService = {
                 serviceName: "",
                 description: "",
+                imgURL: "",
                 price: undefined
             };
         }
     } 
 
     success() {
+        console.log(this.$props);
          axios
         .put(APIConfig.buildUrl("/owner/edit-services/" + this.$props.service.id ), 
             {serviceName: this.$props.service.serviceName,
             description: this.$props.service.description,
-            price : this.$props.service.price }
+            price : this.$props.service.price,
+            imgURL: this.$props.service.imgURL }
         )
         .then( () => {
             this.$emit("success");
@@ -103,6 +115,7 @@ export default class UpdateService extends Vue {
 export interface EditServiceForm {
     serviceName: string;
     description: string;
+    imgURL: string;
     price: number | undefined;
 }
 </script>

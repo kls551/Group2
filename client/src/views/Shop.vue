@@ -76,30 +76,31 @@
       <!-- Shop layout -->
       <div class="tile is-child columns is-multiline shop-layout">
         <div v-for="item in shopItems" :key="item.id" class="column is-narrow">
-          <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
+
+          
             <div class="card">
+
+              <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
               <div class="card-image">
                 <figure class="image is-4by3">
                   <img :src="item.images[0].img">
                 </figure>
               </div>
+              </router-link>
+
               <div class="card-content">
                 <div class="media">
                   <div class="media-content">
-                    <div class="columns">
-                      <div class="column is-8">
-                        <p class="title is-4">{{ item.name }}</p>
-                      </div>
-                      <div class="column">
-                        <p class="title" style="color: orange; font-size: 18px;"> ${{ item.price }} </p>
-                      </div>
+                      <div class="subtitle is-4" style="font-weight: bold">{{ item.name }}</div>
+                      <div class="title" style="color: orange; font-size: 18px;"> ${{ item.price }} </div>
                     </div>
                   </div>
-                </div>
+                
+
                 <div class="content">
                   <div class="columns">
                     <div class="column">
-                      <p v-if="item.brand != null">{{ item.brand }}</p>
+                      <p v-if="item.brand != null">{{ item.brand.name }}</p>
                       <p v-else>Brand</p>
                     </div>
                     <div class="column" style="text-align: right">
@@ -113,10 +114,11 @@
                         <button class="button is-info is-fullwidth" type="submit" style="margin-top: 15px;">Edit</button></router-link>
                         <button class="button is-danger is-fullwidth" style="margin-top: 15px;" v-on:click="showDeleteConfirm(item)">Delete</button>
                     </div>
+
                 </div>
               </div>
             </div>
-          </router-link>
+          
         </div>
       </div>
     </div>
@@ -168,6 +170,7 @@
     }
 
     successDelete() {
+      debugger;
         this.showDelConfirm = false;
         this.removeItem(this.delId);
     }
@@ -177,11 +180,12 @@
     }
 
     showDeleteConfirm(item:iShopItem) {
+        debugger;
         this.delId = item.id;
         this.showDelConfirm = true;
     }
 
-    removeItem( itemid : number | undefined ) {
+    removeItem(itemid : number | undefined ) {
         axios
         .delete(APIConfig.buildUrl("/shopitems/" + itemid ))
         .then( () => {

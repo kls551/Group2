@@ -15,6 +15,10 @@
       <br>
 
       <div class="box">
+          <div v-if="errorMessage == null">
+          </div>
+          <div v-else><p style="color: red">{{errorMessage}}</p></div>
+          
         <div class="field">
             <label class="label">Name</label>
             <div class="control">
@@ -99,12 +103,13 @@
             <div class="field">
                 <label class="label">ImageUrl</label>
                 <div class="control">
-                    <input class="input" type="text" placeholder="URL" v-model="itemImageURL">
+                    <input class="input" type="text" placeholder="Please make sure to copy image address" v-model="itemImageURL">
                 </div>
             </div>
 
         <div class="field">
             <div class="control">
+                <p style="color: red">** select to input more image addresses in image URL field **</p>
                 <label class="checkbox">
                     <input type="checkbox" v-model="addwithmoreimg">
                     Add With More Imgs
@@ -179,9 +184,12 @@ export default class NewItem extends Vue {
     shopItem: iShopItem | undefined;
 
     isEditing: Boolean = false;
+    errorMessage: String = "";
 
     mounted() {
-        this.editItem();
+        if(this.$route.params.editing) {
+            this.editItem();
+        }
         this.getMainCategories();
         //this.getSubCategories(this.mainCategoryId);
         this.getBrands();
@@ -215,9 +223,19 @@ export default class NewItem extends Vue {
             this.isEditing = true;
             this.itemid = parseInt(this.$route.params.itemId);
         }
+            
     }
 
     updateItem() {
+        if(this.itemName != "" && this.itemPrice > 0 && this.itemQuantity >= 0 && this.itemDetail != null) {
+        this.$snackbar.open({
+            duration: 4000,
+            message: "Update Item?",
+            type: "is-info",
+            position: "is-top",
+            actionText: "Update",
+            queue: false,
+            onAction: () => {
         axios
         .put(APIConfig.buildUrl("/shopitems/" + this.itemid), {
                 name: this.itemName,
@@ -247,6 +265,11 @@ export default class NewItem extends Vue {
             .catch((errorResponse: any) => {
                 this.error = errorResponse.response.data.reason;
             });
+            }
+        });
+        } else {
+            this.errorMessage = "Missing fields or out of range price/quantity";
+        }
     }
 
 
@@ -325,6 +348,15 @@ export default class NewItem extends Vue {
     }
 
     addItem() {
+        if(this.itemName != "" && this.itemPrice > 0 && this.itemQuantity >= 0 && this.itemDetail != null) {
+        this.$snackbar.open({
+            duration: 4000,
+            message: "Add Item?",
+            type: "is-info",
+            position: "is-top",
+            actionText: "Add",
+            queue: false,
+            onAction: () => {
         if (this.itemName == "" || this.itemPrice == 0) {
             return;
         }
@@ -357,6 +389,11 @@ export default class NewItem extends Vue {
             .catch((errorResponse: any) => {
                 this.error = errorResponse.response.data.reason;
             });
+            }
+        });
+        } else {
+            this.errorMessage = "Missing fields or out of range price/quantity";
+        }
     }
 }
 

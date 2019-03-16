@@ -38,6 +38,7 @@
                         <div class="control">
                             <input class="input is-small" type="text" placeholder="enter a number" v-model="newQty">
                         </div>
+                        <p v-if="this.newQty <= 0" class="help is-danger">Enter a positive quantity</p>
                     </div>
                     <nav class="level">
                         <div class="level-left">

@@ -59,8 +59,8 @@
           </ul>
         </div>
       </div>
-
     <router-view class="container"/>
+
     <Signup
       v-bind:is-showing="showSignup"
       v-on:success="successSignup()"
@@ -92,12 +92,15 @@ import checkout from "@/components/checkout.vue";
 import { APIConfig } from "@/utils/api.utils";
 import Buefy from 'buefy';
 import 'buefy/dist/buefy.css';
+import Shop from "@/views/Shop.vue";
+
 Vue.use(Buefy);
 @Component({
   components: {
     Signup,
     Login,
-    checkout
+    checkout,
+    Shop
   }
 })
 export default class App extends Vue {
@@ -158,6 +161,7 @@ export default class App extends Vue {
   get isOwner(): boolean {
     return this.$store.state.user && (this.$store.state.user.isAdmin === 1);
   }
+
   logout() {
     console.log("logout   ",this.$store.state.userToken);
     axios

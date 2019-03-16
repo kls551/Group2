@@ -1,5 +1,6 @@
 <template>
 <!-- Main container -->
+
 <div class="container" style="margin-top: 15px; margin-bottom: 15px;">
     <!-- Preview Announcment -->
     <div class="box">
@@ -78,6 +79,7 @@
             </tbody>
         </table>
     </div>
+
 </div>
 </template>
 
@@ -101,7 +103,6 @@ import {
 import {
     iUser
 } from "../models/user.interface";
-
 @Component({
     components: {
         Signup
@@ -114,16 +115,9 @@ export default class Orders extends Vue {
     orders: iOrder[] = [];
     users: iUser[] = [];
     edit: iOrder | undefined;
-    editFn: string = "";
-    editEmail: string = "";
-    editLn: string = "";
-    editRole: number = 0;
-    editIndex: number = 0;
-
     mounted() {
         this.preview();
     }
-
     preview() {
         axios
             .get(APIConfig.buildUrl("/orders"))
@@ -136,13 +130,12 @@ export default class Orders extends Vue {
                 this.error = res.response && res.response.data.error;
             });
     }
-
     getUsers(){
         var i;
         for(i = 0; i < this.orders.length; i++){
             axios
             .get(APIConfig.buildUrl("/users/" + this.orders[i].userId))
-            .then((response: AxiosResponse < iUser >) => {
+            .then((response: AxiosResponse < {user: iUser} >) => {
                 console.log(response.data);
                 this.users.push(response.data.user);
             })
@@ -151,18 +144,27 @@ export default class Orders extends Vue {
             });
         }
     }
-
     deleteItem(index: number) {
-        axios.delete(APIConfig.buildUrl("/trackorder/" + index), {
-            headers: {
-                token: this.$store.state.userToken
+        this.$snackbar.open({
+            duration: 2000,
+            message: "Confirm Deletion",
+            type: "is-danger",
+            position: "is-top",
+            actionText: "Delete",
+            queue: false,
+            onAction: () => {
+                this.error = false;
+                axios
+                .delete(APIConfig.buildUrl("/trackorder/" + index))
+                .then((response: AxiosResponse) => {
+                    this.preview();
+                })
+                .catch((res: AxiosError) => {
+                    this.error = res.response && res.response.data.error;
+                });
             }
-        })
-        .then(() => {
-            this.preview();
-        })
+        });
     }
-
     editOrder(index: number, stat: number) {
         this.edit = this.orders[index];
         if (this.edit) {
@@ -175,11 +177,9 @@ export default class Orders extends Vue {
                 })
         }
     } 
-
     canChangeStat(order: iOrder): boolean{
         return (order.status !== 2 && order.status !== 3);
     }
-
     get isAd(): boolean {
         return (this.$store.state.user.isAdmin === 1);
     }

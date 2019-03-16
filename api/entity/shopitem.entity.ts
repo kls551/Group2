@@ -41,5 +41,4 @@ export class ShopItem {
     onDelete: 'CASCADE'
   })
   public user!: User;
-
 }

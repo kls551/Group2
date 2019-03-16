@@ -1,11 +1,11 @@
 import { Connection, createQueryBuilder, getConnection } from "typeorm";
-import { Session, User } from "../../entity";
+import { Session, User, Announcement, MainCategory, Order } from "../../entity";
 
 export default class DatabaseUtils {
   public static clearDB(): Promise<any> {
     const connection: Connection = getConnection();
     if (connection && connection.isConnected) {
-      return Promise.all([Session, User].map((entity) => {
+      return Promise.all([Session, User, Announcement, MainCategory, Order].map((entity) => {
         return createQueryBuilder().delete().from(entity).execute();
       }));
     }

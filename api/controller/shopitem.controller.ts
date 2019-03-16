@@ -5,7 +5,7 @@ import express from "express";
 import multer from "multer";
 import Path from "path";
 
-import { ShopItem,Imgs, SubCategory } from "../entity";
+import { ShopItem, MainCategory, Brands, Imgs, SubCategory } from "../entity";
 
 import { getRepository, getConnection, Connection } from "typeorm";
 
@@ -13,6 +13,7 @@ export class ShopItemController extends DefaultController {
   protected initializeRoutes(): express.Router {
     const router = express.Router();
     const shopItemRepo = getRepository(ShopItem);
+    const brandRepo = getRepository(Brands);
     const itemImgRepo = getRepository(Imgs);
     const subCatRepo = getRepository(SubCategory);
 
@@ -69,18 +70,17 @@ export class ShopItemController extends DefaultController {
             });
         });
     router.route("/itemimages/:id")
-    .post((req: Request, res: Response) => {
-        shopItemRepo.findOneOrFail(req.params.id).then((savedShopItem: ShopItem) => {
-            const img = new Imgs();
-            img.img = req.body.img;
-            img.ShopItem = savedShopItem;
-            itemImgRepo.save(img);
-            res.status(200).send({ id : savedShopItem.id })});
-    });
+      .post((req: Request, res: Response) => {
+          shopItemRepo.findOneOrFail(req.params.id).then((savedShopItem: ShopItem) => {
+              const img = new Imgs();
+              img.img = req.body.img;
+              img.ShopItem = savedShopItem;
+              itemImgRepo.save(img);
+              res.status(200).send({ id : savedShopItem.id })});
+      });
 
     router.route("/shopitems")
     .post(async (req: Request, res: Response) => {
-        
         const shopitem = new ShopItem();
         shopitem.name = req.body.name;
         shopitem.details = req.body.details;
@@ -100,16 +100,41 @@ export class ShopItemController extends DefaultController {
         });
     })
     .get((req: Request, res: Response) => {
-        const users =  getConnection()
-        .getRepository(ShopItem)
-        .createQueryBuilder("shopitem")
-        .leftJoinAndSelect("shopitem.images", "imgs")
-        .leftJoinAndSelect("shopitem.brand", "brand")
-        .getMany().then(obj => {console.log(obj)
-            res.status(200).send(obj);
-        });
+      const shopItemRepo = getRepository(ShopItem);
+      let query = shopItemRepo;
+      if (req.query.cat_ids || req.query.sub_cat_ids) {
+        query
+          .createQueryBuilder("shopitem")
+          .leftJoinAndSelect("shopitem.images", "imgs")
+          .leftJoinAndSelect("shopitem.brand", "brand")
+          .innerJoinAndSelect("shopitem.category", "category")
+          .where("category.id IN (:...cid)", { cid: req.query.cat_ids })
+          .getMany().then((shopitems: ShopItem[]) => {
+            res.status(200).send(shopitems);
+          });
+      } else {
+        const users = getConnection()
+          .getRepository(ShopItem)
+          .createQueryBuilder("shopitem")
+          .leftJoinAndSelect("shopitem.images", "imgs")
+          .leftJoinAndSelect("shopitem.brand", "brand")
+          .getMany().then(obj => {console.log(obj)
+              res.status(200).send(obj);
+          });
+      }
     });
 
+    // router.route("/shopitems/:brandid")
+    //   .get((req: Request, res: Response) => {
+    //     shopItemRepo
+    //       .createQueryBuilder("shopitem")
+    //       .leftJoinAndSelect("shopitem.brand", "brands")
+    //       .where("shopitem.brand.id = :bid", { bid: req.params.brandid })
+    //       .getMany().then((shopitems: ShopItem[]) => {
+    //         res.status(200).send(shopitems);
+    //       });
+    //   });
+
     return router;
-}
+  }
 }

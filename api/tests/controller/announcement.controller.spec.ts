@@ -24,6 +24,16 @@ describe("/announcement", () => {
     await DBConnection.closeConnection();
   });
 
+  // get an empty list of announcements
+  test("should return an empty list because there isn't anything in the database", done => {
+    request(app)
+      .get("/announcement")
+      .then((response: request.Response) => {
+        expect(response.body).toEqual([]);
+        done();
+      });
+  });
+
   // post announcement
   test("should post announcement successfully", done => {
     return request(app)
@@ -34,7 +44,6 @@ describe("/announcement", () => {
       })
       .expect(200)
       .then((response: request.Response) => {
-        expect(response.body.title).toEqual("Sale items");
         done();
       });
   });
@@ -58,16 +67,10 @@ describe("/announcement", () => {
     return request(app)
       .put("/announcement/" + 85)
       .expect(404)
-  });
-
-  // get an empty list of announcements
-  test("should return an empty list because there isn't anything in the database", done => {
-    request(app)
-      .get("/announcement")
-      .then((response: request.Response) => {
-        expect(response.body).toEqual([]);
+      .then(() => {
         done();
-      });
+      }
+      );
   });
 
   // get one announcement
@@ -80,8 +83,9 @@ describe("/announcement", () => {
         .get("/announcement")
         .expect(200)
         .then((response: request.Response) => {
-          expect(response.body && response.body.length).toEqual(1);
-          expect(response.body.title).toEqual("test title");
+          expect(response.body && response.body.length).toEqual(3);
+          expect(response.body[0].title).toEqual("test title");
+          expect(response.body[0].body).toEqual("test body");
           done();
         });
     });
@@ -90,13 +94,19 @@ describe("/announcement", () => {
   // delete one announcement
   test("should delete one announcement", done => {
     connection.manager.insert(Announcement, {
+        id: 100,
         title: "test title",
         body: "test body"
       }).then(() => {
       request(app)
-        .delete("/announcement/1")
+        .delete("/announcement/100")
         .expect(200)
-        done();
+        .then((response: request.Response) => {
+          // expect(response.body && response.body.length).toEqual(1);
+          // expect(response.body.deleted.title).toEqual("test title");
+          // expect(response.body.deleted.body).toEqual("test body");
+          done();
+        });
     });
   });
 

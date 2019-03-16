@@ -10,7 +10,7 @@
             <h2>Add New Item </h2>
         </div>
     <div class="columns">
-      
+
       <div class="rightMargin column">
       <br>
 
@@ -58,7 +58,7 @@
                             {{ main.name }}
                         </b-radio>
                     </div>
-                    
+
                 </div>
 
                 <!-- Subcategory select multiple -->
@@ -81,7 +81,7 @@
                             {{ brand.name }}
                         </b-radio>
                     </div>
-                    
+
                 </div>
             </div>
 
@@ -91,7 +91,7 @@
                     <input type="checkbox" v-model="iteminStorePickup">
                     In-Store Pickup Only
                 </label>
-            </div>  
+            </div>
         </div>
 
         <div class="field">
@@ -114,9 +114,9 @@
                     <input type="checkbox" v-model="addwithmoreimg">
                     Add With More Imgs
                 </label>
-            </div>  
+            </div>
         </div>
-        
+
           </div>
                 <div v-if="isEditing == true">
                     <span><button v-if="!addMoreimg" class="button is-warning" type="submit" v-on:click="updateItem">Update Item</button></span>
@@ -167,7 +167,7 @@ export default class NewItem extends Vue {
     iteminStorePickup: Boolean = false;
     itemPostedDate: Date = new Date();
     itemImageURL: String = "";
-    
+
     selected: Number = 0;
     selectedBrand: Number = 0;
     selectedSubCategories: Number[] = [];
@@ -195,7 +195,7 @@ export default class NewItem extends Vue {
         this.getBrands();
         this.imageCount;
     }
-    
+
 
     editItem() {
         if(this.$route.params.editing) {
@@ -215,7 +215,7 @@ export default class NewItem extends Vue {
                     this.itemImageURL = this.shopItem.images[0].img;
                     this.saveMainCat(this.selected);
                 }
-                this.$emit("success");  
+                this.$emit("success");
             })
             .catch((res: AxiosError) => {
                 this.error = res.response && res.response.data.error;
@@ -249,7 +249,7 @@ export default class NewItem extends Vue {
                 imageUrl: this.itemImageURL,
                 brand: this.selectedBrand
         })
-        .then((response: AxiosResponse<{ id: number }>) => { 
+        .then((response: AxiosResponse<{ id: number }>) => {
                 if(!this.addwithmoreimg) {
                     this.itemid = response.data.id;
                     this.$emit("success");
@@ -330,7 +330,7 @@ export default class NewItem extends Vue {
             this.error = errorResponse.response.data.reason;
         });
     }
-    
+
     clear() {
         this.itemName = "";
         this.itemDetail = "";
@@ -373,7 +373,7 @@ export default class NewItem extends Vue {
                 imageUrl: this.itemImageURL,
                 brand: this.selectedBrand
             })
-            .then((response: AxiosResponse<{ id: number }>) => { 
+            .then((response: AxiosResponse<{ id: number }>) => {
                 if(!this.addwithmoreimg) {
                     this.itemid = response.data.id;
                     this.$emit("success");
@@ -412,7 +412,7 @@ interface SubCategory {
     mainCategoryId: number;
 }
 
-</script>  
+</script>
 
 <style scoped lang="scss">
 h1 {
@@ -421,9 +421,9 @@ h1 {
   font-weight: bold;
 }
 hr {
-   background-color: black; 
-   height: 2px; 
-   border: 0; 
+   background-color: black;
+   height: 2px;
+   border: 0;
 }
 h2 {
   font-family: 'Questrial';

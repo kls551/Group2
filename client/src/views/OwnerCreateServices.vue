@@ -31,8 +31,8 @@
                     <span> <h3> Price </h3> </span>
                     <input type="text input" class="input is-warning is-small" placeholder="Price" v-model="service.price">
                     <p v-if="isNaN(service.price)" class="help is-danger">Price must be a number</p>
-                    <input type="text input" class="input is-warning is-small" placeholder="Service Name" v-model="service.image">
-                    <p v-if="service.image.length <= 0" class="help is-danger">Service image is required</p>
+                    <input type="text input" class="input is-warning is-small" placeholder="ImageURL" v-model="service.image">
+                    <p v-if="service.image.length <= 0" class="help is-danger">image is required</p>
                 </div>
 
                 <!-- Submit and Cshancel buttons -->

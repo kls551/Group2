@@ -72,31 +72,6 @@
                 Filter
               </button>
             </div>
-<<<<<<< HEAD
-=======
-
-            <!-- Show selection for testing -->
-            <!-- <div class="panel-block"> -->
-              <!-- Active brands:
-            </div>
-            <div class="panel-block menu-contents" v-for="brand in activeBrandIds">
-              {{ brand }}
-            </div>
-
-            <div class="panel-block">
-              Active main categories:
-            </div>
-            <div class="panel-block menu-contents" v-for="cat in activeCatIds">
-              {{ cat }}
-            </div>
-
-            <div class="panel-block">
-              Active subcategories:
-            </div>
-            <div class="panel-block menu-contents" v-for="cat in activeSubCatIds">
-              {{ cat }}
-            </div>  -->
->>>>>>> 9f1cd555c1d202e84e5d1aa24cfa184f6b2841ba
           </nav>
         </section>
       </div>
@@ -105,7 +80,7 @@
       <div class="columns is-multiline shop-layout">
         <div v-for="item in shopItems" :key="item.id" class="column is-narrow">
 
-          
+
             <div class="card">
 
               <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
@@ -123,7 +98,7 @@
                       <div class="title" style="color: orange; font-size: 18px;"> ${{ item.price }} </div>
                     </div>
                   </div>
-                
+
 
                 <div class="content">
                   <div class="columns">
@@ -146,17 +121,17 @@
                 </div>
               </div>
             </div>
-          
+
         </div>
       </div>
     </div>
     </div>
     </div>
 
-    <DeleteConfirm 
+    <DeleteConfirm
             v-bind:is-showing="showDelConfirm"
             v-bind:del="confirmDel"
-            v-on:success="successDelete()" 
+            v-on:success="successDelete()"
             v-on:cancel="cancelDelete()"> </DeleteConfirm>
   </div>
 </template>
@@ -187,7 +162,7 @@ import { constants } from "http2";
     activeCatIds: number[] = [];
     activeSubCatIds: number[] = [];
 
-    @Prop ({default : null}) 
+    @Prop ({default : null})
     mCat : string | undefined;
 
     public showDelConfirm: boolean = false;
@@ -228,7 +203,7 @@ import { constants } from "http2";
         .delete(APIConfig.buildUrl("/shopitems/" + itemid ))
         .then( () => {
             this.display();
-        }) 
+        })
     }
 
     display() {
@@ -344,7 +319,7 @@ import { constants } from "http2";
     return this.$store.state.user;
   }
 
-  
+
 }
 </script>
 

@@ -123,6 +123,7 @@ export default class OwnerEditServices extends Vue{
         axios.get(APIConfig.buildUrl("/owner/edit-services"), {
         })
         .then((response) => {
+            console.log(response.data);
             this.services = response.data;
         });
     }

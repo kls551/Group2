@@ -74,7 +74,7 @@ import { Component, Prop } from "vue-property-decorator";
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { APIConfig } from "@/utils/api.utils";
 import { iShopItem, iImg } from "@/models/shopitem.interface";
-import {} from "@/models/shopItem.interface";
+import {} from "@/models/shopitem.interface";
 
 @Component
 export default class ItemView extends Vue {

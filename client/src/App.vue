@@ -59,7 +59,6 @@
           </ul>
         </div>
       </div>
-
     <router-view class="container"/>
     <Signup
       v-bind:is-showing="showSignup"
@@ -158,6 +157,7 @@ export default class App extends Vue {
   get isOwner(): boolean {
     return this.$store.state.user && (this.$store.state.user.isAdmin === 1);
   }
+
   logout() {
     console.log("logout   ",this.$store.state.userToken);
     axios

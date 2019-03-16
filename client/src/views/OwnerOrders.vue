@@ -1,5 +1,6 @@
 <template>
 <!-- Main container -->
+
 <div class="container" style="margin-top: 15px; margin-bottom: 15px;">
     <!-- Preview Announcment -->
     <div class="box">
@@ -78,6 +79,7 @@
             </tbody>
         </table>
     </div>
+
 </div>
 </template>
 
@@ -102,6 +104,7 @@ import {
     iUser
 } from "../models/user.interface";
 
+
 @Component({
     components: {
         Signup
@@ -114,11 +117,6 @@ export default class Orders extends Vue {
     orders: iOrder[] = [];
     users: iUser[] = [];
     edit: iOrder | undefined;
-    editFn: string = "";
-    editEmail: string = "";
-    editLn: string = "";
-    editRole: number = 0;
-    editIndex: number = 0;
 
     mounted() {
         this.preview();
@@ -142,7 +140,7 @@ export default class Orders extends Vue {
         for(i = 0; i < this.orders.length; i++){
             axios
             .get(APIConfig.buildUrl("/users/" + this.orders[i].userId))
-            .then((response: AxiosResponse < iUser >) => {
+            .then((response: AxiosResponse < {user: iUser} >) => {
                 console.log(response.data);
                 this.users.push(response.data.user);
             })
@@ -153,14 +151,25 @@ export default class Orders extends Vue {
     }
 
     deleteItem(index: number) {
-        axios.delete(APIConfig.buildUrl("/trackorder/" + index), {
-            headers: {
-                token: this.$store.state.userToken
+        this.$snackbar.open({
+            duration: 2000,
+            message: "Confirm Deletion",
+            type: "is-danger",
+            position: "is-top",
+            actionText: "Delete",
+            queue: false,
+            onAction: () => {
+                this.error = false;
+                axios
+                .delete(APIConfig.buildUrl("/trackorder/" + index))
+                .then((response: AxiosResponse) => {
+                    this.preview();
+                })
+                .catch((res: AxiosError) => {
+                    this.error = res.response && res.response.data.error;
+                });
             }
-        })
-        .then(() => {
-            this.preview();
-        })
+        });
     }
 
     editOrder(index: number, stat: number) {

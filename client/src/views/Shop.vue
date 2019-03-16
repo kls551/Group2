@@ -263,6 +263,8 @@
   get isLoggedIn(): boolean {
     return this.$store.state.user;
   }
+
+  
 }
 </script>
 

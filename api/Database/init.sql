@@ -1,14 +1,14 @@
 -- creating admin
-insert into dev.user values
-(1, "AdminFirst", "AdminLast", "123", "", "admin", 1);
+insert into dev.user () values
+(1, "AdminFirst", "AdminLast", "123", "", "admin", 1, null);
 
 -- creating staff
 insert into dev.user values
-(2, "staffFirst", "staffLast", "123", "", "staff", 0);
+(2, "staffFirst", "staffLast", "123", "", "staff", 0, null);
 
 -- creating staff
 insert into dev.user values
-(3, "userFirst", "userLast", "123", "", "user", -1);
+(3, "userFirst", "userLast", "123", "", "user", -1, null);
 
 -- creating about
 insert into dev.about values
@@ -16,7 +16,10 @@ insert into dev.about values
 "415-344-2134", "", "10AM-8PM", "10AM-8PM","10AM-8PM","10AM-8PM","10AM-8PM","10AM-8PM","10AM-8PM");
 
 insert into dev.main_category values
-(1, "Bike");
-
-insert into dev.sub_category values
-(1, "Mountain Bike", 1)
+(1, "Mountain Bike", false);
+insert into dev.main_category values
+(2, "Cruisers", false);
+insert into dev.main_category values
+(3, "Racing", false);
+insert into dev.main_category values
+(4, "Accessories", false);

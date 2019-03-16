@@ -3,7 +3,6 @@
 
     <div class="container" style="margin-top: 25px; margin-bottom: 25px">
         <!-- check to see if we are editing an item from the shop -->
-        {{ editItem() }}
         <div v-if="isEditing == true">
             <h2 style="color: red">Editing {{ this.itemName }}</h2>
         </div>
@@ -16,6 +15,10 @@
       <br>
 
       <div class="box">
+          <div v-if="errorMessage == null">
+          </div>
+          <div v-else><p style="color: red">{{errorMessage}}</p></div>
+          
         <div class="field">
             <label class="label">Name</label>
             <div class="control">
@@ -70,8 +73,6 @@
                 </div>
                 <div v-else></div>
 
-                {{selectedSubCategories}}
-
 
                 <div class="column">
                     <label class="label">Brand</label>
@@ -102,12 +103,13 @@
             <div class="field">
                 <label class="label">ImageUrl</label>
                 <div class="control">
-                    <input class="input" type="text" placeholder="URL" v-model="itemImageURL">
+                    <input class="input" type="text" placeholder="Please make sure to copy image address" v-model="itemImageURL">
                 </div>
             </div>
 
         <div class="field">
             <div class="control">
+                <p style="color: red">** select to input more image addresses in image URL field **</p>
                 <label class="checkbox">
                     <input type="checkbox" v-model="addwithmoreimg">
                     Add With More Imgs
@@ -119,12 +121,13 @@
                 <div v-if="isEditing == true">
                     <span><button v-if="!addMoreimg" class="button is-warning" type="submit" v-on:click="updateItem">Update Item</button></span>
                     <span><button v-if="addMoreimg" class="button is-warning" type="submit" v-on:click="addMore">Add More Image</button></span>
-                    <button v-if="addMoreimg" class="button is-danger" type="submit" v-on:click="cancel">Cancel</button>
+                    <span><button v-if="addMoreimg" class="button is-danger" type="submit" v-on:click="cancel">Cancel</button></span>
+
                 </div>
                 <div v-else>
                     <span><button v-if="!addMoreimg" class="button is-success" type="submit" v-on:click="addItem">Add Item</button></span>
                     <span><button v-if="addMoreimg" class="button is-warning" type="submit" v-on:click="addMore">Add More Image</button></span>
-                    <button v-if="addMoreimg" class="button is-danger" type="submit" v-on:click="cancel">Cancel</button>
+                    <span><button v-if="addMoreimg" class="button is-danger" type="submit" v-on:click="cancel">Cancel</button></span>
                 </div>
         </div>
 
@@ -181,10 +184,14 @@ export default class NewItem extends Vue {
     shopItem: iShopItem | undefined;
 
     isEditing: Boolean = false;
+    errorMessage: String = "";
 
     mounted() {
+        if(this.$route.params.editing) {
+            this.editItem();
+        }
         this.getMainCategories();
-        this.getSubCategories(this.mainCategoryId);
+        //this.getSubCategories(this.mainCategoryId);
         this.getBrands();
         this.imageCount;
     }
@@ -201,7 +208,12 @@ export default class NewItem extends Vue {
                     this.itemPrice = this.shopItem.price;
                     this.itemDetail = this.shopItem.details;
                     this.itemQuantity = this.shopItem.quantity;
-                    this.iteminStorePickup = this.shopItem.inStorePickup;
+                    this.iteminStorePickup = this.shopItem.inStorePickup; 
+                    this.selected = response.data.category && response.data.category.id;
+                    this.selectedBrand = response.data.brand.id;
+                    this.selectedSubCategories = response.data.subcategories;
+                    this.itemImageURL = this.shopItem.images[0].img;
+                    this.saveMainCat(this.selected);
                 }
                 this.$emit("success");
             })
@@ -211,9 +223,19 @@ export default class NewItem extends Vue {
             this.isEditing = true;
             this.itemid = parseInt(this.$route.params.itemId);
         }
+            
     }
 
     updateItem() {
+        if(this.itemName != "" && this.itemPrice > 0 && this.itemQuantity >= 0 && this.itemDetail != null) {
+        this.$snackbar.open({
+            duration: 4000,
+            message: "Update Item?",
+            type: "is-info",
+            position: "is-top",
+            actionText: "Update",
+            queue: false,
+            onAction: () => {
         axios
         .put(APIConfig.buildUrl("/shopitems/" + this.itemid), {
                 name: this.itemName,
@@ -243,6 +265,11 @@ export default class NewItem extends Vue {
             .catch((errorResponse: any) => {
                 this.error = errorResponse.response.data.reason;
             });
+            }
+        });
+        } else {
+            this.errorMessage = "Missing fields or out of range price/quantity";
+        }
     }
 
 
@@ -284,7 +311,7 @@ export default class NewItem extends Vue {
             });
     }
 
-    saveMainCat(mainCatId:number) {
+    saveMainCat(mainCatId:Number) {
         this.mainCategoryId = mainCatId;
         this.mainselected = true;
         this.getSubCategories(mainCatId);
@@ -321,6 +348,15 @@ export default class NewItem extends Vue {
     }
 
     addItem() {
+        if(this.itemName != "" && this.itemPrice > 0 && this.itemQuantity >= 0 && this.itemDetail != null) {
+        this.$snackbar.open({
+            duration: 4000,
+            message: "Add Item?",
+            type: "is-info",
+            position: "is-top",
+            actionText: "Add",
+            queue: false,
+            onAction: () => {
         if (this.itemName == "" || this.itemPrice == 0) {
             return;
         }
@@ -353,6 +389,11 @@ export default class NewItem extends Vue {
             .catch((errorResponse: any) => {
                 this.error = errorResponse.response.data.reason;
             });
+            }
+        });
+        } else {
+            this.errorMessage = "Missing fields or out of range price/quantity";
+        }
     }
 }
 

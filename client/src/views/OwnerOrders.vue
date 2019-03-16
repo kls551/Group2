@@ -103,8 +103,6 @@ import {
 import {
     iUser
 } from "../models/user.interface";
-
-
 @Component({
     components: {
         Signup
@@ -117,11 +115,9 @@ export default class Orders extends Vue {
     orders: iOrder[] = [];
     users: iUser[] = [];
     edit: iOrder | undefined;
-
     mounted() {
         this.preview();
     }
-
     preview() {
         axios
             .get(APIConfig.buildUrl("/orders"))
@@ -134,7 +130,6 @@ export default class Orders extends Vue {
                 this.error = res.response && res.response.data.error;
             });
     }
-
     getUsers(){
         var i;
         for(i = 0; i < this.orders.length; i++){
@@ -149,7 +144,6 @@ export default class Orders extends Vue {
             });
         }
     }
-
     deleteItem(index: number) {
         this.$snackbar.open({
             duration: 2000,
@@ -171,7 +165,6 @@ export default class Orders extends Vue {
             }
         });
     }
-
     editOrder(index: number, stat: number) {
         this.edit = this.orders[index];
         if (this.edit) {
@@ -184,11 +177,9 @@ export default class Orders extends Vue {
                 })
         }
     } 
-
     canChangeStat(order: iOrder): boolean{
         return (order.status !== 2 && order.status !== 3);
     }
-
     get isAd(): boolean {
         return (this.$store.state.user.isAdmin === 1);
     }

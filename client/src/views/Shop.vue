@@ -150,6 +150,7 @@
   import { iShopItem, iImg } from "../models/shopitem.interface";
   import { iMainCategory, iSubCategory } from "../models/category.interface";
   import { iBrand } from "../models/brand.interface";
+import { constants } from "http2";
 
   @Component
   export default class Shop extends Vue {
@@ -163,6 +164,10 @@
     activeCatIds: number[] = [];
     activeSubCatIds: number[] = [];
 
+    @Prop ({default : null}) 
+    mCat : string | undefined;
+
+
     sorts: iMainCategory = { id: 1099, name: "Sorting Options", show: true,
               subCategories: [
                 { id: 1100, name: "Alphabetical" },
@@ -172,9 +177,11 @@
 
     mounted() {
       this.display();
+      this.loader();
     }
 
     display() {
+      console.log(this.$store.state.mCat);
       axios
         .get(APIConfig.buildUrl("/shopitems"))
         .then((response: AxiosResponse) => {
@@ -197,6 +204,20 @@
         .catch((res: AxiosError) => {
             this.error = res.response && res.response.data.error;
         });
+    }
+
+    loader () {
+      console.log(this.$store.state.mCat);
+      if (this.$store.state.mCat) {
+        axios
+          .get(APIConfig.buildUrl("/shopitems/"), { params: { cat_ids: [this.$store.state.mCat] }})
+          .then((response: AxiosResponse) => {
+            this.shopItems = response.data;
+            this.$store.state.mCat = null;
+            console.log(this.shopItems);
+            this.$emit("success");
+          });
+      }
     }
 
   sortby(): void {

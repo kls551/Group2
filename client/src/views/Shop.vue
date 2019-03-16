@@ -1,6 +1,9 @@
 <template>
   <div class="shop">
-    <div class="tile is-ancestor top-bar">
+    <div class="container" style="margin-top: 25px; margin-bottom: 25px">
+    <h2 style="color: orange">Shop our collection</h2>
+    <h3 style="border-bottom: 1.5px solid orange">Sort or filter items and click to view item details</h3>
+    <div class="tile is-ancestor top-bar" style="padding-top: 10px;">
       <!-- Categories menu -->
       <div class="tile is-3 is-vertical is-parent menu">
         <div class="tile is-child">
@@ -121,6 +124,7 @@
           
         </div>
       </div>
+    </div>
     </div>
 
     <DeleteConfirm 

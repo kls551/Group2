@@ -1,6 +1,8 @@
 <template>
   <div class="itemView">
+    <div class="container" style="margin-top: 25px; margin-bottom: 25px">
     <div class="columns" v-if="loaded">
+      <div class="column">
       <div class="card-content">
         <div class="card-carousel">
           <figure class="image is-48x48">
@@ -18,51 +20,26 @@
           </div>
         </div>
       </div>
+      </div>
 
-      <div class="leftMargin column">
+      <div class="leftMargin column" style="margin-top: 75px">
         <h1>{{ shopItem.name }}</h1>
-        <hr width="30%">
-        <br>
         <div class="columns">
           <div class="column is-3">
             <h2>${{ shopItem.price }}</h2>
           </div>
-          <div class="column">
-            <div class="dropdown is-hoverable">
-              <div class="dropdown-trigger">
-                <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
-                  <span>{{ shopItem.quantity }}</span>
-                  <span class="icon is-small">
-                    <i class="fas fa-angle-down" aria-hidden="true"></i>
-                  </span>
-                </button>
-              </div>
-              <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                <div class="dropdown-content">
-                  <a href="#" class="dropdown-item">1</a>
-                  <a class="dropdown-item">2</a>
-                  <a href="#" class="dropdown-item is-active">3</a>
-                  <a href="#" class="dropdown-item">4</a>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-
-        <br>
         <div class="buttons has-addons">
           <span class="button buttonStyle" v-on:click="addToCart(shopItem)">Add To Cart</span>
-          <span class="button buttonStyle">Buy Now</span>
         </div>
 
         <p class="subtitle is-6" v-if="shopItem.inStorePickup">In-Store Pickup Only</p>
         <p class="subtitle is-6" v-else>Order online available</p>
-
-        <br>
-        <article class="message">
-          <div class="message-body">{{ shopItem.details }}</div>
-        </article>
+        <div class="box">
+          <h3><strong>Details</strong><br>{{ shopItem.details }}</h3>
+        </div>
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -228,9 +205,10 @@ export default class ItemView extends Vue {
   color: #eee;
 }
 h1 {
-  margin-top: 90px;
+  font-family: 'Questrial';
   font-size: 30px;
   font-weight: bold;
+  color: orange;
 }
 hr {
   background-color: black;
@@ -238,7 +216,8 @@ hr {
   border: 0;
 }
 h2 {
-  font-size: 22px;
+  font-family: 'Questrial';
+  font-size: 28px;
 }
 .rightMargin {
   margin-right: 80px;

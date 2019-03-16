@@ -101,7 +101,7 @@
             <div class="card">
               <div class="card-image">
                 <figure class="image is-4by3">
-                  <img :src="item.images[0].img">
+                  <img v-if="item.images[0].img" :src="item.images[0].img">
                 </figure>
               </div>
               <div class="card-content">

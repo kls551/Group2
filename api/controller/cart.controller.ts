@@ -38,6 +38,28 @@ export class CartController extends DefaultController {
           });
         }
       });
+    })
+    .get((req: Request, res: Response) => {
+      const userId = req.params.userId;
+      const userRepo = getRepository(User);    
+      const cartRepo = getRepository(Cart);
+
+      userRepo
+      .createQueryBuilder("user")
+      .leftJoinAndSelect("user.cart", "cart")
+      .getOne()
+      .then((user: User | any) => { 
+        console.log("user --------- ", user);
+        console.log("cart --------- ", user.cart);
+        if (user) {
+          cartRepo.findOne(user.cart.id)
+          .then((cart : Cart | any) => {
+            console.log("found cart ---------- ", cart);
+            if (cart)
+              res.status(200).send(cart);
+          });
+        }
+      });
     });
 
     router.route("/cart/:userId")
@@ -45,7 +67,7 @@ export class CartController extends DefaultController {
       const userId = req.params.userId;
       const userRepo = getRepository(User);    
       const cartRepo = getRepository(Cart);
-
+      console.log("userId -----------", userId);
       userRepo.findOne(userId, {relations: ["cart"]}).then((user: User | any) => { 
         if (user) {
           const cartId = user.cartId;
@@ -77,13 +99,29 @@ export class CartController extends DefaultController {
       const cartRepo = getRepository(Cart);
      
       cartRepo
-      .findOneOrFail(cartId, {relations: ["items"]})
+      .findOneOrFail(cartId, {relations: ["items", "user"]})
       .then((foundCart : Cart) => {
-        if (foundCart) {
-          res.status(200).send(foundCart.items);
+        if (foundCart && foundCart.items) {
+          foundCart.items.forEach(item => {
+            itemRepo.findOneOrFail(item.id, {relations: ["images"]})
+            .then(foundItem => {
+              item = foundItem;
+            })
+
+          })
+          console.log("foundCart ", foundCart);
+          res.status(200).send(foundCart);
         }
-        else 
-          res.status(404).send("Cart not found");
+
+
+
+        // if (foundCart) {
+        //   res.status(200).send(foundCart.items);
+        // }
+        // else 
+        //   res.status(404).send("Cart not found");
+
+
       });
     })
     .put((req: Request, res: Response) => {
@@ -117,19 +155,6 @@ export class CartController extends DefaultController {
           res.status(404).send("Cart not found");
       }); 
     });
-    // .delete((req: Request, res: Response) => {
-    //   const cartRepo = getRepository(Cart);
-    //   const itemRepo = getRepository(ShopItem);
-    //   const cartId = req.params.cartId;
-
-    //   cartRepo
-    //   .findOneOrFail(cartId, {relations: ["items"]})
-    //   .then((foundCart : Cart) => {
-    //       cartRepo
-    //       .delete(foundCart)
-    //       .then((result) => { res.status(200).send("sucess deleted cart ") });
-    //   });
-    // });
 
     return router;
     }

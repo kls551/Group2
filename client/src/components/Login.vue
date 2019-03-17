@@ -40,14 +40,16 @@
 
 <script lang="ts">
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { APIConfig } from "../utils/api.utils";
+import { APIConfig } from "@/utils/api.utils";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import Modal from "./Modal.vue";
+
 @Component({
   components: {
     Modal
   }
 })
+
 export default class Signup extends Vue {
   signup: LoginForm = {
     emailAddress: "",
@@ -64,6 +66,7 @@ export default class Signup extends Vue {
       };
     }
   }
+
   success() {
     this.error = false;
     axios
@@ -72,16 +75,35 @@ export default class Signup extends Vue {
         password: this.signup.password
       })
       .then((response: AxiosResponse<LoginResponse>) => {
+       
         this.$store.dispatch("login", {
           token: response.data.token,
           userid: response.data.userId
         });
-        this.$emit("success");
+      
+        this.$emit("success");      
+        this.getCart(response.data.userId);
       })
       .catch((res: AxiosError) => {
         this.error = res.response && res.response.data.error;
       });
   }
+
+  getCart(userId: number) {
+    console.log("getting cart ");
+    console.log("user id  ", userId);
+    axios
+    .get(APIConfig.buildUrl("/cart"), 
+    { params: { userId : userId}})
+    .then((cart) => {
+      console.log("found cart in login ", cart);
+      this.$store.commit("getCart", cart);
+      // this.$store.dispatch("getCart", {
+      //   cartId : cart.data.id,
+      // })
+    })
+  }
+
   get formcheck(): boolean {
     if(
     this.signup.emailAddress.length <= 0 ||
@@ -97,6 +119,9 @@ export default class Signup extends Vue {
 interface LoginResponse {
   token: string;
   userId: number;
+}
+interface GetCartResponse {
+  cartId: number;
 }
 export interface LoginForm {
   emailAddress: string;

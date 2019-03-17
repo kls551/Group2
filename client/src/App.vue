@@ -51,7 +51,7 @@
 
               <router-link to="/owner/announcment" v-show="isOwner" tag="li" exact-active-class="is-active"><a>Announcement</a></router-link>
               <router-link to="/owner/about" v-show="isOwner" tag="li" exact-active-class="is-active"><a>About</a></router-link>
-              <router-link to="/owner/accounts" v-show="isOwner" tag="li" exact-active-class="is-active"><a>Accounts</a></router-link>
+              <router-link to="/owner/accounts" v-show="isStaff || isOwner" tag="li" exact-active-class="is-active"><a>Accounts</a></router-link>
 
               <router-link to="/owner/add-item" v-show="isOwner" tag="li" exact-active-class="is-active"><a>New Item</a></router-link>
 

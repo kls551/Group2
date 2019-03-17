@@ -9,12 +9,12 @@
                 <div class="tile is-child box" v-for="(item, index) in cartList" v-bind:key="index">
                     <div class="columns">
                         <!-- item image -->
-                        <div class="column">
+                        <!-- <div class="column">
                             <figure class="image is-1by1">
-                                <!-- <img alt="" :src="item.images[0].img"> -->
-                                <!-- <img src="https://bulma.io/images/placeholders/640x480.png"> -->
+                                <img alt="" :src="item.images[0].img">
+                                <img src="https://bulma.io/images/placeholders/640x480.png">
                             </figure>
-                        </div>
+                        </div> -->
                         <!-- item name and description -->
                         <div class="column">
                             <p> <h2>{{ item.name }}</h2> </p> 
@@ -113,21 +113,30 @@ export default class Cart extends Vue {
     }
 
     getCart() {
-        const cartId = this.$store.state.cart && this.$store.state.cart.id;
+        const cartId = this.$store.state.cartId;
+        console.log("before getting cart");
+        console.log(" state cart ", this.$store.state.cartId);
+        console.log(" cart id ", cartId);
         if (this.$store.state.user) {
-            console.log("store ", this.$store.state.cart );
+
             const userId = this.$store.state.user && this.$store.state.user.id;
+
             axios
             .get(APIConfig.buildUrl("/cart/" + cartId))
             .then((response: AxiosResponse) => {
-                response.data.forEach((item : iShopItem) => {
+                console.log("car res ", response.data);
+                response.data.items.forEach((item : iShopItem) => {
                     if (!item.quant)
                         item.quant = 1;
                 })
-                this.cartList = response.data;
+
+                this.cart = response.data;
+                // this.cartList = response.data;
                 this.calculateTotal();
-                console.log("items ", this.cartList);
-                console.log("cart ", this.cart && this.cart.itemsId);
+                this.cartList = response.data.items;
+
+                console.log("images ", response.data.items[0].images[0]);
+                console.log("cart ", this.cart && this.cart.items);
             })
             .catch((res: AxiosError) => {
                 this.error = res.response && res.response.data.error;

@@ -1,8 +1,12 @@
 <template>
   <div class="shop">
+    <div class="container" style="margin-top: 25px; margin-bottom: 25px">
+    <h2 style="color: orange">Shop our collection</h2>
+    <h3 style="border-bottom: 1.5px solid orange">Sort or filter items and click to view item details</h3>
+    <div class="tile is-ancestor top-bar" style="padding-top: 10px;">
     <div class="columns top-bar">
       <!-- Categories menu -->
-      <div class="column is-3 menu">
+      <div class="column is-3" style="padding: 0px 0px 0px 20px; margin: 4px 15px;">
           <section>
             <nav class="panel">
               <p class="panel-heading">
@@ -15,7 +19,8 @@
             </div>
 
             <a
-              class="panel-block menu-contents"
+              class="panel-block"
+              style="padding-left: 40px"
               v-show="sorts.show"
               v-for="option in sorts.subCategories"
               :key="option.id"
@@ -33,7 +38,7 @@
               <font-awesome-icon v-show="brandsShow" icon="angle-up"/>
             </div>
 
-            <a class="panel-block menu-contents" v-show="brandsShow" v-for="brand in brands" :key="brand.id">
+            <a class="panel-block" style="padding-left: 40px" v-show="brandsShow" v-for="brand in brands" :key="brand.id">
               <b-checkbox v-model="activeBrandIds" :native-value="brand.id">
                 {{ brand.name }}
               </b-checkbox>
@@ -44,7 +49,7 @@
               <!-- Main category set -->
               <div class="panel-block" v-on:click="category.show = !category.show">
                 <span class="cat-name">
-                    <b-checkbox v-model="activeCatIds" :native-value="category.id">
+                  <b-checkbox v-model="activeCatIds" :native-value="category.id">
                     {{ category.name }}
                   </b-checkbox>
                 </span>
@@ -55,8 +60,8 @@
               </div>
 
               <!-- Subcategory set -->
-              <a class="panel-block menu-contents" v-show="category.show" v-for="sub in category.subCategories" :key="sub.id + 100">
-                <b-checkbox v-model="activeSubCatIds" :native-value="sub.id">
+              <a class="panel-block" style="padding-left: 40px" v-show="category.show" v-for="sub in category.subCategories" :key="sub.id + 100">
+                <b-checkbox v-model="activeSubCatIds" :native-value="sub.id" style="color: #363636" disabled>
                   {{ sub.name }}
                 </b-checkbox>
               </a>
@@ -68,77 +73,66 @@
                 Filter
               </button>
             </div>
-
-            <!-- Show selection for testing -->
-            <div class="panel-block">
-              Active brands:
-            </div>
-            <div class="panel-block menu-contents" v-for="brand in activeBrandIds">
-              {{ brand }}
-            </div>
-
-            <div class="panel-block">
-              Active main categories:
-            </div>
-            <div class="panel-block menu-contents" v-for="cat in activeCatIds">
-              {{ cat }}
-            </div>
-
-            <div class="panel-block">
-              Active subcategories:
-            </div>
-            <div class="panel-block menu-contents" v-for="cat in activeSubCatIds">
-              {{ cat }}
-            </div>
           </nav>
         </section>
       </div>
 
       <!-- Shop layout -->
-      <div class="columns is-multiline shop-layout">
+      <div class="columns is-multiline">
         <div v-for="item in shopItems" :key="item.id" class="column is-narrow">
-          <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
+
             <div class="card">
-              <div class="card-image">
-                <figure class="image is-4by3">
-                  <img v-if="item.images[0].img" :src="item.images[0].img">
+              <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
+              <div class="card-image" style="min-height: 200px">
+                <figure class="image">
+                  <img v-if="item.images[0].img" :src="item.images[0].img" style="max-width: 100%; height: auto; border-radius: 4px;" class="center">
+                  <img v-else src="https://www.rabata.org/wp-content/uploads/2018/05/dummy.png" style="max-width: 100%; height: auto; border-radius: 4px;" class="center">
                 </figure>
               </div>
+              </router-link>
+
               <div class="card-content">
                 <div class="media">
                   <div class="media-content">
-                    <div class="columns">
-                      <div class="column is-8">
-                        <p class="title is-4">{{ item.name }}</p>
-                      </div>
-                      <div class="column">
-                        <p class="title" style="color: orange; font-size: 18px;">
-                          ${{ item.price }}
-                        </p>
-                      </div>
+                      <div class="subtitle is-4" style="font-weight: bold">{{ item.name }}</div>
+                      <div class="title" style="color: orange; font-size: 18px;"> ${{ item.price }} </div>
                     </div>
                   </div>
-                </div>
+
+
                 <div class="content">
-                  <p> {{ item.brand }}   |   IN STOCK </p>
-                    <div v-if="isLoggedIn">
-                      <router-link :to="{ name: 'ownerAddItem', params: { itemId: item.id, editing: true }}">
-                        <button class="button is-info is-fullwidth" type="submit" style="margin-top: 15px;">
-                          Edit
-                        </button>
-                      </router-link>
-                      <button class="button is-danger is-fullwidth" type="submit" style="margin-top: 15px;">
-                        Delete
-                      </button>
+                  <div class="columns">
+                    <div class="column">
+                      <p v-if="item.brand != null">{{ item.brand.name }}</p>
+                      <p v-else>Brand</p>
+                    </div>
+                    <div class="column" style="text-align: right">
+                      <p v-if="inStock(item.quantity) === true" style="color: green">IN STOCK</p>
+                      <p v-else style="color: red">SOLD OUT</p>
                     </div>
                   </div>
+
+                    <div v-if="isLoggedIn && isOwner">
+                      <router-link :to="{ name: 'ownerAddItem', params: { itemId: item.id, editing: true }}">
+                        <button class="button is-info is-fullwidth" type="submit" style="margin-top: 15px;">Edit</button></router-link>
+                        <button class="button is-danger is-fullwidth" style="margin-top: 15px;" v-on:click="showDeleteConfirm(item)">Delete</button>
+                    </div>
+
                 </div>
               </div>
-            </router-link>
-          </div>
+            </div>
+
         </div>
       </div>
     </div>
+    </div>
+    </div>
+
+    <DeleteConfirm
+            v-bind:is-showing="showDelConfirm"
+            v-bind:del="confirmDel"
+            v-on:success="successDelete()"
+            v-on:cancel="cancelDelete()"> </DeleteConfirm>
   </div>
 </template>
 
@@ -150,9 +144,13 @@
   import { iShopItem, iImg } from "../models/shopitem.interface";
   import { iMainCategory, iSubCategory } from "../models/category.interface";
   import { iBrand } from "../models/brand.interface";
+  import Modal  from "../components/Modal.vue";
+  import DeleteConfirm  from "@/components/DeleteConfirm.vue";
 import { constants } from "http2";
 
-  @Component
+@Component({
+  components: { Modal, DeleteConfirm}
+})
   export default class Shop extends Vue {
     error: string | boolean = false;
     shopItems: iShopItem[] = [];
@@ -164,8 +162,12 @@ import { constants } from "http2";
     activeCatIds: number[] = [];
     activeSubCatIds: number[] = [];
 
-    @Prop ({default : null}) 
+    @Prop ({default : null})
     mCat : string | undefined;
+
+    public showDelConfirm: boolean = false;
+    public confirmDel: boolean = false;
+    public delId: number = -1;
 
 
     sorts: iMainCategory = { id: 1099, name: "Sorting Options", show: true,
@@ -178,6 +180,30 @@ import { constants } from "http2";
     mounted() {
       this.display();
       this.loader();
+    }
+
+    successDelete() {
+      debugger;
+        this.showDelConfirm = false;
+        this.removeItem(this.delId);
+    }
+
+    cancelDelete() {
+        this.showDelConfirm = false;
+    }
+
+    showDeleteConfirm(item:iShopItem) {
+        debugger;
+        this.delId = item.id;
+        this.showDelConfirm = true;
+    }
+
+    removeItem(itemid : number | undefined ) {
+        axios
+        .delete(APIConfig.buildUrl("/shopitems/" + itemid ))
+        .then( () => {
+            this.display();
+        })
     }
 
     display() {
@@ -204,6 +230,14 @@ import { constants } from "http2";
         .catch((res: AxiosError) => {
             this.error = res.response && res.response.data.error;
         });
+    }
+
+    inStock(quant:number) {
+      if(quant > 0) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     loader () {
@@ -248,25 +282,16 @@ import { constants } from "http2";
   }
 
   filter() {
-    if (this.activeBrandIds.length != 0) {
+    if (this.activeCatIds.length != 0 || this.activeBrandIds.length != 0) {
       axios
-        .get(APIConfig.buildUrl("/shopitems/"), { params: { brand_ids: this.activeBrandIds }})
+        .get(APIConfig.buildUrl("/shopitems/"), { params: { cat_ids: this.activeCatIds, brand_ids: this.activeBrandIds }})
         .then((response: AxiosResponse) => {
           this.shopItems = response.data;
           console.log(this.shopItems);
           this.$emit("success");
         });
     }
-    if (this.activeCatIds.length != 0) {
-      axios
-        .get(APIConfig.buildUrl("/shopitems/"), { params: { cat_ids: this.activeCatIds }})
-        .then((response: AxiosResponse) => {
-          this.shopItems = response.data;
-          console.log(this.shopItems);
-          this.$emit("success");
-        });
-    }
-    if (this.activeBrandIds.length == 0 && this.activeCatIds.length == 0 && this.activeSubCatIds.length == 0) {
+    else if (this.activeBrandIds.length == 0 && this.activeCatIds.length == 0 && this.activeSubCatIds.length == 0) {
       axios
         .get(APIConfig.buildUrl("/shopitems"))
         .then((response: AxiosResponse) => {
@@ -285,7 +310,7 @@ import { constants } from "http2";
     return this.$store.state.user;
   }
 
-  
+
 }
 </script>
 
@@ -320,19 +345,9 @@ import { constants } from "http2";
 .cat-name {
   margin-right: 5px;
 }
-.menu-contents {
-  padding-left: 40px;
-}
 .column {
   margin: 5px;
 }
-.shop-layout {
-  margin: 0px 5px 0px 5px;
-}
-.menu {
-  margin-top: 5px;
-}
-
 .title {
   font-family: 'Questrial';
   font-size: 16px;

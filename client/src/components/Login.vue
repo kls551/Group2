@@ -74,34 +74,17 @@ export default class Signup extends Vue {
         password: this.signup.password
       })
       .then((response: AxiosResponse<LoginResponse>) => {
-       
         this.$store.dispatch("login", {
           token: response.data.token,
           userid: response.data.userId
         });
-      
-        this.$emit("success");      
-        this.getCart(response.data.userId);
+        this.$emit("success");     
       })
       .catch((res: AxiosError) => {
         this.error = res.response && res.response.data.error;
       });
   }
 
-  getCart(userId: number) {
-    console.log("getting cart ");
-    console.log("user id  ", userId);
-    axios
-    .get(APIConfig.buildUrl("/cart"), 
-    { params: { userId : userId}})
-    .then((cart) => {
-      console.log("found cart in login ", cart);
-      this.$store.commit("getCart", cart);
-      // this.$store.dispatch("getCart", {
-      //   cartId : cart.data.id,
-      // })
-    })
-  }
 
   get formcheck(): boolean {
     if(

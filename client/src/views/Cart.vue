@@ -113,30 +113,20 @@ export default class Cart extends Vue {
     }
 
     getCart() {
-        const cartId = this.$store.state.cartId;
-        console.log("before getting cart");
-        console.log(" state cart ", this.$store.state.cartId);
-        console.log(" cart id ", cartId);
+        const cartId = this.$store.state.cart && this.$store.state.cart.data.newCart.id;
+     
         if (this.$store.state.user) {
-
             const userId = this.$store.state.user && this.$store.state.user.id;
-
             axios
             .get(APIConfig.buildUrl("/cart/" + cartId))
             .then((response: AxiosResponse) => {
-                console.log("car res ", response.data);
                 response.data.items.forEach((item : iShopItem) => {
                     if (!item.quant)
                         item.quant = 1;
                 })
-
                 this.cart = response.data;
-                // this.cartList = response.data;
-                this.calculateTotal();
                 this.cartList = response.data.items;
-
-                console.log("images ", response.data.items[0].images[0]);
-                console.log("cart ", this.cart && this.cart.items);
+                this.calculateTotal();
             })
             .catch((res: AxiosError) => {
                 this.error = res.response && res.response.data.error;
@@ -184,21 +174,9 @@ export default class Cart extends Vue {
                 this.error = res.response && res.response.data.error;
             });
         })
-        this.deleteCart();
         this.$router.push("/order-placed");
     }
 
-    deleteCart() {
-        if (this.$store.state.user) {
-            const userId = this.$store.state.user && this.$store.state.user.id;
-
-            axios
-            .delete(APIConfig.buildUrl("/cart/" + userId))
-            .catch((res: AxiosError) => {
-                this.error = res.response && res.response.data.error;
-            });
-        }
-    }
 
     cancelCheckout() {
         this.showcheckout = false;

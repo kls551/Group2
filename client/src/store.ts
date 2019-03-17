@@ -49,6 +49,9 @@ const mutations: MutationTree<iRootState> = {
   getCart(state, payload) {
     const { cart } = payload;
     state.cart = cart;
+  },
+  removeCart(state, payload) {
+    state.cart = null;
   }
 };
 
@@ -68,12 +71,6 @@ const actions: ActionTree<iRootState, iRootState> = {
       commit("login", { user, token });
     });
   }
-  // getCart({ commit, dispatch }, payload) {
-  //   let cartId = payload;
-  //   dispatch("getCart", { cartId }).then(cartId => {
-  //     commit("getCart", cartId);
-  //   });
-  // }
 };
 
 export default new Vuex.Store({

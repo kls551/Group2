@@ -10,7 +10,7 @@
         <p v-if="error">{{ error }}</p>
         <!-- Confirm Delete Message -->
         <div class="field">
-            <label class="label">Do you want to delete the service? </label>
+            <label class="label">Are you sure you want to delete?</label>
         </div>
 
         </form>

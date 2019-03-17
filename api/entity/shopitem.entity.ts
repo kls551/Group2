@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, OneToMany, JoinTable, JoinColumn, OneToOne, ManyToMany} from "typeorm";
-import { User, MainCategory, SubCategory, Imgs  } from "./";
+import { User, MainCategory, SubCategory, Imgs, Brands  } from "./";
 
 @Entity()
 export class ShopItem {
@@ -25,8 +25,8 @@ export class ShopItem {
   @JoinTable()
   public subcategories!: SubCategory[];
 
-  @Column({default: null})
-  public brand!: string;
+  @ManyToOne((type) => Brands, brand => brand.id)
+  public brand!: Brands;
 
   @Column()
   public inStorePickup!: boolean;

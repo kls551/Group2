@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex, { MutationTree, ActionTree } from "vuex";
+import createPersistedState from 'vuex-persistedstate'
 
 import { APIConfig } from "./utils/api.utils";
 import axios, { AxiosResponse } from "axios";
@@ -16,6 +17,7 @@ interface iRootState {
   user: iUser | null;
   cart: iCart | null;
   orderNum: number | null;
+  mCat: number | null;
 }
 
 interface iLoginPayload {
@@ -28,6 +30,7 @@ const state: iRootState = {
   user: null,
   cart: null,
   orderNum: null,
+  mCat: null,
 };
 
 const mutations: MutationTree<iRootState> = {
@@ -74,6 +77,7 @@ const actions: ActionTree<iRootState, iRootState> = {
 };
 
 export default new Vuex.Store({
+  plugins: [createPersistedState()],
   state,
   mutations,
   actions

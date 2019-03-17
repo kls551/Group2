@@ -1,5 +1,9 @@
 <template>
   <div class="shop">
+    <div class="container" style="margin-top: 25px; margin-bottom: 25px">
+    <h2 style="color: orange">Shop our collection</h2>
+    <h3 style="border-bottom: 1.5px solid orange">Sort or filter items and click to view item details</h3>
+    <div class="tile is-ancestor top-bar" style="padding-top: 10px;">
     <div class="columns top-bar">
       <!-- Categories menu -->
       <div class="column is-3 menu">
@@ -70,8 +74,8 @@
             </div>
 
             <!-- Show selection for testing -->
-            <div class="panel-block">
-              Active brands:
+            <!-- <div class="panel-block"> -->
+              <!-- Active brands:
             </div>
             <div class="panel-block menu-contents" v-for="brand in activeBrandIds">
               {{ brand }}
@@ -89,7 +93,7 @@
             </div>
             <div class="panel-block menu-contents" v-for="cat in activeSubCatIds">
               {{ cat }}
-            </div>
+            </div>  -->
           </nav>
         </section>
       </div>
@@ -97,48 +101,60 @@
       <!-- Shop layout -->
       <div class="columns is-multiline shop-layout">
         <div v-for="item in shopItems" :key="item.id" class="column is-narrow">
-          <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
+
+          
             <div class="card">
+
+              <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
               <div class="card-image">
                 <figure class="image is-4by3">
-                  <img :src="item.images[0].img">
+                  <img v-if="item.images[0].img" :src="item.images[0].img">
                 </figure>
               </div>
+              </router-link>
+
               <div class="card-content">
                 <div class="media">
                   <div class="media-content">
-                    <div class="columns">
-                      <div class="column is-8">
-                        <p class="title is-4">{{ item.name }}</p>
-                      </div>
-                      <div class="column">
-                        <p class="title" style="color: orange; font-size: 18px;">
-                          ${{ item.price }}
-                        </p>
-                      </div>
+                      <div class="subtitle is-4" style="font-weight: bold">{{ item.name }}</div>
+                      <div class="title" style="color: orange; font-size: 18px;"> ${{ item.price }} </div>
                     </div>
                   </div>
-                </div>
+                
+
                 <div class="content">
-                  <p> {{ item.brand }}   |   IN STOCK </p>
-                    <div v-if="isLoggedIn">
-                      <router-link :to="{ name: 'ownerAddItem', params: { itemId: item.id, editing: true }}">
-                        <button class="button is-info is-fullwidth" type="submit" style="margin-top: 15px;">
-                          Edit
-                        </button>
-                      </router-link>
-                      <button class="button is-danger is-fullwidth" type="submit" style="margin-top: 15px;">
-                        Delete
-                      </button>
+                  <div class="columns">
+                    <div class="column">
+                      <p v-if="item.brand != null">{{ item.brand.name }}</p>
+                      <p v-else>Brand</p>
+                    </div>
+                    <div class="column" style="text-align: right">
+                      <p v-if="inStock(item.quantity) === true" style="color: green">IN STOCK</p>
+                      <p v-else style="color: red">SOLD OUT</p>
                     </div>
                   </div>
+
+                    <div v-if="isLoggedIn && isOwner">
+                      <router-link :to="{ name: 'ownerAddItem', params: { itemId: item.id, editing: true }}">
+                        <button class="button is-info is-fullwidth" type="submit" style="margin-top: 15px;">Edit</button></router-link>
+                        <button class="button is-danger is-fullwidth" style="margin-top: 15px;" v-on:click="showDeleteConfirm(item)">Delete</button>
+                    </div>
+
                 </div>
               </div>
-            </router-link>
-          </div>
+            </div>
+          
         </div>
       </div>
     </div>
+    </div>
+    </div>
+
+    <DeleteConfirm 
+            v-bind:is-showing="showDelConfirm"
+            v-bind:del="confirmDel"
+            v-on:success="successDelete()" 
+            v-on:cancel="cancelDelete()"> </DeleteConfirm>
   </div>
 </template>
 
@@ -150,8 +166,13 @@
   import { iShopItem, iImg } from "../models/shopitem.interface";
   import { iMainCategory, iSubCategory } from "../models/category.interface";
   import { iBrand } from "../models/brand.interface";
+  import Modal  from "../components/Modal.vue";
+  import DeleteConfirm  from "@/components/DeleteConfirm.vue";
+import { constants } from "http2";
 
-  @Component
+@Component({
+  components: { Modal, DeleteConfirm}
+})
   export default class Shop extends Vue {
     error: string | boolean = false;
     shopItems: iShopItem[] = [];
@@ -163,6 +184,14 @@
     activeCatIds: number[] = [];
     activeSubCatIds: number[] = [];
 
+    @Prop ({default : null}) 
+    mCat : string | undefined;
+
+    public showDelConfirm: boolean = false;
+    public confirmDel: boolean = false;
+    public delId: number = -1;
+
+
     sorts: iMainCategory = { id: 1099, name: "Sorting Options", show: true,
               subCategories: [
                 { id: 1100, name: "Alphabetical" },
@@ -172,9 +201,35 @@
 
     mounted() {
       this.display();
+      this.loader();
+    }
+
+    successDelete() {
+      debugger;
+        this.showDelConfirm = false;
+        this.removeItem(this.delId);
+    }
+
+    cancelDelete() {
+        this.showDelConfirm = false;
+    }
+
+    showDeleteConfirm(item:iShopItem) {
+        debugger;
+        this.delId = item.id;
+        this.showDelConfirm = true;
+    }
+
+    removeItem(itemid : number | undefined ) {
+        axios
+        .delete(APIConfig.buildUrl("/shopitems/" + itemid ))
+        .then( () => {
+            this.display();
+        }) 
     }
 
     display() {
+      console.log(this.$store.state.mCat);
       axios
         .get(APIConfig.buildUrl("/shopitems"))
         .then((response: AxiosResponse) => {
@@ -197,6 +252,28 @@
         .catch((res: AxiosError) => {
             this.error = res.response && res.response.data.error;
         });
+    }
+
+    inStock(quant:number) {
+      if(quant > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    loader () {
+      console.log(this.$store.state.mCat);
+      if (this.$store.state.mCat) {
+        axios
+          .get(APIConfig.buildUrl("/shopitems/"), { params: { cat_ids: [this.$store.state.mCat] }})
+          .then((response: AxiosResponse) => {
+            this.shopItems = response.data;
+            this.$store.state.mCat = null;
+            console.log(this.shopItems);
+            this.$emit("success");
+          });
+      }
     }
 
   sortby(): void {
@@ -263,6 +340,8 @@
   get isLoggedIn(): boolean {
     return this.$store.state.user;
   }
+
+  
 }
 </script>
 

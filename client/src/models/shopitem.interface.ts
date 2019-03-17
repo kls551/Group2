@@ -8,13 +8,17 @@ export interface iShopItem
   details: string;
   price: number;
   quantity: number;
-  category: iMainCategory;
-  subcategories: iSubCategory[];
-  brand: iBrand;
+  category: string ;
   inStorePickup: boolean;
+  brand: iBrand;
   postedDate: Date;
   images: iImg[];
   quant: number;
+}
+
+export interface iBrand {
+  id: number;
+  name: string;
 }
 
 export interface iImg {

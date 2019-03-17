@@ -6,7 +6,7 @@
     <div class="tile is-ancestor top-bar" style="padding-top: 10px;">
     <div class="columns top-bar">
       <!-- Categories menu -->
-      <div class="column is-3 menu">
+      <div class="column is-3" style="padding: 0px 0px 0px 20px; margin: 4px 15px;">
           <section>
             <nav class="panel">
               <p class="panel-heading">
@@ -19,7 +19,8 @@
             </div>
 
             <a
-              class="panel-block menu-contents"
+              class="panel-block"
+              style="padding-left: 40px"
               v-show="sorts.show"
               v-for="option in sorts.subCategories"
               :key="option.id"
@@ -37,7 +38,7 @@
               <font-awesome-icon v-show="brandsShow" icon="angle-up"/>
             </div>
 
-            <a class="panel-block menu-contents" v-show="brandsShow" v-for="brand in brands" :key="brand.id">
+            <a class="panel-block" style="padding-left: 40px" v-show="brandsShow" v-for="brand in brands" :key="brand.id">
               <b-checkbox v-model="activeBrandIds" :native-value="brand.id">
                 {{ brand.name }}
               </b-checkbox>
@@ -48,7 +49,7 @@
               <!-- Main category set -->
               <div class="panel-block" v-on:click="category.show = !category.show">
                 <span class="cat-name">
-                    <b-checkbox v-model="activeCatIds" :native-value="category.id">
+                  <b-checkbox v-model="activeCatIds" :native-value="category.id">
                     {{ category.name }}
                   </b-checkbox>
                 </span>
@@ -59,8 +60,8 @@
               </div>
 
               <!-- Subcategory set -->
-              <a class="panel-block menu-contents" v-show="category.show" v-for="sub in category.subCategories" :key="sub.id + 100">
-                <b-checkbox v-model="activeSubCatIds" :native-value="sub.id">
+              <a class="panel-block" style="padding-left: 40px" v-show="category.show" v-for="sub in category.subCategories" :key="sub.id + 100">
+                <b-checkbox v-model="activeSubCatIds" :native-value="sub.id" style="color: #363636" disabled>
                   {{ sub.name }}
                 </b-checkbox>
               </a>
@@ -77,12 +78,10 @@
       </div>
 
       <!-- Shop layout -->
-      <div class="columns is-multiline shop-layout">
+      <div class="columns is-multiline">
         <div v-for="item in shopItems" :key="item.id" class="column is-narrow">
 
-
             <div class="card">
-
               <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
               <div class="card-image">
                 <figure class="image is-4by3">
@@ -354,19 +353,9 @@ import { constants } from "http2";
 .cat-name {
   margin-right: 5px;
 }
-.menu-contents {
-  padding-left: 40px;
-}
 .column {
   margin: 5px;
 }
-.shop-layout {
-  margin: 0px 5px 0px 5px;
-}
-.menu {
-  margin-top: 5px;
-}
-
 .title {
   font-family: 'Questrial';
   font-size: 16px;

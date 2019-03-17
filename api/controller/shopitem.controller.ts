@@ -29,7 +29,7 @@ export class ShopItemController extends DefaultController {
         shopItemRepo.findOneOrFail(req.params.id, {relations: ["images", "category", "subcategories", "brand"]}).then((foundItem: ShopItem) => {
           res.status(200).send(foundItem);
         });
-      })    
+      })
 
       .put((req: Request, res: Response) => {
         const item = getRepository(ShopItem);
@@ -102,13 +102,13 @@ export class ShopItemController extends DefaultController {
     .get((req: Request, res: Response) => {
       const shopItemRepo = getRepository(ShopItem);
       let query = shopItemRepo;
-      if (req.query.cat_ids || req.query.sub_cat_ids) {
+      if (req.query.brand_ids || req.query.cat_ids) {
         query
           .createQueryBuilder("shopitem")
           .leftJoinAndSelect("shopitem.images", "imgs")
-          .leftJoinAndSelect("shopitem.brand", "brand")
           .innerJoinAndSelect("shopitem.category", "category")
           .where("category.id IN (:...cid)", { cid: req.query.cat_ids })
+          .leftJoinAndSelect("shopitem.brand", "brand")
           .getMany().then((shopitems: ShopItem[]) => {
             res.status(200).send(shopitems);
           });

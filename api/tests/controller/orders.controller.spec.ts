@@ -90,11 +90,8 @@ describe("/orders", () => {
     // get list of orders - should have one
     test("should get list of (one) orders", done => {
         connection.manager.insert(Order, {
-            complete: true,
             status: 0,
             pickup: true,
-            processing: true, 
-            trackingNum: "456",
             address: "address",
             city: "city"
         })
@@ -117,11 +114,8 @@ describe("/orders", () => {
     test("should update order status", done => {
         connection.manager.insert(Order, {
             id: 1,
-            complete: true,
             status: 0,
             pickup: true,
-            processing: true, 
-            trackingNum: "456",
             address: "address",
             city: "city"
         })
@@ -131,7 +125,7 @@ describe("/orders", () => {
                 .expect(200)
                 .then((response: request.Response) => {
                     console.log("order ", response.body);
-                    expect(response.body.status).toEqual("1");
+                    expect(response.body.status).toEqual("2");
                     done();
                 });
         });
@@ -141,11 +135,8 @@ describe("/orders", () => {
      test("tries to update status of nonexistent order", done => {
         connection.manager.insert(Order, {
             id: 1,
-            complete: true,
             status: 0,
             pickup: true,
-            processing: true, 
-            trackingNum: "456",
             address: "address",
             city: "city"
         })

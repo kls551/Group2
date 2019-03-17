@@ -108,7 +108,6 @@ export class ShopItemController extends DefaultController {
           .leftJoinAndSelect("shopitem.images", "imgs")
           .innerJoinAndSelect("shopitem.category", "category")
           .where("category.id IN (:...cid)", { cid: req.query.cat_ids })
-          .leftJoinAndSelect("shopitem.brand", "brand")
           .getMany().then((shopitems: ShopItem[]) => {
             res.status(200).send(shopitems);
           });

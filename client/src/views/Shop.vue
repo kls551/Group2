@@ -83,9 +83,10 @@
 
             <div class="card">
               <router-link :to="{ name: 'shopItem', params: { itemId: item.id } }">
-              <div class="card-image">
-                <figure class="image is-4by3">
-                  <img v-if="item.images[0].img" :src="item.images[0].img">
+              <div class="card-image" style="min-height: 200px">
+                <figure class="image">
+                  <img v-if="item.images[0].img" :src="item.images[0].img" style="max-width: 100%; height: auto; border-radius: 4px;" class="center">
+                  <img v-else src="https://www.rabata.org/wp-content/uploads/2018/05/dummy.png" style="max-width: 100%; height: auto; border-radius: 4px;" class="center">
                 </figure>
               </div>
               </router-link>

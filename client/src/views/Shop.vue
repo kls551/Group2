@@ -282,18 +282,18 @@ import { constants } from "http2";
   }
 
   filter() {
-    if (this.activeBrandIds.length != 0 || this.activeCatIds.length != 0) {
+    if (this.activeCatIds.length != 0 || this.activeBrandIds.length != 0) {
       axios
-        .get(APIConfig.buildUrl("/shopitems/"), { params: { brand_ids: this.activeBrandIds, cat_ids: this.activeCatIds }})
+        .get(APIConfig.buildUrl("/shopitems/"), { params: { cat_ids: this.activeCatIds, brand_ids: this.activeBrandIds }})
         .then((response: AxiosResponse) => {
           this.shopItems = response.data;
           console.log(this.shopItems);
           this.$emit("success");
         });
     }
-    // if (this.activeCatIds.length != 0) {
+    // else if (this.activeBrandIds.length != 0) {
     //   axios
-    //     .get(APIConfig.buildUrl("/shopitems/"), { params: { cat_ids: this.activeCatIds }})
+    //     .get(APIConfig.buildUrl("/shopitems/"), { params: { brand_ids: this.activeBrandIds }})
     //     .then((response: AxiosResponse) => {
     //       this.shopItems = response.data;
     //       console.log(this.shopItems);

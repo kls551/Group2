@@ -102,16 +102,30 @@ export class ShopItemController extends DefaultController {
     .get((req: Request, res: Response) => {
       const shopItemRepo = getRepository(ShopItem);
       let query = shopItemRepo;
-      if (req.query.brand_ids || req.query.cat_ids) {
+      if (req.query.cat_ids || req.query.brand_ids) {
         query
           .createQueryBuilder("shopitem")
           .leftJoinAndSelect("shopitem.images", "imgs")
+          .innerJoinAndSelect("shopitem.brand", "brand")
           .innerJoinAndSelect("shopitem.category", "category")
           .where("category.id IN (:...cid)", { cid: req.query.cat_ids })
+          .orWhere("brand.id IN (:...bid)", { bid: req.query.brand_ids })
           .getMany().then((shopitems: ShopItem[]) => {
             res.status(200).send(shopitems);
           });
-      } else {
+      }
+      // else if (req.query.brand_ids) {
+      //   query
+      //     .createQueryBuilder("shopitem")
+      //     .leftJoinAndSelect("shopitem.images", "imgs")
+      //     .innerJoinAndSelect("shopitem.category", "category")
+      //     .innerJoinAndSelect("shopitem.brand", "brand")
+      //     .where("brand.id IN (:...bid)", { bid: req.query.brand_ids })
+      //     .getMany().then((shopitems: ShopItem[]) => {
+      //       res.status(200).send(shopitems);
+      //     });
+      // }
+      else {
         const users = getConnection()
           .getRepository(ShopItem)
           .createQueryBuilder("shopitem")

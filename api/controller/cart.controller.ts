@@ -7,6 +7,7 @@ import { Session, ShopItem, User, Cart } from "../entity";
 
 import { getRepository, Connection } from "typeorm";
 import { readSync } from "fs";
+import { resolveSoa } from "dns";
 
 export class CartController extends DefaultController {
   protected initializeRoutes(): express.Router {
@@ -44,6 +45,9 @@ export class CartController extends DefaultController {
       .find()
       .then((carts : Cart[]) => {
         res.status(200).send(carts);
+      })
+      .catch((err: any) => {
+        res.status(500).send(err);
       })
     })
 

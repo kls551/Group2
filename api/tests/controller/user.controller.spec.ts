@@ -27,7 +27,7 @@ describe("/users", () => {
     myApp = await new Server().getMyApp();
     connection = await DBConnection.getConnection();
     await connection.synchronize();
-    await DBUtils.clearDB();
+    // await DBUtils.clearDB();
   });
 
   beforeEach(async () => {

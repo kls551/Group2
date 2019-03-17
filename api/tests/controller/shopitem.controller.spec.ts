@@ -76,6 +76,11 @@ describe("/shopitems", () => {
           });
       });
     });
+    // Test get with category or brand id query
+
   });
 
+  // describe("GET '/'", () => {
+  //
+  // });
 });

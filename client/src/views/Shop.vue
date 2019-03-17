@@ -291,15 +291,6 @@ import { constants } from "http2";
           this.$emit("success");
         });
     }
-    // else if (this.activeBrandIds.length != 0) {
-    //   axios
-    //     .get(APIConfig.buildUrl("/shopitems/"), { params: { brand_ids: this.activeBrandIds }})
-    //     .then((response: AxiosResponse) => {
-    //       this.shopItems = response.data;
-    //       console.log(this.shopItems);
-    //       this.$emit("success");
-    //     });
-    // }
     else if (this.activeBrandIds.length == 0 && this.activeCatIds.length == 0 && this.activeSubCatIds.length == 0) {
       axios
         .get(APIConfig.buildUrl("/shopitems"))

@@ -3,7 +3,6 @@ import DefaultController from "./default.controller";
 import { NextFunction, Request, Response, Router } from "express";
 import multer from "multer";
 import Path from "path";
-
 import { getRepository } from "typeorm";
 import { Session, User } from "../entity";
 import { isDate } from "util";
@@ -63,10 +62,8 @@ export class UserController extends DefaultController {
         });
       }
     )
-    .put(multer({
-      dest: Path.join(__dirname, "..", "public", "profilePhotos")
-        }).single("profilePhoto"),
-        (req: Request, res: Response) => {
+    .put(
+    (req: Request, res: Response) => {
         const userRepo = getRepository(User);
         userRepo.findOne(req.params.id).then(
           (user: User | undefined) => {
@@ -78,9 +75,8 @@ export class UserController extends DefaultController {
               .then(() => res.sendStatus(200));
             }
             else {
-
               console.log(req.params.id + " user not found");
-              res.sendStatus(404).send("user not found");
+              res.status(404).send("user not found");
             }
           }
         )
@@ -106,6 +102,8 @@ export class UserController extends DefaultController {
         userRepo.delete(foundUser).then(result => {
           res.send(200);
         });
+      }).catch(err => {
+        res.status(404).send(err);
       });
     });
 

@@ -1,14 +1,14 @@
 -- creating admin
 insert into dev.user () values
-(1, "AdminFirst", "AdminLast", "123", "", "admin", 1, null);
+(1, "AdminFirst", "AdminLast", "123", "", "admin", 1);
 
 -- creating staff
 insert into dev.user values
-(2, "staffFirst", "staffLast", "123", "", "staff", 0, null);
+(2, "staffFirst", "staffLast", "123", "", "staff", 0);
 
 -- creating staff
 insert into dev.user values
-(3, "userFirst", "userLast", "123", "", "user", -1, null);
+(3, "userFirst", "userLast", "123", "", "user", -1);
 
 -- creating about
 insert into dev.about values

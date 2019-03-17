@@ -54,6 +54,7 @@ export class OrderController extends DefaultController {
         const user = foundSession!.user;
         order.userId = req.body.user;
         order.pickup = req.body.Pickup;
+        order.status = 0;
         order.orderedDate = req.body.orderedDate;
         order.address = req.body.address;
         order.city = req.body.city;

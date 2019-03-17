@@ -10,7 +10,8 @@ export class ServiceController extends DefaultController {
     protected initializeRoutes(): express.Router {
         const router = express.Router();
 
-        router.route("/owner/edit-services").post((req: Request, res: Response) => {
+        router.route("/owner/edit-services")
+        .post((req: Request, res: Response) => {
             console.log(req.body);
             const {serviceName, description, price, imgURL } = req.body;
             const serviceRepo = getRepository(Service);
@@ -35,12 +36,9 @@ export class ServiceController extends DefaultController {
                             }
                         );
                     }
-                    // else {
-                    //     res.sendStatus(400).send({ error : true });
-                    // }
                 });
-            });
-        router.route("/owner/edit-services").get((req: Request, res: Response) => {
+        })
+        .get((req: Request, res: Response) => {
             const serviceRepo = getRepository(Service);
             const token = req.get("token");
             serviceRepo
@@ -56,7 +54,8 @@ export class ServiceController extends DefaultController {
                 });
             });
         
-        router.route("/owner/edit-services/:id").delete((req: Request, res: Response) => {
+        router.route("/owner/edit-services/:id")
+        .delete((req: Request, res: Response) => {
             const serviceRepo = getRepository(Service);
             const srvId = req.params.id;
 
@@ -73,10 +72,8 @@ export class ServiceController extends DefaultController {
                         res.status(400).send("service not found");
                     }
                 });
-        }); 
-
-
-        router.route("/owner/edit-services/:id").put((req: Request, res: Response) => {
+        })
+        .put((req: Request, res: Response) => {
             const serviceRepo = getRepository(Service);
             const srvId = req.params.id;
             const serviceName = req.body.serviceName;
@@ -91,6 +88,7 @@ export class ServiceController extends DefaultController {
                         service.serviceName = serviceName;
                         service.description = description;
                         service.price = price;
+                        service.imgURL = req.body.imgURL;
                         serviceRepo.save(service)
                         .then( (result => {
                             res.status(200).end();
@@ -101,17 +99,8 @@ export class ServiceController extends DefaultController {
                     }
                 });
         }); 
-
-
         return router;
     }
-    // public router: Router;
-
-    // constructor() {
-    // this.router = this.initializeRoutes();
-    // }
-
-    // protected abstract initializeRoutes(): Router;
 }
 
 export default ServiceController;

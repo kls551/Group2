@@ -51,7 +51,7 @@
 
               <router-link to="/owner/announcment" v-show="isOwner" tag="li" exact-active-class="is-active"><a>Announcement</a></router-link>
               <router-link to="/owner/about" v-show="isOwner" tag="li" exact-active-class="is-active"><a>About</a></router-link>
-              <router-link to="/owner/accounts" v-show="isOwner" tag="li" exact-active-class="is-active"><a>Accounts</a></router-link>
+              <router-link to="/owner/accounts" v-show="isStaff || isOwner" tag="li" exact-active-class="is-active"><a>Accounts</a></router-link>
 
               <router-link to="/owner/add-item" v-show="isOwner" tag="li" exact-active-class="is-active"><a>New Item</a></router-link>
 
@@ -60,6 +60,7 @@
         </div>
       </div>
     <router-view class="container"/>
+
     <Signup
       v-bind:is-showing="showSignup"
       v-on:success="successSignup()"
@@ -91,12 +92,15 @@ import checkout from "@/components/checkout.vue";
 import { APIConfig } from "@/utils/api.utils";
 import Buefy from 'buefy';
 import 'buefy/dist/buefy.css';
+import Shop from "@/views/Shop.vue";
+
 Vue.use(Buefy);
 @Component({
   components: {
     Signup,
     Login,
-    checkout
+    checkout,
+    Shop
   }
 })
 export default class App extends Vue {
@@ -159,15 +163,31 @@ export default class App extends Vue {
   }
 
   logout() {
-    console.log("logout   ",this.$store.state.userToken);
-    axios
-      .post(APIConfig.buildUrl("/logout"), null, {
-        headers: { token: this.$store.state.userToken }
-      })
-      .then(() => {
-        this.$store.commit("logout");
-        this.$router.push({ name: "home" });
-      });
+    if (this.$store.state.cart) {
+      axios
+      .delete(APIConfig.buildUrl("/cart/" + this.$store.state.cart.data.newCart.id))
+      .then( () => {
+        axios
+        .post(APIConfig.buildUrl("/logout"), null, {
+          headers: { token: this.$store.state.userToken }
+        })
+        .then(() => {
+          this.$store.commit("logout");
+          this.$router.push({ name: "home" });
+        });
+      }
+      );
+    }
+    else {
+      axios
+        .post(APIConfig.buildUrl("/logout"), null, {
+          headers: { token: this.$store.state.userToken }
+        })
+        .then(() => {
+          this.$store.commit("logout");
+          this.$router.push({ name: "home" });
+        });
+    } 
   }
 }
 </script>

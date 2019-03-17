@@ -31,7 +31,6 @@ export class User {
   @OneToMany(type => ShopItem, (shopitem) => shopitem.id)
   public cartList!: ShopItem[];
 
-  @OneToOne((type) => Cart, cart => cart.id ,{cascade: true})
-  @JoinColumn()
+  @OneToOne((type) => Cart, cart => cart.id)
   public cart!: Cart;
 }

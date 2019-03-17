@@ -17,6 +17,7 @@ interface iRootState {
   user: iUser | null;
   cart: iCart | null;
   orderNum: number | null;
+  mCat: number | null;
 }
 
 interface iLoginPayload {
@@ -29,6 +30,7 @@ const state: iRootState = {
   user: null,
   cart: null,
   orderNum: null,
+  mCat: null,
 };
 
 const mutations: MutationTree<iRootState> = {
@@ -44,8 +46,12 @@ const mutations: MutationTree<iRootState> = {
     state.userToken = null;
     state.user = null;
   },
-  addCart(state, payload) {
-    state.cart = payload;
+  getCart(state, payload) {
+    const { cart } = payload;
+    state.cart = cart;
+  },
+  removeCart(state, payload) {
+    state.cart = null;
   }
 };
 

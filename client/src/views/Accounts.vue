@@ -17,9 +17,6 @@
               <abbr title="Last Name">LN</abbr>
             </th>
             <th>
-              <abbr title="profileUrl">img</abbr>
-            </th>
-            <th>
               <abbr title="emailAddress">Email</abbr>
             </th>
             <th>
@@ -34,7 +31,6 @@
             <th>{{user.id}}</th>
             <td>{{user.firstName}}</td>
             <td>{{user.lastName}}</td>
-            <td>{{user.profileUrl}}</td>
             <td>{{user.emailAddress}}</td>
             <td>{{user.isAdmin === 1 ? "Admin" : user.isAdmin === 0 ? "Staff" : "User"}}</td>
             <td v-if="isAd">

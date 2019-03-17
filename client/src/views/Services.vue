@@ -9,9 +9,12 @@
       <div v-for="(service, index) in services" v-bind:key="index">
 
         <div class="tile is-ancestor">
-          <div class="tile is-3"></div>
+          <div class="tile is-2"></div>
             <div class="tile is-parent is-vertical">
             <div class="tile is-child box">
+                <figure v-if="service.imgURL" class="image is-4by3">
+                  <img :src="service.imgURL">
+                </figure>
               <div class="columns">
                 <div class="column">
                   <h2>{{ service.serviceName }}</h2>
@@ -63,7 +66,6 @@ export default class Services extends Vue{
       .then((response) => {
           this.services = response.data;
           console.log("service ", this.services);
-          // this.display = false;
       });
     }
 }

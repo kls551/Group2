@@ -39,14 +39,16 @@
 
 <script lang="ts">
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { APIConfig } from "../utils/api.utils";
+import { APIConfig } from "@/utils/api.utils";
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import Modal from "./Modal.vue";
+
 @Component({
   components: {
     Modal
   }
 })
+
 export default class Signup extends Vue {
   signup: LoginForm = {
     emailAddress: "",
@@ -63,6 +65,7 @@ export default class Signup extends Vue {
       };
     }
   }
+
   success() {
     this.error = false;
     axios
@@ -75,12 +78,14 @@ export default class Signup extends Vue {
           token: response.data.token,
           userid: response.data.userId
         });
-        this.$emit("success");
+        this.$emit("success");     
       })
       .catch((res: AxiosError) => {
         this.error = res.response && res.response.data.error;
       });
   }
+
+
   get formcheck(): boolean {
     if(
     this.signup.emailAddress.length <= 0 ||
@@ -96,6 +101,9 @@ export default class Signup extends Vue {
 interface LoginResponse {
   token: string;
   userId: number;
+}
+interface GetCartResponse {
+  cartId: number;
 }
 export interface LoginForm {
   emailAddress: string;

@@ -23,12 +23,14 @@ export class BrandsController extends DefaultController {
         const brandstRepo = getRepository(Brands);
         const brand = new Brands();
         brand.name = req.body.name;
-        brandstRepo.save(brand).then((savedBrand: Brands | undefined) => {
+        brandstRepo.save(brand)
+        .then((savedBrand: Brands | undefined) => {
           if (savedBrand) {
             res.status(200).send({ brand });
-          } else {
-            res.status(400).send({ message: "duplicate brand"})
-          }
+          } 
+        },
+        (err : any) => {
+           res.status(400).send({ message: "duplicate brand"})
         });
       });
 

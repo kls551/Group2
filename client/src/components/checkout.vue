@@ -131,18 +131,22 @@ export default class order extends Vue {
   success() {
     this.error = false;
     this.checkout.user = this.$store.state.user;
-    console.log('hello');
     this.checkout.items = this.cartList;
     axios
       .post(APIConfig.buildUrl("/orders"), {
         ...this.checkout
       }, {headers: {token: this.$store.state.userToken}})
       .then((response) => {
-        console.log("id ", response.data.savedOrder.id);
         this.$store.state.orderNum = response.data.savedOrder.id;
-        console.log("store ordernumber ", this.$store.state.orderNum);
-        console.log(" after saving order ", response);
-        this.$emit("success");
+      })
+      .then(() => {
+        const cartId = this.$store.state.cart && this.$store.state.cart.data.newCart.id;
+        axios
+          .delete(APIConfig.buildUrl("/cart/" + cartId))
+          .then(() => {
+            this.$store.commit("removeCart", null);
+            this.$emit("success");
+          })
       })
       .catch((errorResponse: any) => {
         this.error = errorResponse.response.data.reason;
@@ -150,23 +154,14 @@ export default class order extends Vue {
   }
 
   getCart() {
-        const cartId = this.$store.state.cart && this.$store.state.cart.id;
+        const cartId = this.$store.state.cart && this.$store.state.cart.data.newCart.id;
         if (this.$store.state.user) {
             console.log("store ", this.$store.state.cart );
             const userId = this.$store.state.user && this.$store.state.user.id;
             axios
             .get(APIConfig.buildUrl("/cart/" + cartId))
             .then((response: AxiosResponse) => {
-
-                // response.data.forEach((item : iShopItem) => {
-                //     if (!item.quant)
-                //         item.quant = 1;
-                // })
                 this.cartList = response.data;
-  
-
-                // console.log("items ", this.cartList);
-                // console.log("cart ", this.cart && this.cart.itemsId);
             })
             .catch((res: AxiosError) => {
                 this.error = res.response && res.response.data.error;

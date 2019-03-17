@@ -27,25 +27,25 @@ describe("/orders", () => {
     });
 
     // should get an order 
-    test("gets order of specific tracking number", done => {
-        connection.manager.insert(Order, {
-            complete: true,
-            status: 0,
-            pickup: true,
-            processing: true, 
-            trackingNum: "456",
-            address: "address",
-            city: "city"
-        }).then(() => {
-            request(app)
-                .get("/trackorder/456")
-                .expect(200)
-                .then((response: request.Response) => {
-                    expect(response.body.address).toEqual("address");
-                    done();
-                });
-        });
-    });
+    // test("gets order of specific tracking number", done => {
+    //     connection.manager.insert(Order, {
+    //         complete: true,
+    //         status: 0,
+    //         pickup: true,
+    //         processing: true, 
+    //         trackingNum: "456",
+    //         address: "address",
+    //         city: "city"
+    //     }).then(() => {
+    //         request(app)
+    //             .get("/trackorder/456")
+    //             .expect(200)
+    //             .then((response: request.Response) => {
+    //                 expect(response.body.address).toEqual("address");
+    //                 done();
+    //             });
+    //     });
+    // });
 
     // should fail to get an order
     test("should fail because announcement with this id does not exist", done => {

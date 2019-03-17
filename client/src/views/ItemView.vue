@@ -85,6 +85,7 @@ export default class ItemView extends Vue {
 
   addToCart(item: iShopItem) {
     const itemId = item && item.id;
+
     if (!this.$store.state.cart) {
       axios
         .post(APIConfig.buildUrl("/cart"), {
@@ -92,21 +93,21 @@ export default class ItemView extends Vue {
           itemId: itemId
         })
         .then((cart: AxiosResponse) => {
+          this.$store.commit("getCart", cart);
           this.$store.state.cart = cart;
         })
         .catch((res: AxiosError) => {
           this.error = res.response && res.response.data.error;
         });
     } else {
-      const cartId = this.$store.state.cart && this.$store.state.cart.id;
+      const cartId = this.$store.state.cart.data && this.$store.state.cart.data.newCart.id;
       axios
         .put(APIConfig.buildUrl("/cart/" + cartId), {
           userId: this.$store.state.user.id,
           itemId: itemId
         })
         .then((cart: AxiosResponse) => {
-          console.log(" add new item ", cart);
-          this.$store.state.cart = cart;
+          console.log(" added new item ", cart);
         })
         .catch((res: AxiosError) => {
           this.error = res.response && res.response.data.error;

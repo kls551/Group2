@@ -1,8 +1,7 @@
 import { iMainCategory, iSubCategory } from "./category.interface";
 import { iBrand } from "./brand.interface";
 
-export interface iShopItem
-{
+export interface iShopItem {
   id: number;
   name: string;
   details: string;

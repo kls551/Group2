@@ -29,7 +29,7 @@ export class ShopItemController extends DefaultController {
         shopItemRepo.findOneOrFail(req.params.id, {relations: ["images", "category", "subcategories", "brand"]}).then((foundItem: ShopItem) => {
           res.status(200).send(foundItem);
         });
-      })    
+      })
 
       .put((req: Request, res: Response) => {
         const item = getRepository(ShopItem);
@@ -102,17 +102,19 @@ export class ShopItemController extends DefaultController {
     .get((req: Request, res: Response) => {
       const shopItemRepo = getRepository(ShopItem);
       let query = shopItemRepo;
-      if (req.query.cat_ids || req.query.sub_cat_ids) {
+      if (req.query.cat_ids || req.query.brand_ids) {
         query
           .createQueryBuilder("shopitem")
           .leftJoinAndSelect("shopitem.images", "imgs")
-          .leftJoinAndSelect("shopitem.brand", "brand")
+          .innerJoinAndSelect("shopitem.brand", "brand")
           .innerJoinAndSelect("shopitem.category", "category")
           .where("category.id IN (:...cid)", { cid: req.query.cat_ids })
+          .orWhere("brand.id IN (:...bid)", { bid: req.query.brand_ids })
           .getMany().then((shopitems: ShopItem[]) => {
             res.status(200).send(shopitems);
           });
-      } else {
+      }
+      else {
         const users = getConnection()
           .getRepository(ShopItem)
           .createQueryBuilder("shopitem")
@@ -123,17 +125,6 @@ export class ShopItemController extends DefaultController {
           });
       }
     });
-
-    // router.route("/shopitems/:brandid")
-    //   .get((req: Request, res: Response) => {
-    //     shopItemRepo
-    //       .createQueryBuilder("shopitem")
-    //       .leftJoinAndSelect("shopitem.brand", "brands")
-    //       .where("shopitem.brand.id = :bid", { bid: req.params.brandid })
-    //       .getMany().then((shopitems: ShopItem[]) => {
-    //         res.status(200).send(shopitems);
-    //       });
-    //   });
 
     return router;
   }

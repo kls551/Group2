@@ -3,8 +3,8 @@
     <div class="container" style="margin-top: 25px; margin-bottom: 25px">
     <h2 style="color: orange">Shop our collection</h2>
     <h3 style="border-bottom: 1.5px solid orange">Sort or filter items and click to view item details</h3>
-    <div class="tile is-ancestor top-bar" style="padding-top: 10px;">
-    <div class="columns top-bar">
+    <div class="top-bar" style="padding-top: 10px;">
+    <div class="columns is-full top-bar">
       <!-- Categories menu -->
       <div class="column is-3" style="padding: 0px 0px 0px 20px; margin: 4px 15px;">
           <section>

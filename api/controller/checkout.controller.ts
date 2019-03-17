@@ -67,15 +67,23 @@ export class OrderController extends DefaultController {
     router.route("/orders/:id/:stat")
         .put((req: Request, res: Response) => {
             const orderRepo = getRepository(Order);
-            orderRepo.findOneOrFail(req.params.id).then((orderItem: Order) => {
-                if (orderItem == undefined) {
-                    return;
+            orderRepo.findOneOrFail(req.params.id).then((orderItem: Order | undefined) => {
+                if (orderItem) {         
+                  orderItem.status = req.params.stat;
+                  if(req.params.stat == 2){
+                    orderItem.shipped = new Date();
+                  }
+                  orderRepo.save(orderItem).then((updatedItem: Order) => {
+                      res.status(200).send(updatedItem);
+                  });
                 }
-                orderItem.status = req.params.stat;
-                orderRepo.save(orderItem).then((updatedItem: Order) => {
-                    res.status(200).send(updatedItem);
-                });
-            });
+                else{
+                  res.sendStatus(404);
+                }
+              },
+              () => {
+                res.sendStatus(404);
+              });
         });
     return router;
   }

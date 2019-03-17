@@ -6,6 +6,7 @@ import { Order } from "../../entity";
 import { Server } from "../../server";
 import DBUtils from "../util/database";
 import { getConnection } from "typeorm";
+import { doesNotReject } from "assert";
 
 describe("/orders", () => {
     let app: express.Application;
@@ -22,8 +23,9 @@ describe("/orders", () => {
         await DBUtils.clearDB();
     });
 
-    afterAll(async () => {
+    afterAll(async done => {
         DBConnection.closeConnection();
+        done();
     });
 
     // should get an order 
@@ -67,8 +69,8 @@ describe("/orders", () => {
         })
         .then(() => {
             request(app)
-                .delete("trackorder/1")
-                .expect(200)
+                .delete("trackorder/" + 1)
+                .expect(200);
                 done();
         });
     });

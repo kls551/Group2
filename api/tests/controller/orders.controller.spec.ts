@@ -113,5 +113,46 @@ describe("/orders", () => {
         });
     });
 
-   
+    // should update the status of an order
+    test("should update order status", done => {
+        connection.manager.insert(Order, {
+            id: 1,
+            complete: true,
+            status: 0,
+            pickup: true,
+            processing: true, 
+            trackingNum: "456",
+            address: "address",
+            city: "city"
+        })
+        .then(() => {
+            request(app)
+                .put("/orders/1/2")
+                .expect(200)
+                .then((response: request.Response) => {
+                    console.log("order ", response.body);
+                    expect(response.body.status).toEqual("1");
+                    done();
+                });
+        });
+    });
+
+     // should fail to update the status of an order
+     test("tries to update status of nonexistent order", done => {
+        connection.manager.insert(Order, {
+            id: 1,
+            complete: true,
+            status: 0,
+            pickup: true,
+            processing: true, 
+            trackingNum: "456",
+            address: "address",
+            city: "city"
+        })
+        .then(() => {
+            request(app)
+                .put("/orders/12/1")
+                .expect(404, done)
+        });
+    });
 })

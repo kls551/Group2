@@ -80,7 +80,7 @@ describe("/shopitems", () => {
 
   });
 
-  // describe("GET '/'", () => {
-  //
-  // });
+  describe("POST '/'", () => {
+  
+  });
 });

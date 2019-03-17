@@ -23,6 +23,9 @@ export class Order {
   public city!: string;
 
   @Column({default:null})
+  public shipped!: Date;
+
+  @Column({default:null})
   public orderedDate!: Date;
 
   @ManyToOne((type) => User, user => user.orders, { cascade: true })

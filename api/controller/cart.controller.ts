@@ -7,6 +7,7 @@ import { Session, ShopItem, User, Cart } from "../entity";
 
 import { getRepository, Connection } from "typeorm";
 import { readSync } from "fs";
+import { resolveSoa } from "dns";
 
 export class CartController extends DefaultController {
   protected initializeRoutes(): express.Router {
@@ -32,66 +33,47 @@ export class CartController extends DefaultController {
             cartRepo
             .save(newCart)
             .then((savedcart : Cart | any) => {
-                console.log("saved Cart ", savedcart);
                 res.status(200).send({newCart : savedcart});
             });
           });
         }
       });
-    });
-
-    router.route("/cart/:userId")
-    .delete((req: Request, res: Response) => {
-      const userId = req.params.userId;
-      const userRepo = getRepository(User);    
+    })
+    .get((req: Request, res: Response) => {
       const cartRepo = getRepository(Cart);
-
-      userRepo.findOne(userId, {relations: ["cart"]}).then((user: User | any) => { 
-        if (user) {
-          const cartId = user.cartId;
-          
-          cartRepo
-          .findOne(cartId)
-          .then((foundCart : Cart | any) => {
-            if (foundCart) {
-              cartRepo.delete(foundCart)
-              .then((result) => res.status(200).send("cart deleted"))
-              .catch(err => res.status(400).send("cannot delete cart"))
-            }
-            else {
-              res.status(404).send("cart not found");
-            }
-          });
-        }
-      });
-    });
+      cartRepo
+      .find()
+      .then((carts : Cart[]) => {
+        res.status(200).send(carts);
+      })
+      .catch((err: any) => {
+        res.status(500).send(err);
+      })
+    })
 
     router.route("/cart/:id")
     .get((req: Request, res: Response) => {
-      const token = req.get("token");
-      const sessionRepo = getRepository(Session);
       const itemRepo = getRepository(ShopItem);
-      const userRepo = getRepository(User);        
-      const userId = req.query.userId;
-      const cartId = req.params.cartId;
+      const cartId = req.params.id;
       const cartRepo = getRepository(Cart);
      
       cartRepo
-      .findOneOrFail(cartId, {relations: ["items"]})
+      .findOneOrFail(cartId, {relations: ["items", "user"]})
       .then((foundCart : Cart) => {
-        if (foundCart) {
-          res.status(200).send(foundCart.items);
+        if (foundCart && foundCart.items) {
+          foundCart.items.forEach(item => {
+            itemRepo.findOneOrFail(item.id, {relations: ["images"]})
+            .then(foundItem => {
+              item = foundItem;
+            })
+          })
+          res.status(200).send(foundCart);
         }
-        else 
-          res.status(404).send("Cart not found");
       });
     })
     .put((req: Request, res: Response) => {
-      // checking for the right user 
       const itemRepo = getRepository(ShopItem);
-      const userRepo = getRepository(User);    
       const cartRepo = getRepository(Cart);
-      const userId = req.body.userId;
       const cartId = req.params.cartId;
       const itemId = req.body.itemId;
 
@@ -102,9 +84,7 @@ export class CartController extends DefaultController {
           itemRepo.findOne(itemId)
           .then((item) => {
              if (foundCart && foundCart.items && item) {
-              console.log("before ", foundCart.items);
               foundCart.items.push(item);
-              console.log("after ", foundCart.items );
               cartRepo.save(foundCart);
               res.status(200).send(foundCart);
              }
@@ -116,20 +96,25 @@ export class CartController extends DefaultController {
         else 
           res.status(404).send("Cart not found");
       }); 
-    });
-    // .delete((req: Request, res: Response) => {
-    //   const cartRepo = getRepository(Cart);
-    //   const itemRepo = getRepository(ShopItem);
-    //   const cartId = req.params.cartId;
+    })
+    .delete((req: Request, res: Response) => {
+      const cartId = req.params.id;
+      const cartRepo = getRepository(Cart);
 
-    //   cartRepo
-    //   .findOneOrFail(cartId, {relations: ["items"]})
-    //   .then((foundCart : Cart) => {
-    //       cartRepo
-    //       .delete(foundCart)
-    //       .then((result) => { res.status(200).send("sucess deleted cart ") });
-    //   });
-    // });
+      cartRepo
+      .findOne(cartId)
+      .then((foundCart : Cart | any) => {
+        if (foundCart) {
+          cartRepo.delete(foundCart)
+          .then((result) => res.status(200).send("cart deleted"))
+          .catch(err => res.status(400).send("cannot delete cart"))
+        }
+        else {
+          res.status(404).send("cart not found");
+        }
+      });
+
+    });
 
     return router;
     }

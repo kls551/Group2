@@ -163,15 +163,31 @@ export default class App extends Vue {
   }
 
   logout() {
-    console.log("logout   ",this.$store.state.userToken);
-    axios
-      .post(APIConfig.buildUrl("/logout"), null, {
-        headers: { token: this.$store.state.userToken }
-      })
-      .then(() => {
-        this.$store.commit("logout");
-        this.$router.push({ name: "home" });
-      });
+    if (this.$store.state.cart) {
+      axios
+      .delete(APIConfig.buildUrl("/cart/" + this.$store.state.cart.data.newCart.id))
+      .then( () => {
+        axios
+        .post(APIConfig.buildUrl("/logout"), null, {
+          headers: { token: this.$store.state.userToken }
+        })
+        .then(() => {
+          this.$store.commit("logout");
+          this.$router.push({ name: "home" });
+        });
+      }
+      );
+    }
+    else {
+      axios
+        .post(APIConfig.buildUrl("/logout"), null, {
+          headers: { token: this.$store.state.userToken }
+        })
+        .then(() => {
+          this.$store.commit("logout");
+          this.$router.push({ name: "home" });
+        });
+    } 
   }
 }
 </script>

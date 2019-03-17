@@ -46,8 +46,12 @@ const mutations: MutationTree<iRootState> = {
     state.userToken = null;
     state.user = null;
   },
-  addCart(state, payload) {
-    state.cart = payload;
+  getCart(state, payload) {
+    const { cart } = payload;
+    state.cart = cart;
+  },
+  removeCart(state, payload) {
+    state.cart = null;
   }
 };
 

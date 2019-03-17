@@ -7,14 +7,11 @@ export class Cart {
   @PrimaryGeneratedColumn()
   public id!: number;
 
-//   @Column()
-//   public quantities!: number[];
-
   @ManyToMany(type => ShopItem, item => item.id)
   @JoinTable()
   public items!: ShopItem[] | undefined; 
 
-  @OneToOne(type => User)
+  @OneToOne(type => User, user => user.cart)
   @JoinColumn()
   public user!: User;
 }

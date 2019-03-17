@@ -8,7 +8,7 @@ import DBUtils from "../util/database";
 import { getConnection } from "typeorm";
 import { doesNotReject } from "assert";
 
-describe("/orders", () => {
+describe("/trackorder", () => {
     let app: express.Application;
     let connection: Connection;
 

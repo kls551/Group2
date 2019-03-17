@@ -29,12 +29,16 @@ export class CartController extends DefaultController {
             const newCart = new Cart();
             newCart.items = [item]; 
             newCart.user = user;
-  
-            cartRepo
-            .save(newCart)
-            .then((savedcart : Cart | any) => {
-                res.status(200).send({newCart : savedcart});
-            });
+            if (item && item.quantity > 0) {
+              cartRepo
+              .save(newCart)
+              .then((savedcart : Cart | any) => {
+                  res.status(200).send({newCart : savedcart});
+              });
+            } else 
+            {
+              res.status(400).send("item out of stock");
+            }
           });
         }
       });
@@ -83,13 +87,15 @@ export class CartController extends DefaultController {
         if (foundCart) {
           itemRepo.findOne(itemId)
           .then((item) => {
-             if (foundCart && foundCart.items && item) {
+             if (foundCart && foundCart.items && item
+                && item.quantity > 0
+              ) {
               foundCart.items.push(item);
               cartRepo.save(foundCart);
               res.status(200).send(foundCart);
              }
              else {
-               res.status(404).send("Item not found");
+               res.status(404).send("Item not found / out of stock");
              }
           })
         }

@@ -9,7 +9,7 @@ export class Session {
   @Column()
   public expiresAt!: Date;
 
-  @OneToOne((type) => User, {cascade: true})
+  @OneToOne((type) => User)
   @JoinColumn()
   public user!: User;
 }

@@ -163,10 +163,15 @@ export default class App extends Vue {
   }
 
   logout() {
-    if (this.$store.state.cart) {
+    console.log("loging out ", this.$store.state.cart);
+  
+    if (this.$store.state.cart && this.$store.state.cart.data.newCart.id) {
+      console.log("deleting cart ");
+      console.log("cart id  ", this.$store.state.cart.data.newCart.id);
       axios
       .delete(APIConfig.buildUrl("/cart/" + this.$store.state.cart.data.newCart.id))
       .then( () => {
+        this.$store.commit("removeCart");
         axios
         .post(APIConfig.buildUrl("/logout"), null, {
           headers: { token: this.$store.state.userToken }
@@ -179,6 +184,7 @@ export default class App extends Vue {
       );
     }
     else {
+      console.log("no cart found ");
       axios
         .post(APIConfig.buildUrl("/logout"), null, {
           headers: { token: this.$store.state.userToken }

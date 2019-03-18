@@ -31,7 +31,6 @@ export class DBConnection {
         return prom.then(() => {
           return DBConnection.connection!.close().then(() => {
             DBConnection.connection = undefined;
-            console.log("connection closed");
           });
         });
       }

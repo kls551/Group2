@@ -9,7 +9,7 @@ export interface iOrder {
   orderedDate: Date;
   address: string;
   city: string;
-  pickup: boolean;
+  pickup: number;
   trackingNum: string;
   items: ShopItem[];
 }

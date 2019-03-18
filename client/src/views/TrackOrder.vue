@@ -18,16 +18,11 @@
                 <!-- order information to appear when order retrieved from databse -->
                 <h2 style="margin-bottom: 15px; margin-top: 15px; padding-top: 20px; border-top: 1px solid orange;">Order Information</h2>
                 <div class="tile is-child box" v-if="isnotnull">
-                    <h3>Ordered on: </h3>
-                        <span> {{ new Date(order.orderedDate).toDateString() }}</span>
-                    <h3>Shipped on: </h3>
-                        <span v-if="shipnotnull"> {{ new Date(order.shipped).toDateString() }}</span>
-                    <h3>Current Location: </h3>
-                    <h3>Expected Delivery: </h3>
-                        <span v-if="shipnotnull"> {{ expected.toDateString() }}</span>
-                    <h3>Shipping to: </h3>
-                        <span> {{order.address + ", "}}</span>
-                        <span> {{order.city}}</span>
+                    <h3>Ordered on: {{ new Date(order.orderedDate).toDateString() }}</h3>
+                    <h3>Current Status: {{status()}}</h3>
+                    <h3 v-if="shipnotnull">Shipped on: {{ new Date(order.shipped).toDateString() }}</h3>
+                    <h3 v-if="shipnotnull">Expected Delivery: {{ expected.toDateString() }}</h3>
+                    <h3>Your Address: {{order.address + ", "}}{{order.city}}</h3>
                 </div>
             </div>
 
@@ -82,13 +77,34 @@ export default class TrackOrder extends Vue {
         return !!this.order;
     }
     get shipnotnull(): boolean {
-        return !!this.order && !!this.order.shipped;
+        return !!this.order && !!this.order.shipped && 
+        (this.order.pickup !== 1);
     }
     get isAd(): boolean {
         return (this.$store.state.user.isAdmin === 1);
     }
     get picture(): boolean {
         return false;
+    }
+
+    status(): string {
+        if (this.order) {
+        switch (this.order.status) {
+            case 0: {
+                return "Processing";
+            }
+            case 1: {
+                return "Complete";
+            }
+            case 2: {
+                return "Shipped";
+            }
+            case 3: {
+                return "Cancelled";
+            }
+        }
+        }
+        return "null";
     }
 }
 </script>

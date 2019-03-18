@@ -47,13 +47,17 @@ export class AboutController extends DefaultController {
     //     });
     // })
     .get((req: Request, res: Response) => {
-        aboutRepo.findOneOrFail().then((about: About) => {
-          res.status(200).send(about);
+        aboutRepo.findOne().then((about: About | undefined) => {
+          if(about){
+            res.status(200).send(about);
+          }
+          else{
+            res.status(404).send({ message: "about info not found"});
+          }
         })
     })
     .put((req: Request, res: Response) => {
-        aboutRepo.findOne(1).then(
-        (about: About | undefined) => {
+        aboutRepo.findOne(1).then((about: About | undefined) => {
           if (about) {
             aboutRepo.update( about.id,
               {address: req.body.address,

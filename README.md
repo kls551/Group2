@@ -43,7 +43,7 @@ open browser and go to http://localhost:8080/
 - Run Api side before running these queries
 - [Setup](api/Database/init.sql)
 
-#### To add admin 
+#### To add admin Home
 - create an account
 - set up a query to update isAdmin=1
 ```
@@ -65,5 +65,4 @@ insert into about values
 ```
 
 ### NOTE
-- Home page links "Mountain" "Cruiser" "Racing" "Accessories" will break if not setup with [Setup](api/Database/init.sql)
-- init.sql file can be used to load some starting data into the site, other data can be added through owner controls
+- init.sql file ([Setup](api/Database/init.sql)) can be used to load some starting data into the site, other data can be added through owner controls

@@ -51,7 +51,6 @@ export class OrderController extends DefaultController {
       const orderRepo = getRepository(Order);
       const order = new Order();
       sessionRepo.findOne(token).then((foundSession: Session | undefined) => {
-        const user = foundSession!.user;
         order.userId = req.body.user;
         order.pickup = req.body.Pickup;
         order.status = 0;

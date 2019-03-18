@@ -31,6 +31,6 @@ export class User {
   @OneToMany(type => ShopItem, (shopitem) => shopitem.id)
   public cartList!: ShopItem[];
 
-  @OneToOne((type) => Cart, cart => cart.id)
+  @OneToOne((type) => Cart, cart => cart.user)
   public cart!: Cart;
 }

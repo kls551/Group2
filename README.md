@@ -16,13 +16,13 @@ Group2: Enter Team Name Here:_
 * [Database schema](https://app.sqldbm.com/MySQL/Share/xvRP5NF28w0S85sWkNUghkGFrngIE8md_DYjF4jNYw0)
 * [API document](https://docs.google.com/document/d/11vsN7vSGXqhrBo1z6LZIPY8Uv73Pml7CJhFJCh8KZnU/edit?usp=sharing)
 
-# Running Instruction
+# Running Instructions
 - in terminal run `git clone git@github.com:CSC307Winter2019/Group2.git`
 - cd into the Group2 directory
 - run `docker-compose up`
 - open two more terminal windows
 
-## api side
+## Api side
 - first new terminal window
 - cd into Group2 directory
 - cd into api
@@ -43,13 +43,13 @@ open browser and go to http://localhost:8080/
 - Run Api side before running these queries
 - [Setup](api/Database/init.sql)
 
-#### to add admin 
+#### To add admin Home
 - create an account
 - set up a query to update isAdmin=1
 ```
 update dev.user set isAdmin=1 where email="<email here>"`
 ```
-#### to set up staff
+#### To set up staff
 - create an account
 - set up a query to update isAdmin=0
 ```
@@ -65,4 +65,4 @@ insert into about values
 ```
 
 ### NOTE
-- Home page links "Mountain" "Cruiser" "Racing" "Accessories" will break if not setup with [Setup](api/Database/init.sql)
+- init.sql file ([Setup](api/Database/init.sql)) can be used to load some starting data into the site, other data can be added through owner controls

@@ -35,7 +35,7 @@ export class OrderController extends DefaultController {
         });
       });
     });
-  
+
 
     router.route("/orders")
     .get((req: Request, res: Response) => {
@@ -51,7 +51,6 @@ export class OrderController extends DefaultController {
       const orderRepo = getRepository(Order);
       const order = new Order();
       sessionRepo.findOne(token).then((foundSession: Session | undefined) => {
-        const user = foundSession!.user;
         order.userId = req.body.user;
         order.pickup = req.body.Pickup;
         order.status = 0;
@@ -69,7 +68,7 @@ export class OrderController extends DefaultController {
         .put((req: Request, res: Response) => {
             const orderRepo = getRepository(Order);
             orderRepo.findOneOrFail(req.params.id).then((orderItem: Order | undefined) => {
-                if (orderItem) {         
+                if (orderItem) {
                   orderItem.status = req.params.stat;
                   if(req.params.stat == 2){
                     orderItem.shipped = new Date();

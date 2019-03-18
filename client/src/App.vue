@@ -55,7 +55,7 @@
 
               <router-link to="/owner/add-item" v-show="isOwner" tag="li" exact-active-class="is-active"><a>New Item</a></router-link>
 
-              <router-link to="/owner/edit-services" v-show="isOwner" tag="li" exact-active-class="is-active"><a>Services</a></router-link>           
+              <router-link to="/owner/edit-services" v-show="isOwner" tag="li" exact-active-class="is-active"><a>Services</a></router-link>
           </ul>
         </div>
       </div>
@@ -141,7 +141,7 @@ export default class App extends Vue {
 
   successLogin() {
     this.showLogin = false;
-    // direct owner to management page 
+    // direct owner to management page
     if (this.$store.state.user && (this.$store.state.user.isAdmin === 1)) {
       this.$router.push("/owner/manage-main-categories");
     }
@@ -164,7 +164,7 @@ export default class App extends Vue {
 
   logout() {
     console.log("loging out ", this.$store.state.cart);
-  
+    // this.$store.commit("removeCart");
     if (this.$store.state.cart && this.$store.state.cart.data.newCart.id) {
       console.log("deleting cart ");
       console.log("cart id  ", this.$store.state.cart.data.newCart.id);
@@ -193,7 +193,7 @@ export default class App extends Vue {
           this.$store.commit("logout");
           this.$router.push({ name: "home" });
         });
-    } 
+    }
   }
 }
 </script>

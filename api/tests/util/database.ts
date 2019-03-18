@@ -1,5 +1,5 @@
 import { Connection, createQueryBuilder, getConnection } from "typeorm";
-import { Session, User, Announcement, MainCategory, SubCategory, Order, Brands, Cart, ShopItem, About, Service } from "../../entity";
+import { Session, User, Announcement, MainCategory, Order, Brands, Cart, ShopItem, About, Service, Imgs } from "../../entity";
 
 export default class DatabaseUtils {
   public static clearDB(): Promise<any> {

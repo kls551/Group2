@@ -56,9 +56,7 @@ describe("/users", () => {
               response.body.length
             ).toEqual(1);
             expect(response.body[0].isAdmin).toEqual(0);
-            //  response.body && response.body.length
-            //).toEqual(1);
-            //expect(response.body[0].emailAddress).toEqual(email);
+            expect(response.body[0].firstName).toEqual("testUser");
             done();
           });
       });

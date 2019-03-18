@@ -36,13 +36,12 @@ export class SubCategoryController extends DefaultController {
         const subCat = new SubCategory();
         subCat.name = req.body.name;
         subCat.mainCategory = req.body.mainCategoryId;
+        console.log(subCat);
         subCatRepo.save(subCat).then(
           (savedCategory: SubCategory) => {
-            res.status(200).send({ subCat });
-          },
-          (reason: any) => {
-            res.status(500);
-          });
+            res.status(200).send(subCat);
+          }).catch(err =>
+            res.status(500).send(err))
         });
 
         router.route("/subcategory/:id")
@@ -60,15 +59,10 @@ export class SubCategoryController extends DefaultController {
         .delete((req: Request, res: Response) => {
           const subCat = getRepository(SubCategory);
           subCat.findOneOrFail(req.params.id).then((foundCategory: SubCategory | undefined) => {
-            if (foundCategory){
+            if (foundCategory)
               subCat.delete(foundCategory).then(result => {
-                res.status(200).send({ deleted: true});
-              })
-            } else {
-              res.status(404).send({ deleted: false});
-            }
-          });
-        })
+                res.status(200).send({ deleted: true});});})
+          .catch(err => res.status(404).send({deleted : false}));})
 
         .put((req: Request, res: Response) => {
           const subCat = getRepository(SubCategory);
@@ -77,11 +71,8 @@ export class SubCategoryController extends DefaultController {
               foundCategory.name = req.body.name;
               subCat.save(foundCategory).then(result => {
               res.send(200);
-            })
-            } else {
-              res.sendStatus(404).send("subcat not found");
-            }
-          });
+            });}
+          }).catch(err => res.status(404).send(err));
         });
 
       return router;

@@ -133,19 +133,19 @@ describe("/shopitems", () => {
     });
 
     // Testing post an item image
-    // test("should add an item image", done => {
-    //   return request(app)
-    //     .post("/itemimages/9")
-    //     .send({
-    //       id: 9,
-    //       img: "testpostitemimage",
-    //       ShopItem: new ShopItem()
-    //     })
-    //     .expect(200)
-    //     .then((response: request.Response) => {
-    //       done();
-    //     });
-    // });
+    test("should add an item image", done => {
+      return request(app)
+        .post("/itemimages/9")
+        .send({
+          id: 9,
+          img: "testpostitemimage",
+          ShopItem: new ShopItem()
+        })
+        .expect(200)
+        .then((response: request.Response) => {
+          done();
+        });
+    });
   });
 
   describe("PUT '/'", () => {

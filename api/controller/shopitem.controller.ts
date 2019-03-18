@@ -41,7 +41,8 @@ export class ShopItemController extends DefaultController {
             foundItem.quantity = req.body.quantity;
             foundItem.category = req.body.category;
             foundItem.inStorePickup = req.body.inStorePickup;
-            foundItem.subcategories = await subCatRepo.findByIds(req.body.subcategories);
+            // foundItem.subcategories = await subCatRepo.findByIds(req.body.subcategories);
+            foundItem.subcategories = req.body.subcategories;
             foundItem.postedDate = req.body.postedDate;
             foundItem.brand = req.body.brand;
             item.save(foundItem).then((savedShopItem: ShopItem) => {
@@ -88,7 +89,8 @@ export class ShopItemController extends DefaultController {
         shopitem.quantity = req.body.quantity;
         shopitem.category = req.body.category;
         shopitem.inStorePickup = req.body.inStorePickup;
-        shopitem.subcategories = await subCatRepo.findByIds(req.body.subcategories);
+        // shopitem.subcategories = await subCatRepo.findByIds(req.body.subcategories);
+        shopitem.subcategories = req.body.subcategories;
         shopitem.postedDate = req.body.postedDate;
         shopitem.brand = req.body.brand;
         shopItemRepo.save(shopitem).then((savedShopItem: ShopItem) => {

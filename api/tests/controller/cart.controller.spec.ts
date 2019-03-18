@@ -2,7 +2,7 @@ import express from "express";
 import request from "supertest";
 import { Connection } from "typeorm";
 import { DBConnection } from "../../connection";
-import { Brands, User, MainCategory, SubCategory, ShopItem} from "../../entity";
+import { Brands, User, MainCategory, SubCategory, ShopItem, Cart} from "../../entity";
 import { Server } from "../../server";
 import DBUtils from "../util/database";
 import { getConnection } from "typeorm";
@@ -11,11 +11,15 @@ import { create } from "domain";
 describe("/cart", () => {
     let myApp: express.Application;
     let connection: Connection;
-    let userId = 1;
-    const email = "test@test.com";
-    let brandId = -1;
-    let mainCatId = -1;
-    let subCatId : number[] = [];
+    let user1 = 1;
+    let user2 = 1;
+    let item1 : ShopItem;
+    let item2 : ShopItem;
+    const email1 = "test@test.com";
+    const email2 = "test2@test.com";
+    // let brand : Brands = null;
+    // let mainCat : MainCategory = undefined;
+    // let subCat : SubCategory[] = [];
 
     // create a test user 
     const createUser = (
@@ -58,15 +62,15 @@ describe("/cart", () => {
         quantity: number,
         conn: Connection
         ) => {
-        return request(myApp)
-                .post("/shopitems")
-                .send({
-                    name :  name,
-                    price : price,
-                    details: "some bikes",
-                    inStorePickup : true,
-                    postedDate: new Date(),
-                })
+        const item = new ShopItem();
+        item.name = name;
+        item.price = price;
+        item.details = "some bikes";
+        item.quantity = quantity;
+        item.inStorePickup = true;
+        item.postedDate = new Date();
+        
+        return conn.getRepository(ShopItem).save(item);
     };
 
     const createBrand = (name: string, conn: Connection): Promise<Brands> => {
@@ -74,6 +78,14 @@ describe("/cart", () => {
         brand.name = name;
         return conn.getRepository(Brands).save(brand);
     };
+
+    // const createCart = (name: string, conn: Connection): Promise<Brands> => {
+    //     const cart = new Cart();
+    //     cart.userId =
+    //     brand.name = name;
+    //     return conn.getRepository(Brands).save(brand);
+    // };
+
 
     beforeAll(async () => {
         myApp = await new Server().getMyApp();
@@ -83,12 +95,15 @@ describe("/cart", () => {
     });
 
     beforeEach(async () => {   
+        // subCatId = [];
         await DBUtils.clearDB();
-        await createUser(email, connection).then((user) => {userId = user.id});
-        await createBrand("Trek", connection).then((brand) => {brandId = brand.id});
-        await createMainCat("Hybird", connection).then((mainCat) => {mainCatId = mainCat.id});
-        await createSubCat("Sport Bike", connection).then((subCat) => {subCatId.push(subCat.id)});
-        await createItem("Test Bike", 1000, 20, connection);
+        await createUser(email1, connection).then((user) => {user1 = user.id});
+        await createUser(email2, connection).then((user) => {user2 = user.id});
+        // await createBrand("Trek", connection).then((brand) => {brandId = brand.id});
+        // await createMainCat("Hybird", connection).then((mainCat) => {mainCatId = mainCat.id});
+        // await createSubCat("Sport Bike", connection).then((subCat) => {subCatId.push(subCat.id)});
+        await createItem("Test Bike", 1000, 20, connection).then((item) => {item1 = item});
+        await createItem("Bike 2", 4444, 70, connection).then((item) => {item2 = item});
     });
 
     afterAll(async () => {
@@ -106,43 +121,23 @@ describe("/cart", () => {
                 done();
             })
         })
-        test("create a user ", done => {
-            const email = "test@test.com";
-            return createUser(email, connection).then((createdUser: User) => {
-              return request(myApp)
-                .get("/users")
-                .expect(200)
-                .then((response: request.Response) => {
-                  console.log("user ", response.body);
-                  expect(
-                    response.body.length
-                  ).toEqual(1);
-                  expect(response.body.emailAddress).toEqual(email);
-                  done();
-                });
-            });
-        });
-
-
-        
+      
         test("return with 1 added cart ", done => {
-            // const brand = "Scott";
-            // const email = "testing@gmail.com";
-            // const mainCat = "moutain bike";
-            // const subCat = "hybird";
             return createItem("Test Bike", 1000, 20, connection)
                     .then((item : ShopItem | any) => {
                         request(myApp)
                         .post("/cart")
                         .send({
-                            userId: userId,
+                            userId: user1,
                             itemId: item.id,
                         })
                         .expect(200)
                         .then ((response: request.Response) => {
-                            console.log("cart res " , response.body);
-                            expect(response.body.newCart.id).toEqual(1);
-                            expect(response.body.newCart.user.id).toEqual(1);
+                            console.log("cart res ---------------" , response.body);
+                            expect(response.body.newCart.items.length).toEqual(1);
+                            expect(response.body.newCart.items[0].id).toEqual(item.id);
+                            expect(response.body.newCart.user.emailAddress).toEqual(email1);
+                            done();
                         })
 
                     });         
@@ -169,33 +164,61 @@ describe("/cart", () => {
     });
 
 
-    // describe("GET '/'", () => {
-    //     test("should not have any brands in DB", done => {
-    //         request(myApp)
-    //         .get("/brands")
-    //         .then((response: request.Response) => {
-    //             expect(response.body).toEqual([]);
-    //             done();
-    //         })
-    //     })
+    describe("GET '/'", () => {
+        test("should not have any cart in DB", done => {
+            request(myApp)
+            .get("/cart")
+            .then((response: request.Response) => {
+                expect(response.body).toEqual([]);
+                done();
+            })
+        })
 
-    //     test("should return one brand", done => {
-    //         const brand = "Trek";
-    //         return createBrand(brand, connection).then((createBrand: Brands) => {
-    //           return request(myApp)
-    //             .get("/brands")
-    //             .expect(200)
-    //             .then((response: request.Response) => {
-                    
-    //               expect(
-    //                 response.body && response.body.length
-    //               ).toEqual(1);
-    //               expect(response.body[0].name).toEqual(brand);
-    //               done();
-    //             });
-    //         });
-    //     });
-    // });
+        test("added cart 1", done => {
+            return  request(myApp)
+                        .post("/cart")
+                        .send({
+                            userId: user1,
+                            itemId: item1.id,
+                        })
+                        .expect(200)
+                        .then ((response: request.Response) => {
+                            expect(response.body.newCart.items.length).toEqual(1);
+                            expect(response.body.newCart.items[0].id).toEqual(item1.id);
+                            expect(response.body.newCart.user.emailAddress).toEqual(email1);
+                            done();
+                        })
+                    });         
+
+        test("added cart 2", done => {
+            return  request(myApp)
+                        .post("/cart")
+                        .send({
+                            userId: user2,
+                            itemId: item2.id,
+                        })
+                        .expect(200)
+                        .then ((response: request.Response) => {
+                            expect(response.body.newCart.items.length).toEqual(1);
+                            expect(response.body.newCart.items[0].id).toEqual(item2.id);
+                            expect(response.body.newCart.user.emailAddress).toEqual(email2);
+                            done();
+                        })
+                    });         
+
+        test("should return 2 cart ", done => {
+            return request(myApp)
+            .get("/cart")
+            .expect(200)
+            .then((response: request.Response) => {
+                expect(
+                response.body && response.body.length
+                ).toEqual(2);
+                // expect(response.body[0].name).toEqual(brand);
+                done();
+            });
+        });
+    });
 
     // describe("PUT '/'", () => {
     //     test("should not have any brands in DB", done => {

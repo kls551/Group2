@@ -16,7 +16,7 @@
                 <figure class="image is-3by2">
                     <img src="../assets/mountain-bike.jpg">
                     <div class="middle">
-                        <a><div v-on:click="showShop(1)" class="hover-text">Mountain</div></a>
+                        <a><div class="hover-text">Mountain</div></a>
                     </div>
                 </figure>
             </div>
@@ -26,7 +26,7 @@
                 <figure class="image is-3by2">
                     <img src="../assets/race-bikes.jpg">
                     <div class="middle">
-                        <a><div v-on:click="showShop(2)"  class="hover-text">Cruisers</div></a>
+                        <a><div class="hover-text">Cruisers</div></a>
                     </div>
                 </figure>
             </div>
@@ -38,7 +38,7 @@
                 <figure class="image is-3by2">
                     <img src="../assets/beach-cruiser.jpg">
                     <div class="middle">
-                        <a><div v-on:click="showShop(3)"  class="hover-text">Racing</div></a>
+                        <a><div class="hover-text">Racing</div></a>
                     </div>
                 </figure>
             </div>
@@ -48,7 +48,7 @@
                 <figure class="image is-3by2">
                     <img src="../assets/bike-accessories.jpg">
                     <div class="middle">
-                        <a><div v-on:click="showShop(4)"  class="hover-text">Accesories</div></a>
+                        <a><div class="hover-text">Accesories</div></a>
                     </div>
                 </figure>
             </div>

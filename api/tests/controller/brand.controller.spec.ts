@@ -66,9 +66,6 @@ describe("/brands", () => {
                   .expect(400)
                   .then((response: request.Response) => {
                     console.log("dup brands ", response.body);
-                    // expect(
-                    //   response.body && response.body.length
-                    // ).toEqual(1);
                     expect(response.body.message).toEqual("duplicate brand");
                     done();
                   });

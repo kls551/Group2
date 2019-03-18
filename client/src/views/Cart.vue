@@ -186,7 +186,7 @@ export default class Cart extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 h2 {
     font-family: 'Questrial';
     font-size: 28px;

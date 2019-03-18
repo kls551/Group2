@@ -38,11 +38,12 @@
                         <div class="control">
                             <input class="input is-small" type="text" placeholder="enter a number" v-model="newQty">
                         </div>
-                        <p v-if="this.newQty <= 0" class="help is-danger">Enter a positive quantity</p>
+                        <p v-if="this.newQty < 0" class="help is-danger">Enter a positive quantity</p>
                     </div>
                     <nav class="level">
                         <div class="level-left">
-                            <button class="button is-success is-small" v-on:click="editItem(editIndex)">Update</button></div>
+                            <button class="button is-success is-small" v-if="this.newQty >= 0" v-on:click="editItem(editIndex)">Update</button>
+                            <button class="button is-success is-small" v-if="this.newQty < 0" v-on:click="editItem(editIndex)" disabled>Update</button></div>
                         <div class="level-right">
                             <button class="button is-danger is-small" v-on:click="cancelEdit()">Cancel</button></div>
                     </nav>

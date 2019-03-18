@@ -34,17 +34,15 @@ export class CartController extends DefaultController {
               .save(newCart)
               .then((savedcart : Cart | any) => {
                   res.status(200).send({newCart : savedcart});
-              });
-            } else 
-            {
-              res.status(400).send("item out of stock");
-            }
-          });
+              }).catch((err) => res.status(404).send(err));
+            } 
+          }).catch((err) => res.status(404).send(err));
         }
-      });
+      }).catch((err) => res.status(404).send(err));
     })
     .get((req: Request, res: Response) => {
       const cartRepo = getRepository(Cart);
+
       cartRepo
       .find()
       .then((carts : Cart[]) => {
@@ -69,11 +67,11 @@ export class CartController extends DefaultController {
             itemRepo.findOneOrFail(item.id, {relations: ["images"]})
             .then(foundItem => {
               item = foundItem;
-            })
+            }).catch((err) => {res.status(400).send("error")});
           })
           res.status(200).send(foundCart);
         }
-      });
+      }).catch((err) => {res.status(400).send("error")});
     })
     .put((req: Request, res: Response) => {
       const itemRepo = getRepository(ShopItem);
@@ -97,11 +95,9 @@ export class CartController extends DefaultController {
              else {
                res.status(404).send("Item not found / out of stock");
              }
-          })
+          }).catch((err) => {res.status(400).send("error")});
         }
-        else 
-          res.status(404).send("Cart not found");
-      }); 
+      }).catch((err) => {res.status(400).send("error")}); 
     })
     .delete((req: Request, res: Response) => {
       const cartId = req.params.id;
@@ -118,7 +114,7 @@ export class CartController extends DefaultController {
         else {
           res.status(404).send("cart not found");
         }
-      });
+      }).catch((err) => {res.status(400).send("error")});
 
     });
 

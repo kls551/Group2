@@ -30,7 +30,8 @@
           </div>
         </div>
         <div class="buttons has-addons">
-          <span class="button buttonStyle" v-on:click="addToCart(shopItem)">Add To Cart</span>
+          <span v-if="shopItem.quantity > 0" class="button buttonStyle" v-on:click="addToCart(shopItem)">Add To Cart</span>
+          <span v-if="shopItem.quantity <= 0" class="button buttonStyle" v-on:click="addToCart(shopItem)" disabled>Add To Cart</span>
         </div>
 
         <p class="subtitle is-6" v-if="shopItem.inStorePickup">In-Store Pickup Only</p>

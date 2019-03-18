@@ -1,9 +1,5 @@
 import { Connection, createQueryBuilder, getConnection } from "typeorm";
-<<<<<<< HEAD
-import { Session, User, Announcement, MainCategory, Order, Brands, Cart, ShopItem, Imgs } from "../../entity";
-=======
-import { Session, User, Announcement, MainCategory, Order, Brands, Cart, ShopItem, About, Service } from "../../entity";
->>>>>>> f7181deea53f0cb94c0c6a693f686a1dd52a19b0
+import { Session, User, Announcement, MainCategory, Order, Brands, Cart, ShopItem, About, Service, Imgs } from "../../entity";
 
 export default class DatabaseUtils {
   public static clearDB(): Promise<any> {

@@ -1,5 +1,5 @@
 -- creating admin
-insert into dev.user () values
+insert into dev.user values
 (1, "AdminFirst", "AdminLast", "123", "", "admin", 1);
 
 -- creating staff
@@ -35,14 +35,14 @@ insert into dev.brands values
 
 -- adding items in shop
 insert into dev.shop_item values
-(1, 'mountain bicycle', 'this bike goes fast', 500, 12, 1, '2019-03-04 12:12:12', 1, 2, 1);
+(1, 'mountain bicycle', 'this bike goes fast', 500, 12, 1, '2019-03-04 12:12:12', 1, 1, 1);
 insert into dev.shop_item values
-(2, 'cruising bicycle', 'this bike is chill', 300, 8, 1, '2019-03-04 12:12:12', 2, 1, 1);
+(2, 'cruising bicycle', 'this bike is chill', 300, 8, 1, '2019-03-04 12:12:12', 2, 1, 2);
 insert into dev.shop_item values
-(3, 'racing bicycle', 'this bike will win you all the races', 4000, 16, 0, '2019-03-04 12:12:12', 3, 2, 1);
+(3, 'racing bicycle', 'this bike will win you all the races', 4000, 16, 0, '2019-03-04 12:12:12', 3, 1, 3);
 
 -- adding item images
 insert into dev.imgs values 
-(1, https://i5.walmartimages.com/asr/e69bee47-9900-40f4-9001-18c4b12cc8e5_1.2ef76d7ca8c20a105d28bc19f84eeed0.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF, 1);
-(2, http://nebula.wsimg.com/f51f94ace79501b6d667ebcc37ca8e10?AccessKeyId=F3C3CCBB8C68E3CA8593&disposition=0&alloworigin=1, 2);
-(3, https://www.motoplanete.com/ducati/zoom-700px/ducati-939-hypermotard-SP-2017-700px.jpg, 3);
+(1, 'https://i5.walmartimages.com/asr/e69bee47-9900-40f4-9001-18c4b12cc8e5_1.2ef76d7ca8c20a105d28bc19f84eeed0.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF', 1);
+(2, 'http://nebula.wsimg.com/f51f94ace79501b6d667ebcc37ca8e10?AccessKeyId=F3C3CCBB8C68E3CA8593&disposition=0&alloworigin=1', 2);
+(3, 'https://www.motoplanete.com/ducati/zoom-700px/ducati-939-hypermotard-SP-2017-700px.jpg', 3);

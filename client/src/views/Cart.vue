@@ -115,7 +115,7 @@ export default class Cart extends Vue {
     getCart() {
         const cartId = this.$store.state.cart && this.$store.state.cart.data.newCart.id;
      
-        if (this.$store.state.user) {
+        if (this.$store.state.user && cartId) {
             const userId = this.$store.state.user && this.$store.state.user.id;
             axios
             .get(APIConfig.buildUrl("/cart/" + cartId))

@@ -2,7 +2,7 @@ import express from "express";
 import request from "supertest";
 import { Connection } from "typeorm";
 import { DBConnection } from "../../connection";
-import { ShopItem, MainCategory } from "../../entity";
+import { ShopItem, MainCategory, SubCategory, Brands, Imgs } from "../../entity";
 import { Server } from "../../server";
 import DBUtils from "../util/database";
 
@@ -25,6 +25,37 @@ describe("/shopitems", () => {
     item.inStorePickup = true;
     item.postedDate = new Date();
     return conn.getRepository(ShopItem).save(item);
+  };
+
+  // const createItemImage = (
+  //   imgurl: string,
+  //   conn: Connection
+  // ): Promise<Imgs> => {
+  //   const image = new Imgs();
+  //   image.id = 9;
+  //   image.img = imgurl;
+  //   return conn.getRepository(Imgs).save(image);
+  // };
+
+  const createMainCat = (
+    name: string,
+    conn: Connection
+  ): Promise<MainCategory> => {
+    const cat = new MainCategory();
+    cat.id = 2;
+    cat.name = name;
+    cat.show = false;
+    return conn.getRepository(MainCategory).save(cat);
+  };
+
+  const createSubCat = (
+    name: string,
+    conn: Connection
+  ): Promise<SubCategory> => {
+    const subcat = new SubCategory();
+    subcat.id = 3;
+    subcat.name = name;
+    return conn.getRepository(SubCategory).save(subcat);
   };
 
   beforeAll(async () => {
@@ -76,11 +107,112 @@ describe("/shopitems", () => {
           });
       });
     });
-    // Test get with category or brand id query
-
   });
 
   describe("POST '/'", () => {
-  
+    // Testing post a shop item
+    test("should create a shop item", done => {
+      //createSubCat("Mountain", connection);
+      const itemname = "testpostshopitem";
+      return request(app)
+        .post("/shopitems")
+        .send({
+          id: 500,
+          name: "testpostshopitem",
+          details: "details",
+          price: 200,
+          quantity: 30,
+          inStorePickup: true,
+          postedDate: new Date()
+        })
+        .expect(200)
+        .then((response: request.Response) => {
+          done();
+        });
+      done();
+    });
+
+    // Testing post an item image
+    // test("should add an item image", done => {
+    //   return request(app)
+    //     .post("/itemimages/9")
+    //     .send({
+    //       id: 9,
+    //       img: "testpostitemimage",
+    //       ShopItem: new ShopItem()
+    //     })
+    //     .expect(200)
+    //     .then((response: request.Response) => {
+    //       done();
+    //     });
+    // });
+  });
+
+  describe("PUT '/'", () => {
+    // Testing update shop item
+    test("should update shop item", done => {
+      connection.manager.insert(ShopItem, {
+        id: 20,
+        name: "testputitem",
+        details: "details",
+        price: 200,
+        quantity: 30,
+        inStorePickup: true,
+        postedDate: new Date()
+      }).then(() => {
+        request(app)
+          .put("/shopitems/20")
+          .send({ name: "altered" })
+          .expect(200)
+          .then((response: request.Response) => {
+            expect(response.body.id).toEqual(20);
+            done();
+          });
+      });
+    });
+
+    // Testing update shop item quantity
+    test("should update shop item quantity", done => {
+      connection.manager.insert(ShopItem, {
+        id: 20,
+        name: "testputitemquantity",
+        details: "details",
+        price: 200,
+        quantity: 30,
+        inStorePickup: true,
+        postedDate: new Date()
+      }).then(() => {
+        request(app)
+          .put("/shopitems/20/2")
+          .send({ quantity: 2 })
+          .expect(200)
+          .then((response: request.Response) => {
+            expect(response.body.quantity).toEqual("2");
+            done();
+          });
+      });
+    });
+  });
+
+  describe("DELETE '/'", () => {
+    test("should delete shop item successfully", done => {
+      connection.manager.insert(ShopItem, {
+        id: 500,
+        name: "testdeleteitem",
+        details: "details",
+        price: 200,
+        quantity: 30,
+        inStorePickup: true,
+        postedDate: new Date(),
+        images: []
+      }).then(() => {
+        request(app)
+          .delete("/shopitems/500")
+          .expect(200)
+          .then(() => {
+            done();
+          });
+      });
+    });
   });
 });

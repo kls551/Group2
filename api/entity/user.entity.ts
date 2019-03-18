@@ -25,12 +25,12 @@ export class User {
   @Column({default: null})
   public isAdmin!: number;
 
-  @OneToMany(type => Order, (order) => order.userId)
+  @OneToMany(type => Order, (order) => order.id)
   public orders!: Order[];
 
   @OneToMany(type => ShopItem, (shopitem) => shopitem.id)
   public cartList!: ShopItem[];
 
-  @OneToOne((type) => Cart, cart => cart.id)
+  @OneToOne((type) => Cart, cart => cart.id, {onDelete: 'CASCADE'})
   public cart!: Cart;
 }

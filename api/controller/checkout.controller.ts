@@ -54,6 +54,7 @@ export class OrderController extends DefaultController {
         const user = foundSession!.user;
         order.userId = req.body.user;
         order.pickup = req.body.Pickup;
+        order.status = 0;
         order.orderedDate = req.body.orderedDate;
         order.address = req.body.address;
         order.city = req.body.city;
@@ -67,15 +68,23 @@ export class OrderController extends DefaultController {
     router.route("/orders/:id/:stat")
         .put((req: Request, res: Response) => {
             const orderRepo = getRepository(Order);
-            orderRepo.findOneOrFail(req.params.id).then((orderItem: Order) => {
-                if (orderItem == undefined) {
-                    return;
+            orderRepo.findOneOrFail(req.params.id).then((orderItem: Order | undefined) => {
+                if (orderItem) {         
+                  orderItem.status = req.params.stat;
+                  if(req.params.stat == 2){
+                    orderItem.shipped = new Date();
+                  }
+                  orderRepo.save(orderItem).then((updatedItem: Order) => {
+                      res.status(200).send(updatedItem);
+                  });
                 }
-                orderItem.status = req.params.stat;
-                orderRepo.save(orderItem).then((updatedItem: Order) => {
-                    res.status(200).send(updatedItem);
-                });
-            });
+                else{
+                  res.sendStatus(404);
+                }
+              },
+              () => {
+                res.sendStatus(404);
+              });
         });
     return router;
   }

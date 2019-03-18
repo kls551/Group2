@@ -6,8 +6,9 @@ import { Order } from "../../entity";
 import { Server } from "../../server";
 import DBUtils from "../util/database";
 import { getConnection } from "typeorm";
+import { doesNotReject } from "assert";
 
-describe("/orders", () => {
+describe("/trackorder", () => {
     let app: express.Application;
     let connection: Connection;
 
@@ -22,30 +23,29 @@ describe("/orders", () => {
         await DBUtils.clearDB();
     });
 
-    afterAll(async () => {
+    afterAll(async done => {
         DBConnection.closeConnection();
+        done();
     });
 
     // should get an order 
-    // test("gets order of specific tracking number", done => {
-    //     connection.manager.insert(Order, {
-    //         complete: true,
-    //         status: 0,
-    //         pickup: true,
-    //         processing: true, 
-    //         trackingNum: "456",
-    //         address: "address",
-    //         city: "city"
-    //     }).then(() => {
-    //         request(app)
-    //             .get("/trackorder/456")
-    //             .expect(200)
-    //             .then((response: request.Response) => {
-    //                 expect(response.body.address).toEqual("address");
-    //                 done();
-    //             });
-    //     });
-    // });
+    test("gets order of specific tracking number", done => {
+        connection.manager.insert(Order, {
+            id: 1,
+            status: 0,
+            pickup: true,
+            address: "address",
+            city: "city"
+        }).then(() => {
+            request(app)
+                .get("/trackorder/" + 1)
+                .expect(200)
+                .then((response: request.Response) => {
+                    expect(response.body.address).toEqual("address");
+                    done();
+                });
+        });
+    });
 
     // should fail to get an order
     test("should fail because announcement with this id does not exist", done => {
@@ -55,21 +55,21 @@ describe("/orders", () => {
     });
 
     // should delete an order
-    test("should delete an order", done =>{
+    test("should delete an order", done => {
         connection.manager.insert(Order, {
-            complete: true,
+            id: 1,
             status: 0,
             pickup: true,
-            processing: true, 
-            trackingNum: "456",
             address: "address",
             city: "city"
         })
         .then(() => {
             request(app)
-                .delete("trackorder/1")
+                .delete("/trackorder/" + 1)
                 .expect(200)
-                done();
+                .then(() => {
+                    done();
+                });
         });
     });
 })

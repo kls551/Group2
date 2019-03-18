@@ -35,7 +35,7 @@ export class OrderController extends DefaultController {
         });
       });
     });
-  
+
 
     router.route("/orders")
     .get((req: Request, res: Response) => {
@@ -68,7 +68,7 @@ export class OrderController extends DefaultController {
         .put((req: Request, res: Response) => {
             const orderRepo = getRepository(Order);
             orderRepo.findOneOrFail(req.params.id).then((orderItem: Order | undefined) => {
-                if (orderItem) {         
+                if (orderItem) {
                   orderItem.status = req.params.stat;
                   if(req.params.stat == 2){
                     orderItem.shipped = new Date();

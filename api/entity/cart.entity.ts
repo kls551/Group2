@@ -11,7 +11,7 @@ export class Cart {
   @JoinTable()
   public items!: ShopItem[] | undefined; 
 
-  @OneToOne(type => User, user => user.cart)
+  @OneToOne(type => User, user => user.cart, {cascade: true})
   @JoinColumn()
   public user!: User;
 }

@@ -111,19 +111,17 @@
                     </div>
                   </div>
 
-                    <div v-if="isLoggedIn && isOwner">
-                      <router-link :to="{ name: 'ownerAddItem', params: { itemId: item.id, editing: true }}">
-                        <button class="button is-info is-fullwidth" type="submit" style="margin-top: 15px;">Edit</button></router-link>
-                        <button class="button is-danger is-fullwidth" style="margin-top: 15px;" v-on:click="showDeleteConfirm(item)">Delete</button>
-                    </div>
-
+                  <div v-if="isLoggedIn && isOwner">
+                    <router-link :to="{ name: 'ownerAddItem', params: { itemId: item.id, editing: true }}">
+                      <button class="button is-info is-fullwidth" type="submit" style="margin-top: 15px;">Edit</button></router-link>
+                      <button class="button is-danger is-fullwidth" style="margin-top: 15px;" v-on:click="showDeleteConfirm(item)">Delete</button>
+                  </div>
                 </div>
               </div>
             </div>
-
+          </div>
         </div>
       </div>
-    </div>
     </div>
 
     <DeleteConfirm
@@ -134,7 +132,6 @@
   </div>
 </template>
 
-
 <script lang="ts">
   import axios, { AxiosResponse, AxiosError } from "axios";
   import { APIConfig } from "../utils/api.utils";
@@ -144,7 +141,7 @@
   import { iBrand } from "../models/brand.interface";
   import Modal  from "../components/Modal.vue";
   import DeleteConfirm  from "@/components/DeleteConfirm.vue";
-import { constants } from "http2";
+  import { constants } from "http2";
 
 @Component({
   components: { Modal, DeleteConfirm}

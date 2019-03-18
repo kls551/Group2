@@ -164,7 +164,7 @@ export default class App extends Vue {
 
   logout() {
     console.log("loging out ", this.$store.state.cart);
-    if (this.$store.state.cart && this.$store.state.cart.data.newCart.id) {
+    if (this.$store.state.cart && this.$store.state.cart.data && this.$store.state.cart.data.newCart.id) {
       console.log("deleting cart ");
       console.log("cart id  ", this.$store.state.cart.data.newCart.id);
       axios

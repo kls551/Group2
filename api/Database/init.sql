@@ -29,9 +29,9 @@ insert into dev.main_category values
 insert into dev.brands values
 (1, "Schwinn");
 insert into dev.brands values
-(1, "Hipster");
+(2, "Hipster");
 insert into dev.brands values
-(1, "Ducati");
+(3, "Ducati");
 
 -- adding items in shop
 insert into dev.shop_item values
